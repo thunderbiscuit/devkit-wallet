@@ -1,4 +1,4 @@
-package org.goldenraven.bdksampleapp
+package com.goldenraven.bdksampleapp
 
 import org.junit.Test
 

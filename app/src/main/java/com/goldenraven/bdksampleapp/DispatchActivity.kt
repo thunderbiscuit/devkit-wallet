@@ -1,3 +1,8 @@
+/*
+ * Copyright 2021 thunderbiscuit and contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
+ */
+
 package com.goldenraven.bdksampleapp
 
 import android.content.Intent
@@ -9,7 +14,7 @@ class DispatchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // not implemented yet
-        // launch into wallet activity if user already has a Summer of Bitcoin Wallet on device
+        // launch into wallet activity if user already has a Bitcoindevkit Sample App wallet on device
         // if (currentWalletExists) {
         //     startActivity(Intent(this, WalletActivity::class.java))
         //     finish()
