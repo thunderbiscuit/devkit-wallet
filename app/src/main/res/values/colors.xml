@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  stock android  -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -9,4 +10,22 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--  nord theme  -->
+    <color name="night_1">#2e3440</color>
+    <color name="night_2">#3b4252</color>
+    <color name="night_3">#434c5e</color>
+    <color name="night_4">#4c566a</color>
+    <color name="snow_1">#d8dee9</color>
+    <color name="snow_2">#e5e9f0</color>
+    <color name="snow_3">#eceff4</color>
+    <color name="frost_1">#5e81ac</color>
+    <color name="frost_2">#81a1c1</color>
+    <color name="frost_3">#88c0d0</color>
+    <color name="frost_4">#8fbcbb</color>
+    <color name="aurora_purple">#b48ead</color>
+    <color name="aurora_green">#a3be8c</color>
+    <color name="aurora_yellow">#ebcb8b</color>
+    <color name="aurora_orange">#d08770</color>
+    <color name="aurora_red">#bf616a</color>
 </resources>

@@ -7,6 +7,7 @@ package com.goldenraven.bdksampleapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.Navigation
@@ -23,21 +24,21 @@ class WalletActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.menu_recovery_phrase -> {
-            val navController = Navigation.findNavController(this, R.id.navHostWallet)
-            navController.navigate(R.id.action_walletFragment_to_settingsFragment)
-            true
-        }
-        R.id.menu_about -> {
-            val navController = Navigation.findNavController(this, R.id.navHostWallet)
-            navController.navigate(R.id.action_walletFragment_to_aboutFragment)
-            true
-        }
-        else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
-            super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val navController = Navigation.findNavController(this, R.id.navHostWallet)
+        when (item.itemId) {
+            R.id.menu_recovery_phrase -> {
+                navController.navigate(R.id.action_walletFragment_to_settingsFragment)
+                return true
+            }
+            R.id.menu_about -> {
+                navController.navigate(R.id.action_walletFragment_to_aboutFragment)
+                return true
+            }
+            else -> {
+                Log.i("WalletActivity", "Overflow menu choice didn't match available options")
+                return true
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ class WalletChoiceActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        binding.thankYouButton.setOnClickListener {
+        binding.newWalletButton.setOnClickListener {
             val intent: Intent = Intent(this, WalletActivity::class.java)
             startActivity(intent)
             finish()

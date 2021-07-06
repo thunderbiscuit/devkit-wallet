@@ -11,14 +11,13 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:theme="@style/Theme.BitcoindevkitSampleApp.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@color/white" />
+        app:popupTheme="@style/Theme.BitcoindevkitSampleApp.ToolbarPopup"
+        app:titleTextColor="@color/snow_3" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navHostWallet"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
