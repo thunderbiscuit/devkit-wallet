@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    style="@style/Theme.BitcoindevkitSampleApp.Fragments">
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,11 +24,11 @@
         android:fontFamily="@font/fira_mono"
         android:text="@string/send_to"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView11"
+        app:layout_constraintBottom_toTopOf="@+id/sendToAddress"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/textView11"
+        android:id="@+id/sendToAddress"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
@@ -40,6 +41,7 @@
         android:text=""
         android:textColor="@color/snow_3"
         android:textColorHint="@color/snow_3"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,11 +55,11 @@
         android:fontFamily="@font/fira_mono"
         android:text="@string/amount"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView14"
+        app:layout_constraintBottom_toTopOf="@+id/sendAmount"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/textView14"
+        android:id="@+id/sendAmount"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
@@ -71,10 +73,11 @@
         android:text=""
         android:textColor="@color/snow_3"
         android:textColorHint="@color/snow_3"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+        app:layout_constraintTop_toBottomOf="@+id/sendToAddress" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -93,19 +96,19 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/night_2"
+        android:background="@color/night_2"
         android:fontFamily="sans-serif-thin"
         android:gravity="center"
         android:text="@string/sat_vbyte"
         android:textColor="@color/snow_3"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/sendAmount" />
 
     <Button
-        android:id="@+id/sendToWalletButton2"
+        android:id="@+id/toBroadcastConfirmation"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginTop="40dp"

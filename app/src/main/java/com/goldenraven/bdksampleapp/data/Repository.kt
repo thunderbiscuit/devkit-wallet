@@ -20,14 +20,14 @@ object Repository {
     // take a look at shared preferences and see if the user already has a wallet saved on device
     fun doesWalletExist(): Boolean {
         val walletInitialized: Boolean = sharedPreferences.getBoolean("initialized", false)
-        Log.i("SobiWallet","Value of walletInitialized at launch: $walletInitialized")
+        Log.i("BDK Sample App","Value of walletInitialized at launch: $walletInitialized")
         return walletInitialized
     }
 
     // save the necessary data for wallet reconstruction in shared preferences
     // upon application launch, the wallet can initialize itself using that data
     fun saveWallet(path: String, descriptor: String, changeDescriptor: String) {
-        Log.i("SobiWallet", "Saved wallet:\npath -> $path \ndescriptor -> $descriptor \nchange descriptor -> $changeDescriptor")
+        Log.i("BDK Sample App", "Saved wallet:\npath -> $path \ndescriptor -> $descriptor \nchange descriptor -> $changeDescriptor")
         val editor = sharedPreferences.edit()
         editor.putBoolean("initialized", true)
         editor.putString("path", path)
@@ -37,7 +37,7 @@ object Repository {
     }
 
     fun saveMnemonic(mnemonic: String) {
-        Log.i("SobiWallet", "The recovery phrase is: $mnemonic")
+        Log.i("BDK Sample App", "The recovery phrase is: $mnemonic")
         val editor = sharedPreferences.edit()
         editor.putString("mnemonic", mnemonic)
         editor.apply()

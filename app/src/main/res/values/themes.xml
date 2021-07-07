@@ -5,11 +5,22 @@
         <item name="colorPrimary">@color/night_1</item>
         <item name="colorPrimaryVariant">@color/night_1</item>
         <item name="colorOnPrimary">@color/snow_3</item>
-        <item name="android:background">@color/night_4</item>
+<!--        <item name="android:background">@color/night_4</item>-->
         <item name="android:textColor">@color/snow_3</item>
 
         <!-- Status bar color -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <item name="snackbarStyle">@style/CustomSnackbar</item>
+    </style>
+    <style name="CustomSnackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:layout_margin">10dp</item>
+<!--        <item name="android:backgroundTint">@color/aurora_yellow</item>-->
+<!--        <item name="android:background">@color/aurora_yellow</item>-->
+    </style>
+
+    <style name="Theme.BitcoindevkitSampleApp.Fragments" parent="Theme.BitcoindevkitSampleApp">
+        <item name="android:background">@color/night_4</item>
     </style>
 
     <style name="Theme.BitcoindevkitSampleApp.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -24,5 +35,36 @@
 
     <style name="Theme.BitcoindevkitSampleApp.Launcher">
         <item name="android:background">@drawable/launch_screen</item>
+    </style>
+
+    <!--  custom dialog  -->
+    <style name="NordDialogTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+<!--        <item name="colorSurface">@color/snow_1</item>-->
+<!--        <item name="colorOnSurface">@color/snow_1</item>-->
+<!--        <item name="colorAccent">@color/snow_1</item>-->
+<!--        <item name="android:windowBackground">@color/snow_1</item>-->
+        <item name="android:backgroundTint">@color/snow_3</item>
+<!--        <item name="colorOnPrimary">@color/night_1</item>-->
+<!--        <item name="android:background">@drawable/background_dialog</item>-->
+        <item name="materialAlertDialogTitleTextStyle">@style/CustomTitleTextStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/CustomBodyTextStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/aurora_green</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/night_4</item>
+    </style>
+
+    <style name="CustomTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="CustomBodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

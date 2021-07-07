@@ -45,19 +45,19 @@ object Wallet {
     }
 
     private fun createDescriptor(keys: ExtendedKey): String {
-        Log.i("SobiWallet", "Descriptor for receive addresses is wpkh(${keys.xprv}/84'/1'/0'/0/*)")
+        Log.i("BDK Sample App", "Descriptor for receive addresses is wpkh(${keys.xprv}/84'/1'/0'/0/*)")
         return ("wpkh(" + keys.xprv + "/84'/1'/0'/0/*)")
     }
 
     private fun createChangeDescriptor(keys: ExtendedKey): String {
-        Log.i("SobiWallet", "Descriptor for change addresses is wpkh(${keys.xprv}/84'/1'/0'/1/*)")
+        Log.i("BDK Sample App", "Descriptor for change addresses is wpkh(${keys.xprv}/84'/1'/0'/1/*)")
         return ("wpkh(" + keys.xprv + "/84'/1'/0'/1/*)")
     }
 
     public fun loadExistingWallet(): Unit {
         val initialWalletData: RequiredInitialWalletData = Repository.getInitialWalletData()
-        Log.i("SobiWallet", "Loading existing wallet, descriptor is ${initialWalletData.descriptor}")
-        Log.i("SobiWallet", "Loading existing wallet, change descriptor is ${initialWalletData.changeDescriptor}")
+        Log.i("BDK Sample App", "Loading existing wallet, descriptor is ${initialWalletData.descriptor}")
+        Log.i("BDK Sample App", "Loading existing wallet, change descriptor is ${initialWalletData.changeDescriptor}")
         initialize(
             descriptor = initialWalletData.descriptor,
             changeDescriptor = initialWalletData.changeDescriptor,
@@ -83,7 +83,7 @@ object Wallet {
 
     fun sync(max_address: Int?=null): Unit {
         lib.sync(walletPtr, max_address)
-        Log.i("SobiWallet", "Wallet successfully synced")
+        Log.i("BDK Sample App", "Wallet successfully synced")
     }
 
     fun getNewAddress(): String {
@@ -92,5 +92,28 @@ object Wallet {
 
     fun getBalance(): Long {
         return lib.get_balance(walletPtr)
+    }
+
+    fun createTransaction(
+        fee_rate: Float,
+        addressees: List<Pair<String, String>>,
+        send_all: Boolean? = false,
+        utxos: List<String>? = null,
+        unspendable: List<String>? = null,
+        policy: Map<String, List<String>>? = null,
+    ): CreateTxResponse {
+        return lib.create_tx(walletPtr, fee_rate, addressees, send_all, utxos, unspendable, policy)
+    }
+
+    fun sign(psbt: String, assume_height: Int? = null): SignResponse {
+        return lib.sign(walletPtr, psbt, assume_height)
+    }
+
+    fun extractPsbt(psbt: String): RawTransaction {
+        return lib.extract_psbt(walletPtr, psbt)
+    }
+
+    fun broadcast(raw_tx: String): Txid {
+        return lib.broadcast(walletPtr, raw_tx)
     }
 }

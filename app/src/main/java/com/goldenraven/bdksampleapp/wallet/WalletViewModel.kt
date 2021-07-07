@@ -13,7 +13,7 @@ class WalletViewModel(application: Application) : AndroidViewModel(application) 
     public fun updateBalance() {
         Wallet.sync(100)
         val newBalance = Wallet.getBalance()
-        Log.i("SobiWallet", "New balance is $newBalance")
+        Log.i("BDK Sample App", "New balance is $newBalance")
         balance.postValue(newBalance)
     }
 }

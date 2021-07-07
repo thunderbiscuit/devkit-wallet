@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.R
-import com.goldenraven.bdksampleapp.data.Wallet
 import com.goldenraven.bdksampleapp.databinding.FragmentWalletBinding
 import java.text.DecimalFormat
 
@@ -49,7 +48,7 @@ class WalletFragment : Fragment() {
         })
 
         binding.syncButton.setOnClickListener {
-            Wallet.sync()
+            viewModel.updateBalance()
         }
         binding.toTransactionsButton.setOnClickListener {
             navController.navigate(R.id.action_walletFragment_to_transactionsFragment)
