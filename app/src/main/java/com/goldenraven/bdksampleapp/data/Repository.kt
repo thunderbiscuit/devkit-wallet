@@ -43,6 +43,10 @@ object Repository {
         editor.apply()
     }
 
+    fun getMnemonic(): String {
+        return sharedPreferences.getString("mnemonic", "No seed phrase saved") ?: "Seed phrase not there"
+    }
+
     fun getInitialWalletData(): RequiredInitialWalletData {
         val descriptor: String = sharedPreferences.getString("descriptor", null)!!
         val changeDescriptor: String = sharedPreferences.getString("changeDescriptor", null)!!

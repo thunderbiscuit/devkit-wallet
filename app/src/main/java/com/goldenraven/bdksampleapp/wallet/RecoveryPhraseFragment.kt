@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.R
 import com.goldenraven.bdksampleapp.databinding.FragmentRecoveryPhraseBinding
+import com.goldenraven.bdksampleapp.data.Repository
 
 class RecoveryPhraseFragment : Fragment() {
 
@@ -30,8 +31,9 @@ class RecoveryPhraseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val navController = Navigation.findNavController(view)
+        binding.recoveryPhrase.text = Repository.getMnemonic()
 
+        val navController = Navigation.findNavController(view)
         binding.settingsToWalletButton.setOnClickListener {
             navController.navigate(R.id.action_settingsFragment_to_walletFragment)
         }

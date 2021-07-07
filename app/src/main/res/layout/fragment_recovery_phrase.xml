@@ -13,19 +13,19 @@
         android:gravity="center"
         android:text="@string/recovery_phrase"
         android:textSize="38sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView8"
+        app:layout_constraintBottom_toTopOf="@+id/recoveryPhrase"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/recoveryPhrase"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center"
+        android:fontFamily="@font/fira_mono"
+        android:gravity="center|start"
         android:text="@string/recovery_fragment_info"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,6 +47,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/recoveryPhrase" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
