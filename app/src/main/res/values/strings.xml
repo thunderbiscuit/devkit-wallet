@@ -21,4 +21,5 @@
     <string name="transaction_history">transaction history</string>
     <string name="sync">sync</string>
     <string name="receive">receive</string>
+    <string name="generate_new_address">Generate new address</string>
 </resources>

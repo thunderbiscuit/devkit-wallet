@@ -8,22 +8,25 @@ package com.goldenraven.bdksampleapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.goldenraven.bdksampleapp.data.Repository
+import com.goldenraven.bdksampleapp.data.Wallet
+import com.goldenraven.bdksampleapp.wallet.WalletActivity
 
 class DispatchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // not implemented yet
-        // launch into wallet activity if user already has a Bitcoindevkit Sample App wallet on device
-        // if (currentWalletExists) {
-        //     startActivity(Intent(this, WalletActivity::class.java))
-        //     finish()
-        // } else {
-        //     startActivity(Intent(this, IntroActivity::class.java))
-        //     finish()
-        // }
+        // ask Repository if a wallet already exists
+        val walletInitialized: Boolean = Repository.doesWalletExist()
 
-        startActivity(Intent(this, WalletChoiceActivity::class.java))
-        finish()
+        // launch into wallet activity if user already has a Summer of Bitcoin Wallet saved on device
+        if (walletInitialized) {
+            Wallet.loadExistingWallet()
+            startActivity(Intent(this, WalletActivity::class.java))
+            finish()
+        } else {
+            startActivity(Intent(this, WalletChoiceActivity::class.java))
+            finish()
+        }
     }
 }

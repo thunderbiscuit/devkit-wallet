@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp
+package com.goldenraven.bdksampleapp.wallet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,18 +12,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.R
-import com.goldenraven.bdksampleapp.databinding.FragmentRecoveryPhraseBinding
+import com.goldenraven.bdksampleapp.databinding.FragmentAboutBinding
 
-class RecoveryPhraseFragment : Fragment() {
+class AboutFragment : Fragment() {
 
-    private lateinit var binding: FragmentRecoveryPhraseBinding
+    private lateinit var binding: FragmentAboutBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentRecoveryPhraseBinding.inflate(inflater, container, false)
+        binding = FragmentAboutBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -33,7 +33,7 @@ class RecoveryPhraseFragment : Fragment() {
         val navController = Navigation.findNavController(view)
 
         binding.settingsToWalletButton.setOnClickListener {
-            navController.navigate(R.id.action_settingsFragment_to_walletFragment)
+            navController.navigate(R.id.action_aboutFragment_to_walletFragment)
         }
     }
 }

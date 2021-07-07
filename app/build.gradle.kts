@@ -24,10 +24,6 @@ android {
         getByName("debug") {
             debuggable(true)
         }
-        // release {
-        //     minifyEnabled false
-        //     proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        // }
     }
 
     compileOptions {
@@ -54,6 +50,9 @@ dependencies {
 
     // toolbar
     implementation("androidx.appcompat:appcompat:1.3.1")
+
+    // bitcoindevkit
+    implementation("org.bitcoindevkit.bdkjni:bdk-jni-debug:0.2.1-dev")
 
     // tests
     testImplementation ("junit:junit:4.13.2")

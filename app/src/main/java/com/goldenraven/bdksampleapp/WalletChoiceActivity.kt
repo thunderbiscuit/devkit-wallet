@@ -9,6 +9,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.goldenraven.bdksampleapp.databinding.ActivityWalletChoiceBinding
+import com.goldenraven.bdksampleapp.data.Wallet
+import com.goldenraven.bdksampleapp.wallet.WalletActivity
 
 class WalletChoiceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +20,7 @@ class WalletChoiceActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         binding.newWalletButton.setOnClickListener {
+            Wallet.createWallet()
             val intent: Intent = Intent(this, WalletActivity::class.java)
             startActivity(intent)
             finish()

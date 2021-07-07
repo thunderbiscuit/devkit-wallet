@@ -4,6 +4,7 @@
     package="com.goldenraven.bdksampleapp">
 
     <application
+        android:name=".BdkSampleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -32,7 +33,7 @@
         </activity>
 
         <activity
-            android:name=".WalletActivity"
+            android:name=".wallet.WalletActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

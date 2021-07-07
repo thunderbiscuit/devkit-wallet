@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,54 +9,60 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
         android:fontFamily="@font/fira_mono_medium"
         android:text="@string/receive_address"
         android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@id/sendAddressQR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/sendAddressQR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/receiveToWalletButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/faucet_address" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/fira_mono"
         android:gravity="center"
-        android:text="tb1q9c6suce5up0u8h8u7qmtwuyxyu4vnp7mhxm78u"
+        android:text="Display not yet implemented"
         android:textIsSelectable="true"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendAddressQR" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/receiveToWalletButton"
         android:layout_width="0dp"
         android:layout_height="70dp"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="@color/frost_1"
         android:fontFamily="@font/fira_mono"
         android:text="@string/back_to_wallet"
         android:textAllCaps="false"
         android:textSize="16sp"
         app:cornerRadius="10dp"
-        app:layout_constraintTop_toBottomOf="@id/sendAddressQR"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.70" />
+
+    <Button
+        android:id="@+id/generateNewAddressButton"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/aurora_green"
+        android:fontFamily="@font/fira_mono"
+        android:text="@string/generate_new_address"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
         app:layout_constraintWidth_percent="0.70" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
