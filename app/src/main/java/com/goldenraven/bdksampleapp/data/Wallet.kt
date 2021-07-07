@@ -24,7 +24,7 @@ object Wallet {
     }
 
     // setting the path requires the application context and is done once by the SobiWalletApplication class
-    fun setPath(path: String) {
+    fun setPath(path: String): Unit {
         Wallet.path = path
     }
 
@@ -81,12 +81,16 @@ object Wallet {
         )
     }
 
-    fun sync(max_address: Int?=null) {
+    fun sync(max_address: Int?=null): Unit {
         lib.sync(walletPtr, max_address)
         Log.i("SobiWallet", "Wallet successfully synced")
     }
 
     fun getNewAddress(): String {
         return lib.get_new_address(walletPtr)
+    }
+
+    fun getBalance(): Long {
+        return lib.get_balance(walletPtr)
     }
 }
