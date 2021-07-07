@@ -116,4 +116,8 @@ object Wallet {
     fun broadcast(raw_tx: String): Txid {
         return lib.broadcast(walletPtr, raw_tx)
     }
+
+    fun listTransactions(): List<TransactionDetails> {
+        return lib.list_transactions(walletPtr, false)
+    }
 }

@@ -10,42 +10,58 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
         android:fontFamily="@font/fira_mono_medium"
         android:text="@string/transactions"
         android:textSize="38sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:text="@string/transaction_fragment_info"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="24dp"
+        android:background="@color/night_2"
+        app:layout_constraintBottom_toTopOf="@+id/transactionsToWalletButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+        <TextView
+            android:id="@+id/transactionsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/fira_mono"
+            android:gravity="center|left"
+            android:text="transactions"
+            android:textIsSelectable="true"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.core.widget.NestedScrollView>
 
     <Button
         android:id="@+id/transactionsToWalletButton"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:fontFamily="@font/fira_mono"
-        android:textAllCaps="false"
+        android:layout_marginBottom="24dp"
         android:backgroundTint="@color/frost_1"
+        android:fontFamily="@font/fira_mono"
+        android:text="@string/back_to_wallet"
+        android:textAllCaps="false"
         android:textSize="16sp"
         app:cornerRadius="10dp"
-        app:layout_constraintWidth_percent="0.70"
-        android:text="@string/back_to_wallet"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintWidth_percent="0.70" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
