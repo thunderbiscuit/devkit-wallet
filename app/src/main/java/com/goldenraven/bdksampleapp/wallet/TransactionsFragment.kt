@@ -5,17 +5,21 @@
 
 package com.goldenraven.bdksampleapp.wallet
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.R
 import com.goldenraven.bdksampleapp.databinding.FragmentTransactionsBinding
 import org.bitcoindevkit.bdkjni.Types.TransactionDetails
 import com.goldenraven.bdksampleapp.data.Wallet
+import com.goldenraven.bdksampleapp.utilities.timestampToString
+
 
 class TransactionsFragment : Fragment() {
 
@@ -47,7 +51,7 @@ class TransactionsFragment : Fragment() {
         for (item in rawList) {
             Log.i("BDK Sample App", "Transaction list item: $item")
             val transactionInfo: String =
-                "Timestamp: ${item.timestamp}\nReceived: ${item.received}\nSent: ${item.sent}\nFees: ${item.fees}\nTxid: ${item.txid}"
+                "Timestamp: ${timestampToString(item.timestamp)}\nReceived: ${item.received}\nSent: ${item.sent}\nFees: ${item.fees}\nTxid: ${item.txid}"
 
             finalList = "$finalList\n$transactionInfo\n"
         }
