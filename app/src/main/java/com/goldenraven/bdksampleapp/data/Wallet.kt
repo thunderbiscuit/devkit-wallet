@@ -81,6 +81,22 @@ object Wallet {
         )
     }
 
+    fun recoverWallet(mnemonic: String) {
+        val keys: ExtendedKey = restoreExtendedKeyFromMnemonic(mnemonic)
+        val descriptor: String = createDescriptor(keys)
+        val changeDescriptor: String = createChangeDescriptor(keys)
+        initialize(
+            descriptor = descriptor,
+            changeDescriptor = changeDescriptor,
+        )
+        Repository.saveWallet(path, descriptor, changeDescriptor)
+        Repository.saveMnemonic(keys.mnemonic)
+    }
+
+    private fun restoreExtendedKeyFromMnemonic(mnemonic: String): ExtendedKey {
+        return lib.restore_extended_key(Network.testnet, mnemonic, "")
+    }
+
     fun sync(max_address: Int?=null): Unit {
         lib.sync(walletPtr, max_address)
         Log.i("BDK Sample App", "Wallet successfully synced")

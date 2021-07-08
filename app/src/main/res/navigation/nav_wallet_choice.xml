@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_wallet_choice"
+    app:startDestination="@id/walletChoiceFragment">
+
+    <fragment
+        android:id="@+id/walletChoiceFragment"
+        android:name="com.goldenraven.bdksampleapp.WalletChoiceFragment"
+        android:label="WalletChoiceFragment"
+        tools:layout="@layout/fragment_wallet_choice">
+        <action
+            android:id="@+id/action_walletChoiceFragment_to_recoverWalletFragment"
+            app:destination="@id/recoverWalletFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recoverWalletFragment"
+        android:name="com.goldenraven.bdksampleapp.RecoverWalletFragment"
+        android:label="RecoverWalletFragment"
+        tools:layout="@layout/fragment_recover">
+    </fragment>
+
+</navigation>

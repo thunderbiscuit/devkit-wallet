@@ -22,4 +22,6 @@
     <string name="sync">sync</string>
     <string name="receive">receive</string>
     <string name="generate_new_address">Generate new address</string>
+    <string name="recover_wallet">Recover\nWallet</string>
+    <string name="recover">Recover</string>
 </resources>
