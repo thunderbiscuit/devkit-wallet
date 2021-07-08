@@ -52,7 +52,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 
     // bitcoindevkit
-    implementation("org.bitcoindevkit.bdkjni:bdk-jni-debug:0.2.1-dev")
+    implementation("org.bitcoindevkit.bdkjni:bdk-jni-debug:0.3.0-rc1")
 
     // qr codes
     implementation("androidmads.library.qrgenearator:QRGenearator:1.0.4")

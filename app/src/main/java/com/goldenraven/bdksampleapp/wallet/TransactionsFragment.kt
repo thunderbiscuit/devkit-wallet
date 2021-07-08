@@ -50,8 +50,9 @@ class TransactionsFragment : Fragment() {
         var finalList: String = ""
         for (item in rawList) {
             Log.i("BDK Sample App", "Transaction list item: $item")
+            val confirmationTime: String = item.confirmation_time?.timestampToString() ?: "Pending"
             val transactionInfo: String =
-                "Timestamp: ${timestampToString(item.timestamp)}\nReceived: ${item.received}\nSent: ${item.sent}\nFees: ${item.fees}\nTxid: ${item.txid}"
+                "Timestamp: ${confirmationTime}\nReceived: ${item.received}\nSent: ${item.sent}\nFees: ${item.fee}\nTxid: ${item.txid}"
 
             finalList = "$finalList\n$transactionInfo\n"
         }
