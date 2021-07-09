@@ -46,7 +46,11 @@ class TransactionsFragment : Fragment() {
     }
 
     private fun transactionList(): String {
-        val rawList: List<TransactionDetails> = Wallet.listTransactions()
+        // we sort the list of transactions by their height in the blockchain
+        // highest height first, so the most recent transactions show up first
+        // note that pending transactions have a confirmation_time of null, in which case we give them a height of 100,000,000
+        // ensuring they show up above all other transactions until they get mined, at which point they get a proper height
+        val rawList: List<TransactionDetails> = Wallet.listTransactions().sortedByDescending { it.confirmation_time?.height ?: 100_000_000 }
         var finalList: String = ""
         for (item in rawList) {
             Log.i("BDK Sample App", "Transaction list item: $item")
