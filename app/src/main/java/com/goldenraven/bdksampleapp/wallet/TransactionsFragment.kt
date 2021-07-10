@@ -37,7 +37,20 @@ class TransactionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.transactionsView.text = transactionList()
+        // we sort the list of transactions by their height in the blockchain
+        // highest height first, so the most recent transactions show up first
+        // note that pending transactions have a confirmation_time of null, in which case we give them a height of 100,000,000
+        // ensuring they show up above all other transactions until they get mined, at which point they get a proper height
+        val rawTransactionList: List<TransactionDetails> = Wallet.listTransactions().sortedByDescending {
+            it.confirmation_time?.height ?: 100_000_000
+        }
+
+        binding.pendingTransactionsContent.text = pendingTransactionsList(
+            rawTransactionList.filter { it.confirmation_time == null }
+        )
+        binding.confirmedTransactionsContent.text = confirmedTransactionsList(
+            rawTransactionList.filter { it.confirmation_time != null }
+        )
 
         val navController = Navigation.findNavController(view)
         binding.transactionsToWalletButton.setOnClickListener {
@@ -45,21 +58,42 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    private fun transactionList(): String {
-        // we sort the list of transactions by their height in the blockchain
-        // highest height first, so the most recent transactions show up first
-        // note that pending transactions have a confirmation_time of null, in which case we give them a height of 100,000,000
-        // ensuring they show up above all other transactions until they get mined, at which point they get a proper height
-        val rawList: List<TransactionDetails> = Wallet.listTransactions().sortedByDescending { it.confirmation_time?.height ?: 100_000_000 }
-        var finalList: String = ""
-        for (item in rawList) {
-            Log.i("BDK Sample App", "Transaction list item: $item")
-            val confirmationTime: String = item.confirmation_time?.timestampToString() ?: "Pending"
-            val transactionInfo: String =
-                "Timestamp: ${confirmationTime}\nReceived: ${item.received}\nSent: ${item.sent}\nFees: ${item.fee}\nTxid: ${item.txid}"
-
-            finalList = "$finalList\n$transactionInfo\n"
+    private fun confirmedTransactionsList(transactions: List<TransactionDetails>): String {
+        if (transactions.isEmpty()) {
+            Log.i("SobiWallet", "Confirmed transaction list is empty")
+            return "No confirmed transactions"
+        } else {
+            return buildString {
+                for (item in transactions) {
+                    Log.i("SobiWallet", "Transaction list item: $item")
+                    appendLine("Timestamp: ${item.confirmation_time!!.timestampToString()}")
+                    appendLine("Received: ${item.received}")
+                    appendLine("Sent: ${item.sent}")
+                    appendLine("Fees: ${item.fee}")
+                    appendLine("Block: ${item.confirmation_time!!.height}")
+                    appendLine("Txid: ${item.txid}")
+                    appendLine()
+                }
+            }
         }
-        return finalList
+    }
+
+    private fun pendingTransactionsList(transactions: List<TransactionDetails>): String {
+        if (transactions.isEmpty()) {
+            Log.i("SobiWallet", "Pending transaction list is empty")
+            return "No pending transactions"
+        } else {
+            return buildString {
+                for (item in transactions) {
+                    Log.i("SobiWallet", "Pending transaction list item: $item")
+                    appendLine("Timestamp: Pending")
+                    appendLine("Received: ${item.received}")
+                    appendLine("Sent: ${item.sent}")
+                    appendLine("Fees: ${item.fee}")
+                    appendLine("Txid: ${item.txid}")
+                    appendLine()
+                }
+            }
+        }
     }
 }

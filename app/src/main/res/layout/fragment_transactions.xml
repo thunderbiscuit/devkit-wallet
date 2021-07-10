@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/Theme.BitcoindevkitSampleApp.Fragments">
@@ -31,21 +32,76 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5">
 
-        <TextView
-            android:id="@+id/transactionsView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/fira_mono"
-            android:gravity="center|left"
-            android:text="transactions"
-            android:textIsSelectable="true"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pendingTransactionsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/night_2"
+                android:backgroundTint="@color/night_1"
+                android:fontFamily="@font/fira_mono_medium"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="Pending"
+                android:textColor="@color/snow_3"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/pendingTransactionsContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/fira_mono"
+                android:text="No pending transactions"
+                android:textColor="@color/snow_3"
+                android:textIsSelectable="true"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/confirmedTransactionsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="42dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/night_4"
+                android:backgroundTint="@color/night_1"
+                android:fontFamily="@font/fira_mono_medium"
+                android:gravity="bottom"
+                android:paddingStart="16dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="Confirmed"
+                android:textColor="@color/snow_3"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/confirmedTransactionsContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/fira_mono"
+                android:gravity="center|left"
+                android:text="transactions"
+                android:textIsSelectable="true"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <Button
