@@ -1,0 +1,6 @@
+[book]
+authors = ["thunderbiscuit"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Bitcoindevkit Android Demo App"
