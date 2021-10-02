@@ -7,6 +7,7 @@ package com.goldenraven.bdksampleapp
 
 import android.app.Application
 import android.content.Context
+import com.goldenraven.bdksampleapp.utilities.SharedPreferencesManager
 import com.goldenraven.bdksampleapp.data.Repository
 import com.goldenraven.bdksampleapp.data.Wallet
 
@@ -17,7 +18,15 @@ class BdkSampleApplication : Application() {
         // initialize Wallet object with path variable
         Wallet.setPath(applicationContext.filesDir.toString())
 
+        // initialize shared preferences manager object (singleton)
+        val sharedPreferencesManager = SharedPreferencesManager(
+                applicationContext.getSharedPreferences(
+                    "current_wallet",
+                    Context.MODE_PRIVATE
+                )
+            )
+
         // initialize Repository object with shared preferences
-        Repository.setSharedPreferences(applicationContext.getSharedPreferences("current_wallet", Context.MODE_PRIVATE))
+        Repository.setSharedPreferences(sharedPreferencesManager)
     }
 }

@@ -5,51 +5,50 @@
 
 package com.goldenraven.bdksampleapp.data
 
-import android.content.SharedPreferences
 import android.util.Log
+import com.goldenraven.bdksampleapp.utilities.SharedPreferencesManager
 
 object Repository {
 
     // shared preferences are a way to save/retrieve small pieces of data without building a database
-    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
-    fun setSharedPreferences(sharedPref: SharedPreferences) {
-        sharedPreferences = sharedPref
+    fun setSharedPreferences(sharedPrefManager: SharedPreferencesManager) {
+        sharedPreferencesManager = sharedPrefManager
     }
 
     // take a look at shared preferences and see if the user already has a wallet saved on device
     fun doesWalletExist(): Boolean {
-        val walletInitialized: Boolean = sharedPreferences.getBoolean("initialized", false)
-        Log.i("BDK Sample App","Value of walletInitialized at launch: $walletInitialized")
+        val walletInitialized: Boolean = sharedPreferencesManager.walletInitialised
+        Log.i("BDK Sample App", "Value of walletInitialized at launch: $walletInitialized")
         return walletInitialized
     }
 
     // save the necessary data for wallet reconstruction in shared preferences
     // upon application launch, the wallet can initialize itself using that data
     fun saveWallet(path: String, descriptor: String, changeDescriptor: String) {
-        Log.i("BDK Sample App", "Saved wallet:\npath -> $path \ndescriptor -> $descriptor \nchange descriptor -> $changeDescriptor")
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("initialized", true)
-        editor.putString("path", path)
-        editor.putString("descriptor", descriptor)
-        editor.putString("changeDescriptor", changeDescriptor)
-        editor.apply()
+        Log.i(
+            "BDK Sample App",
+            "Saved wallet:\npath -> $path \ndescriptor -> $descriptor \nchange descriptor -> $changeDescriptor"
+        )
+        sharedPreferencesManager.walletInitialised = true
+        sharedPreferencesManager.path = path
+        sharedPreferencesManager.descriptor = descriptor
+        sharedPreferencesManager.changeDescriptor = changeDescriptor
     }
 
     fun saveMnemonic(mnemonic: String) {
         Log.i("BDK Sample App", "The recovery phrase is: $mnemonic")
-        val editor = sharedPreferences.edit()
-        editor.putString("mnemonic", mnemonic)
-        editor.apply()
+        sharedPreferencesManager.mnemonic = mnemonic
     }
 
     fun getMnemonic(): String {
-        return sharedPreferences.getString("mnemonic", "No seed phrase saved") ?: "Seed phrase not there"
+        return sharedPreferencesManager.mnemonic
     }
 
     fun getInitialWalletData(): RequiredInitialWalletData {
-        val descriptor: String = sharedPreferences.getString("descriptor", null)!!
-        val changeDescriptor: String = sharedPreferences.getString("changeDescriptor", null)!!
+        val descriptor: String = sharedPreferencesManager.descriptor
+        val changeDescriptor: String = sharedPreferencesManager.changeDescriptor
         return RequiredInitialWalletData(descriptor, changeDescriptor)
     }
 }
