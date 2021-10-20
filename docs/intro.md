@@ -1,6 +1,6 @@
 ---
 layout: default
-title: BDK Android Demo Wallet
+title: Getting Started
 nav_order: 1
 description: A testnet only wallet using the bitcoindevkit
 permalink: /
@@ -33,7 +33,10 @@ The repository is built to help newcomers to the bitcoindevkit by layering compl
 
 The repository works in the following way: multiple branches are maintained in parallel, each of them focusing on a version of the app.
 1. the default branch `docs` is mostly empty, and is used for docs
-2. the `basic-ui` branch builds the basic design and UI without any functionality
-3. the `onchain-basic` branch builds a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and BIP84-compatible wallet recovery.
+2. the `ui` branch builds the basic design and UI without any functionality
+3. the `simple-wallet` branch builds a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and BIP84-compatible wallet recovery.
 
-Each of those branches has a documentation page associated with it. Dig in!
+Each of those branches has a documentation page associated with it.
+
+# Prerequisites
+These tutorials assume you have a working Android development setup, including Android Studio 4.2.2 or above and a phone you can launch the app on or a working emulator on your development machine. It also requires you have downloaded or built the bitcoindevkit library for Android ([bdk-jni](https://github.com/bitcoindevkit/bdk-jni)). To ensure you can run through this tutorial without problems, you can build the `master` branch of the [test app](https://github.com/thunderbiscuit/android-bdk-development-testapp). The readme is comprehensive and should guide you through installing the proper software and testing the app.

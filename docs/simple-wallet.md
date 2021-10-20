@@ -1,10 +1,15 @@
 ---
 layout: default
-title: Basic Wallet
+title: Simple Wallet
 nav_order: 3
 description: A testnet only wallet using the bitcoindevkit
-permalink: /basic-wallet
+permalink: /simple-wallet
 ---
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"> 
+<link rel="stylesheet" href="./styles.css">
 
 # [Task 5](): Add Wallet and Repository objects
 This is where things get interesting on the bitcoin side of things. This task introduces 2 new objects: the `Wallet` object and the `Repository` object.

@@ -5,7 +5,16 @@ nav_order: 2
 description: A testnet only wallet using the bitcoindevkit
 permalink: /ui
 ---
-This page is part of a walkthrough tutorial of the [DevKit Wallet codebase](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app).
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"> 
+<link rel="stylesheet" href="./styles.css">
+
+# Building the UI
+This page is the UI part of a walkthrough tutorial of the [DevKit Wallet codebase](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app).
+
+Note that this page concerns itself with the `ui` branch of the repository.
 
 We break the journey of building the user interface for the wallet into 4 distinct steps:
 1. Create a basic Android activity
@@ -13,7 +22,7 @@ We break the journey of building the user interface for the wallet into 4 distin
 3. Build fragments within the wallet activity (wallet, transaction history, receive, send, recovery phrase, about)
 4. Build the target UI (layout files, colors, themes)
 
-Each task is associated with a tag, and you can checkout the codebase at any of those tasks by checking out the associated tag (something like `git checkout task-ui1` for task 1).
+Each task is associated with a tag, and you can checkout the codebase at any of those tasks by checking out the associated tag (`git checkout task-ui1` for task 1 for example).
 
 ```sh
 task-ui1           create a basic android activity
@@ -22,10 +31,7 @@ task-ui3           add fragments to the wallet activity
 task-ui4           build the target ui
 ```
 
-# Prerequisites
-This tutorial assumes you have a working Android development setup, including a phone you can launch the app on or a working emulator on your development machine. It also requires you have downloaded or built the bitcoindevkit library for Android ([bdk-jni](https://github.com/bitcoindevkit/bdk-jni)). To ensure you can run through this tutorial without problems, you can build the `master` branch of the [test app](https://github.com/thunderbiscuit/summer-of-bitcoin-testapp). The readme is comprehensive and should guide you through installing the proper software and testing the app.
-
-# [Task 1](): Create a basic Android activity
+# [Task 1](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui1): Create a basic Android activity
 
 <center>
   <img class="screenshot" src="./images/screenshots/task-1.png" width="300px" />
@@ -44,7 +50,7 @@ The `main` directory breaks into two major parts: the Kotlin source code files a
 ### 3. The `app/src/main/AndroidManifest.xml` file
 The Android Manifest file describes the activities that are registered for the app, the permissions that the app will requires (internet, camera, etc.), as well as some other metadata information necessary for the OS to start your application.
 
-# [Task 2](): Build multiple activities and navigate between them
+# [Task 2](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui2): Build multiple activities and navigate between them
 You can think of _activities_ in Android as the basic building blocks for apps. They group together multiple related "screens" (called _fragments_). Activities are heavier and costlier than fragments, and most apps do not require many activities (in fact many Android applications are single-activity applications).
 
 Our wallet has 3 activities:
@@ -59,7 +65,7 @@ val intent: Intent = Intent(this, WalletActivity::class.java)
 startActivity(intent)
 ```
 
-# [Task 3](): Add fragments to the wallet activity
+# [Task 3](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui3): Add fragments to the wallet activity
 
 <center>
   <img class="screenshot" src="./images/screenshots/task-3.gif" width="300px" />
@@ -136,7 +142,7 @@ Note that resources are accessed using the following syntax: `@resourcetype/reso
 <!-- ... -->
 ```
 
-# [Task 4](): Build the target UI
+# [Task 4](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui4): Build the target UI
 The UI we'll be building is simple with a clean color palette. The wireframes that were used to develop the original idea were made using a tool called [Figma](https://www.figma.com/) and look like this:
 
 <center>
