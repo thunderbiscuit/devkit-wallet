@@ -9,3 +9,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# docs
+_site/
+.jekyll-cache/
