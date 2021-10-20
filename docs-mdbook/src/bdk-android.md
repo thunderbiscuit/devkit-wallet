@@ -1,1 +1,0 @@
-# BDK on Android
