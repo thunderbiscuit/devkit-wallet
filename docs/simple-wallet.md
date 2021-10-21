@@ -11,7 +11,31 @@ permalink: /simple-wallet
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"> 
 <link rel="stylesheet" href="./styles.css">
 
-# [Task 5](): Add Wallet and Repository objects
+# Building a Simple Testnet Wallet
+This page is the second part of a walkthrough tutorial of the [DevKit Wallet codebase](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app).
+
+Note that this page concerns itself with the `simple-wallet` branch of the repository.
+
+We break the journey of building the wallet into 6 distinct steps:
+1. Create a Wallet object with the Repository design pattern
+2. Implement receive and sync functionalities
+3. Implement send functionality
+4. Query and display transaction history
+5. Display recovery phrase
+6. Implement wallet recovery from BIP39 words
+
+Each task is associated with a tag, and you can checkout the codebase at any of those tasks by checking out the associated tag (`git checkout task-sw1` for task 1 for example).
+
+```sh
+task-sw1        add wallet and repository objects
+task-sw2        implement receive and sync
+task-sw3        implement send
+task-sw4        add transaction history
+task-sw5        display recovery phrase
+task-sw6        recover wallet
+```
+
+# [Task 1](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw1): Add Wallet and Repository objects
 This is where things get interesting on the bitcoin side of things. This task introduces 2 new objects: the `Wallet` object and the `Repository` object.
 
 Both are initialized on startup by the `SobiWalletApplication` class, with some properties they need to function (wallet path and shared preferences respectively).
@@ -62,7 +86,7 @@ binding.generateNewAddressButton.setOnClickListener {
 }
 ```
 
-# [Task 6](): Implement receive and sync
+# [Task 2](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw2): Implement receive and sync
 It's now time to connect the `Wallet` object to the user interface. Note how the `generateNewAddressButton` has on `onClickListener` that triggers the `displayNewAddress()` method:
 ```kotlin
 // ReceiveFragment.kt
@@ -139,7 +163,7 @@ This ensures that the balance displayed in the `balance` view is always up to da
   <img class="screenshot" src="./images/screenshots/task-6.gif" width="300px" />
 </center>
 
-# [Task 7](): Implement send
+# [Task 3](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw3): Implement send
 Sending bitcoin is a slightly more involved operation.
 
 The bitcoindevkit workflow for this operation is as follows:
@@ -212,7 +236,7 @@ Take a look at `utilities/Snackbars.kt` to get a sense for how they work.
   <img class="screenshot" src="./images/screenshots/task-7.gif" width="300px" />
 </center>
 
-# [Task 8](): Add transaction history
+# [Task 4](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw4): Add transaction history
 Adding a list of transactions is a daunting task if one is to take it to a polished result. It involves using a database and keeping track on transactions, their state, and performing calculations on the raw material that the bitcoindevkit provides. This is slightly outside of the scope of this workshop. Simply displaying the list of transactions as one long string (with some small modifications), however, is quite easy, and this is what this wallet implements.
 
 Note that the `transactionsView` is simply a `NestedScrollView` that displays a string built by the `transactionsList()` method. Creating the `confirmationTime` string variable is the most involved part of this whole endeavor, and is done using a neat Kotlin feature called _extension functions_, where we define a method on the bitcoindevkit type `ConfirmationTime` which returns a nicely formatted timestamp. Take a look at the `utilities/Timestamps.kt` file for more on this function. Building the string is otherwise a rather simple affair; the bitcoindevkit returns a list of `TransactionDetails` through the `listTransactions()` method, and we parse them one by one and pull the interesting things into a string template.
@@ -248,7 +272,7 @@ private fun transactionList(): String {
   <img class="screenshot" src="./images/screenshots/transaction-history.png" width="300px" />
 </center>
 
-# [Task 9](): Display recovery phrase
+# [Task 5](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw5): Display recovery phrase
 Displaying the recovery phrase to the user is not a complicated task. Remember that we have stored the recovery phrase in shared preferences when creating the wallet
 ```kotlin
 fun createWallet(): Unit {
@@ -284,7 +308,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
   <img class="screenshot" src="./images/screenshots/recovery-phrase.png" width="300px" />
 </center>
 
-# [Task 10](): Enable wallet recovery
+# [Task 6](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw6): Enable wallet recovery
 Enabling wallet recovery is not complicated from the bitcoindevkit point of view, but does require a bit of work on the Android side of things. Note for example that so far, the `WalletChoiceActivity` does not contain any fragments. But here we'll need to add a screen for entering the 12 word recovery phrase, and so the first thing we need to do is create a `NavHostFragment` in the `WalletChoiceActivity`, complete with 2 fragments: our original screen and a wallet recovery screen. We also need to build a `nav_wallet_choice.xml` file, for navigating between the first and second fragments.
 
 You'll note that the `fragment_recover.xml` layout file is a `ConstraintLayout` with a `NestedScrollView`, itself containing a `LinearLayout` which is the parent for all 12 `EditText` views where the user can input their mnemonic words. This allows for the list of words to be scrollable and ensures it shows well on all screen sizes.
