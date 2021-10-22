@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 30
 
     buildFeatures {
         viewBinding = true
@@ -12,17 +12,16 @@ android {
 
     defaultConfig {
         applicationId = "com.goldenraven.bdksampleapp"
-        minSdkVersion(26)
-        targetSdkVersion(30)
+        minSdk = 26
+        targetSdk = 30
         versionCode = 1
         versionName = "v0.0.1"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         getByName("debug") {
-            debuggable(true)
+            isDebuggable = true
         }
     }
 
