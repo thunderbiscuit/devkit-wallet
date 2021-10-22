@@ -6,7 +6,7 @@
 package com.goldenraven.bdksampleapp.utilities
 
 import android.text.format.DateFormat
-import org.bitcoindevkit.bdkjni.Types.ConfirmationTime
+import org.bitcoindevkit.bdkjni.ConfirmationTime
 import java.util.Calendar
 import java.util.Locale
 

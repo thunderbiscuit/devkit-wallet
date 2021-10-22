@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bitcoindevkit Sample App</string>
+    <string name="app_name">Devkit Wallet</string>
     <string name="send">Send</string>
     <string name="send2">send</string>
     <string name="send_to">Send to</string>

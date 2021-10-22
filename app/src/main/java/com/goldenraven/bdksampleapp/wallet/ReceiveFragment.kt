@@ -42,14 +42,14 @@ class ReceiveFragment : Fragment() {
         }
 
         binding.generateNewAddressButton.setOnClickListener {
-            Log.i("BDK Sample App", Wallet.getNewAddress())
+            Log.i("BDK Sample App", Wallet.getLastUnusedAddress())
             displayNewAddress()
         }
     }
 
     private fun displayNewAddress() {
-        val newGeneratedAddress: String = Wallet.getNewAddress()
-        Log.i("SobiWallet", "New deposit address is $newGeneratedAddress")
+        val newGeneratedAddress: String = Wallet.getLastUnusedAddress()
+        Log.i("BDK Sample App", "New deposit address is $newGeneratedAddress")
 
         val qrgEncoder: QRGEncoder = QRGEncoder(newGeneratedAddress, null, QRGContents.Type.TEXT, 1000)
         qrgEncoder.colorBlack = ContextCompat.getColor(requireContext(), R.color.night_1)

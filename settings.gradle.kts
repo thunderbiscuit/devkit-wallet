@@ -1,2 +1,2 @@
-rootProject.name = "Bitcoindevkit Sample App"
+rootProject.name = "Devkit Wallet"
 include("app")

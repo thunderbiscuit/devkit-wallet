@@ -6,15 +6,14 @@
 package com.goldenraven.bdksampleapp.data
 
 import android.util.Log
-import org.bitcoindevkit.bdkjni.Lib
-import org.bitcoindevkit.bdkjni.Types.*
+import org.bitcoindevkit.bdkjni.*
 
 object Wallet {
 
     private val lib: Lib
     private lateinit var path: String
     private lateinit var walletPtr: WalletPtr
-    private val name: String = "sobi-wallet-0"
+    private val name: String = "bdk-wallet-0"
     private val electrumURL: String = "ssl://electrum.blockstream.info:60002"
 
     init {
@@ -23,7 +22,7 @@ object Wallet {
         lib = Lib()
     }
 
-    // setting the path requires the application context and is done once by the SobiWalletApplication class
+    // setting the path requires the application context and is done once by the BdkSampleApplication class
     fun setPath(path: String): Unit {
         Wallet.path = path
     }
@@ -77,6 +76,9 @@ object Wallet {
                 change_descriptor = changeDescriptor,
                 electrum_url = electrumURL,
                 electrum_proxy = null,
+                electrum_retry = 10,
+                electrum_timeout = null,
+                electrum_stop_gap = 100,
             )
         )
     }
@@ -104,6 +106,10 @@ object Wallet {
 
     fun getNewAddress(): String {
         return lib.get_new_address(walletPtr)
+    }
+
+    fun getLastUnusedAddress(): String {
+        return lib.get_last_unused_address(walletPtr)
     }
 
     fun getBalance(): Long {

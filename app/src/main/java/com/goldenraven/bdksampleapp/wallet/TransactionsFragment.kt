@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.R
 import com.goldenraven.bdksampleapp.databinding.FragmentTransactionsBinding
-import org.bitcoindevkit.bdkjni.Types.TransactionDetails
+import org.bitcoindevkit.bdkjni.TransactionDetails
 import com.goldenraven.bdksampleapp.data.Wallet
 import com.goldenraven.bdksampleapp.utilities.timestampToString
 

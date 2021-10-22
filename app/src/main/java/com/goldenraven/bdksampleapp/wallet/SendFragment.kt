@@ -15,7 +15,7 @@ import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.databinding.FragmentSendBinding
 import com.goldenraven.bdksampleapp.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.bitcoindevkit.bdkjni.Types.*
+import org.bitcoindevkit.bdkjni.*
 import com.goldenraven.bdksampleapp.data.Wallet
 import com.goldenraven.bdksampleapp.utilities.SnackbarLevel
 import com.goldenraven.bdksampleapp.utilities.showSnackbar
