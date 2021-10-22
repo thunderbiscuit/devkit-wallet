@@ -6,7 +6,7 @@ The repository is built to help newcomers to the bitcoindevkit by layering compl
 
 The repository works in the following way: multiple branches are maintained in parallel, each of them focusing on a version of the app.
 1. the default branch `docs` is mostly empty, and is used for docs
-2. the `basic-ui` branch builds the basic design and UI without any functionality
-3. the `onchain-basic` branch builds a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and BIP84-compatible wallet recovery.
+2. the `ui` branch builds the basic design and UI without any functionality
+3. the `simple-wallet` branch builds a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and BIP84-compatible wallet recovery.
 
 You can find the companion tutorial website [here](https://thunderbiscuit.github.io/bitcoindevkit-android-sample-app/).
