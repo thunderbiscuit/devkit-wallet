@@ -34,7 +34,7 @@ task-ui4           build the target ui
 # [Task 1](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui1): Create a basic Android activity
 
 <center>
-  <img class="screenshot" src="./images/screenshots/task-1.png" width="300px" />
+  <img class="screenshot" src="./images/screenshots/task-ui1.png" width="300px" />
 </center>
 
 Our first tag is the easiest to accomplish yet one of the more complicated one to understand if you are new to Android. While the goal of this tutorial is not to teach the Android framework in depth, we nonetheless need to go over the main pieces of the puzzle at play here. Note that almost all of the code at this point was generated automatically by Android Studio (you can created similar empty shell apps by choosing `New Project -> Empty Activity -> [Choose options...]`).
