@@ -15,10 +15,12 @@ import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.databinding.FragmentSendBinding
 import com.goldenraven.bdksampleapp.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.bitcoindevkit.bdkjni.*
+import org.bitcoindevkit.*
 import com.goldenraven.bdksampleapp.data.Wallet
 import com.goldenraven.bdksampleapp.utilities.SnackbarLevel
 import com.goldenraven.bdksampleapp.utilities.showSnackbar
+
+private const val TAG = "Devkit Wallet"
 
 class SendFragment : Fragment() {
 
@@ -49,12 +51,12 @@ class SendFragment : Fragment() {
                     .setTitle("Confirm transaction")
                     .setMessage(buildConfirmTransactionMessage())
                     .setPositiveButton("Broadcast") { _, _ ->
-                        Log.i("BDK Sample App", "User is attempting to broadcast transaction")
+                        Log.i(TAG, "User is attempting to broadcast transaction")
                         broadcastTransaction()
                         navController.navigate(R.id.action_sendFragment_to_walletFragment)
                     }
                     .setNegativeButton("Go back") { _, _ ->
-                        Log.i("BDK Sample App", "User is not broadcasting")
+                        Log.i(TAG, "User is not broadcasting")
                     }
             broadcastTransactionDialog.show()
         }
@@ -72,24 +74,29 @@ class SendFragment : Fragment() {
         try {
             // build required transaction information from text inputs
             val feeRate = 1F
-            val sendToAddress: String = binding.sendToAddress.text.toString().trim()
-            val sendAmount: String = binding.sendAmount.text.toString().trim()
-            val addressAndAmount: List<Pair<String, String>> = listOf(Pair(sendToAddress, sendAmount))
+            val recipient: String = binding.sendToAddress.text.toString().trim()
+            val sendAmount: ULong = binding.sendAmount.text.toString().trim().toULong()
 
-            val transactionDetails: CreateTxResponse = Wallet.createTransaction(feeRate, addressAndAmount, false, null, null, null)
-            val signResponse: SignResponse = Wallet.sign(transactionDetails.psbt)
+            // create, sign, and broadcast
+            val psbt: PartiallySignedBitcoinTransaction = Wallet.createTransaction(recipient, sendAmount, feeRate)
+            Wallet.sign(psbt)
+            val transaction: Transaction = Wallet.broadcast(psbt)
 
-            val rawTx: RawTransaction = Wallet.extractPsbt(signResponse.psbt)
-            val txid: Txid = Wallet.broadcast(rawTx.transaction)
+            val details = when (transaction) {
+                is Transaction.Confirmed -> transaction.details
+                is Transaction.Unconfirmed -> transaction.details
+            }
 
-            Log.i("BDK Sample App", "Transaction was broadcast! txid: $txid")
+            val txidString = details.txid
+
+            Log.i(TAG, "Transaction was broadcast! txid: $txidString")
             showSnackbar(
                 requireView(),
                 SnackbarLevel.SUCCESS,
                 "Transaction was broadcast successfully!"
             )
         } catch (e: Throwable) {
-            Log.i("BDK Sample App", "Broadcast error: ${e.message}")
+            Log.i(TAG, "Broadcast error: ${e.message}")
             showSnackbar(
                 requireView(),
                 SnackbarLevel.ERROR,

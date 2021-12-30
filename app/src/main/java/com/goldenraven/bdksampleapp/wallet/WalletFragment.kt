@@ -38,7 +38,7 @@ class WalletFragment : Fragment() {
 
         viewModel.balance.observe(viewLifecycleOwner, {
             val balanceInBitcoin: Float
-            if (it == 0L) {
+            if (it == 0UL) {
                 balanceInBitcoin = 0F
             } else {
                 balanceInBitcoin = it.toFloat().div(100_000_000)

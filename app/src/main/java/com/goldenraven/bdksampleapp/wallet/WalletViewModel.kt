@@ -13,10 +13,10 @@ import com.goldenraven.bdksampleapp.data.Wallet
 
 class WalletViewModel(application: Application) : AndroidViewModel(application) {
 
-    public var balance: MutableLiveData<Long> = MutableLiveData(0)
+    public var balance: MutableLiveData<ULong> = MutableLiveData(0u)
 
     public fun updateBalance() {
-        Wallet.sync(100)
+        Wallet.sync(100u)
         val newBalance = Wallet.getBalance()
         Log.i("BDK Sample App", "New balance is $newBalance")
         balance.postValue(newBalance)

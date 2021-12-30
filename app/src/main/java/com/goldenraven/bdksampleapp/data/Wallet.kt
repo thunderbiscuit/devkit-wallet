@@ -6,85 +6,46 @@
 package com.goldenraven.bdksampleapp.data
 
 import android.util.Log
-import org.bitcoindevkit.bdkjni.*
+import org.bitcoindevkit.*
+
+
+private const val TAG = "Devkit Wallet"
 
 object Wallet {
 
-    private val lib: Lib
+    private lateinit var wallet: OnlineWallet
+    private const val name: String = "devkit-testnet-0"
     private lateinit var path: String
-    private lateinit var walletPtr: WalletPtr
-    private val name: String = "bdk-wallet-0"
-    private val electrumURL: String = "ssl://electrum.blockstream.info:60002"
+    private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
 
-    init {
-        // load bitcoindevkit native library
-        Lib.load()
-        lib = Lib()
+    object LogProgress: BdkProgress {
+        override fun update(progress: Float, message: String?) {
+            Log.i(TAG, "Sync wallet $progress $message")
+        }
     }
 
     // setting the path requires the application context and is done once by the BdkSampleApplication class
-    fun setPath(path: String): Unit {
+    fun setPath(path: String) {
         Wallet.path = path
-    }
-
-    fun createWallet(): Unit {
-        val keys: ExtendedKey = generateExtendedKey()
-        val descriptor: String = createDescriptor(keys)
-        val changeDescriptor: String = createChangeDescriptor(keys)
-        initialize(
-            descriptor = descriptor,
-            changeDescriptor = changeDescriptor,
-        )
-        Repository.saveWallet(path, descriptor, changeDescriptor)
-        Repository.saveMnemonic(keys.mnemonic)
-    }
-
-    private fun generateExtendedKey(): ExtendedKey {
-        return lib.generate_extended_key(Network.testnet, 12, "")
-    }
-
-    private fun createDescriptor(keys: ExtendedKey): String {
-        Log.i("BDK Sample App", "Descriptor for receive addresses is wpkh(${keys.xprv}/84'/1'/0'/0/*)")
-        return ("wpkh(" + keys.xprv + "/84'/1'/0'/0/*)")
-    }
-
-    private fun createChangeDescriptor(keys: ExtendedKey): String {
-        Log.i("BDK Sample App", "Descriptor for change addresses is wpkh(${keys.xprv}/84'/1'/0'/1/*)")
-        return ("wpkh(" + keys.xprv + "/84'/1'/0'/1/*)")
-    }
-
-    public fun loadExistingWallet(): Unit {
-        val initialWalletData: RequiredInitialWalletData = Repository.getInitialWalletData()
-        Log.i("BDK Sample App", "Loading existing wallet, descriptor is ${initialWalletData.descriptor}")
-        Log.i("BDK Sample App", "Loading existing wallet, change descriptor is ${initialWalletData.changeDescriptor}")
-        initialize(
-            descriptor = initialWalletData.descriptor,
-            changeDescriptor = initialWalletData.changeDescriptor,
-        )
     }
 
     private fun initialize(
         descriptor: String,
         changeDescriptor: String,
     ): Unit {
-        walletPtr = lib.constructor(
-            WalletConstructor(
-                name = name,
-                network = Network.testnet,
-                path = path,
-                descriptor = descriptor,
-                change_descriptor = changeDescriptor,
-                electrum_url = electrumURL,
-                electrum_proxy = null,
-                electrum_retry = 10,
-                electrum_timeout = null,
-                electrum_stop_gap = 100,
-            )
+        val database = DatabaseConfig.Sled(SledDbConfiguration(path, name))
+        val blockchain = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
+        wallet = OnlineWallet(
+            descriptor,
+            changeDescriptor,
+            Network.TESTNET,
+            database,
+            blockchain
         )
     }
 
-    fun recoverWallet(mnemonic: String) {
-        val keys: ExtendedKey = restoreExtendedKeyFromMnemonic(mnemonic)
+    fun createWallet(): Unit {
+        val keys: ExtendedKeyInfo = generateExtendedKey(Network.TESTNET, MnemonicType.WORDS12, null)
         val descriptor: String = createDescriptor(keys)
         val changeDescriptor: String = createChangeDescriptor(keys)
         initialize(
@@ -95,51 +56,61 @@ object Wallet {
         Repository.saveMnemonic(keys.mnemonic)
     }
 
-    private fun restoreExtendedKeyFromMnemonic(mnemonic: String): ExtendedKey {
-        return lib.restore_extended_key(Network.testnet, mnemonic, "")
+    // only create BIP84 compatible wallets
+    private fun createDescriptor(keys: ExtendedKeyInfo): String {
+        Log.i(TAG, "Descriptor for receive addresses is wpkh(${keys.xprv}/84'/1'/0'/0/*)")
+        return ("wpkh(" + keys.xprv + "/84'/1'/0'/0/*)")
     }
 
-    fun sync(max_address: Int?=null): Unit {
-        lib.sync(walletPtr, max_address)
-        Log.i("BDK Sample App", "Wallet successfully synced")
+    private fun createChangeDescriptor(keys: ExtendedKeyInfo): String {
+        Log.i(TAG, "Descriptor for change addresses is wpkh(${keys.xprv}/84'/1'/0'/1/*)")
+        return ("wpkh(" + keys.xprv + "/84'/1'/0'/1/*)")
     }
 
-    fun getNewAddress(): String {
-        return lib.get_new_address(walletPtr)
+    // if the wallet already exists, its descriptors are stored in shared preferences
+    fun loadExistingWallet(): Unit {
+        val initialWalletData: RequiredInitialWalletData = Repository.getInitialWalletData()
+        Log.i(TAG, "Loading existing wallet, descriptor is ${initialWalletData.descriptor}")
+        Log.i(TAG, "Loading existing wallet, change descriptor is ${initialWalletData.changeDescriptor}")
+        initialize(
+            descriptor = initialWalletData.descriptor,
+            changeDescriptor = initialWalletData.changeDescriptor,
+        )
     }
 
-    fun getLastUnusedAddress(): String {
-        return lib.get_last_unused_address(walletPtr)
+    fun recoverWallet(mnemonic: String) {
+        val keys: ExtendedKeyInfo = restoreExtendedKey(Network.TESTNET, mnemonic, null)
+        val descriptor: String = createDescriptor(keys)
+        val changeDescriptor: String = createChangeDescriptor(keys)
+        initialize(
+            descriptor = descriptor,
+            changeDescriptor = changeDescriptor,
+        )
+        Repository.saveWallet(path, descriptor, changeDescriptor)
+        Repository.saveMnemonic(keys.mnemonic)
     }
 
-    fun getBalance(): Long {
-        return lib.get_balance(walletPtr)
+    fun createTransaction(recipient: String, amount: ULong, fee_rate: Float?): PartiallySignedBitcoinTransaction {
+        return PartiallySignedBitcoinTransaction(wallet, recipient, amount, fee_rate)
     }
 
-    fun createTransaction(
-        fee_rate: Float,
-        addressees: List<Pair<String, String>>,
-        send_all: Boolean? = false,
-        utxos: List<String>? = null,
-        unspendable: List<String>? = null,
-        policy: Map<String, List<String>>? = null,
-    ): CreateTxResponse {
-        return lib.create_tx(walletPtr, fee_rate, addressees, send_all, utxos, unspendable, policy)
+    fun sign(psbt: PartiallySignedBitcoinTransaction) {
+        wallet.sign(psbt)
     }
 
-    fun sign(psbt: String, assume_height: Int? = null): SignResponse {
-        return lib.sign(walletPtr, psbt, assume_height)
+    fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): Transaction {
+        return wallet.broadcast(signedPsbt)
     }
 
-    fun extractPsbt(psbt: String): RawTransaction {
-        return lib.extract_psbt(walletPtr, psbt)
+    fun getTransactions(): List<Transaction> = wallet.getTransactions()
+
+    fun sync(maxAddress: UInt?=null): Unit {
+        wallet.sync(LogProgress, maxAddress)
     }
 
-    fun broadcast(raw_tx: String): Txid {
-        return lib.broadcast(walletPtr, raw_tx)
-    }
+    fun getBalance(): ULong = wallet.getBalance()
 
-    fun listTransactions(): List<TransactionDetails> {
-        return lib.list_transactions(walletPtr, false)
-    }
+    fun getNewAddress(): String = wallet.getNewAddress()
+
+    fun getLastUnusedAddress(): String = wallet.getLastUnusedAddress()
 }

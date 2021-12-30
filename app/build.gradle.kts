@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
 
     buildFeatures {
         viewBinding = true
@@ -51,7 +51,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 
     // bitcoindevkit
-    implementation("org.bitcoindevkit.bdkjni:bdk-android:0.3.0")
+    implementation("org.bitcoindevkit:bdk-android:0.2.2")
 
     // qr codes
     implementation("androidmads.library.qrgenearator:QRGenearator:1.0.4")

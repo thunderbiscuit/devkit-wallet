@@ -14,13 +14,5 @@ allprojects {
         google()
         mavenCentral()
         jcenter()
-        maven {
-            url = uri("https://maven.pkg.github.com/bitcoindevkit/bdk-jni")
-            credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
-                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
-        mavenLocal()
     }
 }

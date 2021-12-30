@@ -5,7 +5,6 @@
 
 package com.goldenraven.bdksampleapp.wallet
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,10 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.goldenraven.bdksampleapp.R
 import com.goldenraven.bdksampleapp.databinding.FragmentTransactionsBinding
-import org.bitcoindevkit.bdkjni.TransactionDetails
+import org.bitcoindevkit.Transaction
 import com.goldenraven.bdksampleapp.data.Wallet
 import com.goldenraven.bdksampleapp.utilities.timestampToString
 
+private const val TAG = "Devkit Wallet"
 
 class TransactionsFragment : Fragment() {
 
@@ -36,19 +36,13 @@ class TransactionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // we sort the list of transactions by their height in the blockchain
-        // highest height first, so the most recent transactions show up first
-        // note that pending transactions have a confirmation_time of null, in which case we give them a height of 100,000,000
-        // ensuring they show up above all other transactions until they get mined, at which point they get a proper height
-        val rawTransactionList: List<TransactionDetails> = Wallet.listTransactions().sortedByDescending {
-            it.confirmation_time?.height ?: 100_000_000
-        }
+        val allTransactions: List<Transaction> = Wallet.getTransactions()
 
         binding.pendingTransactionsContent.text = pendingTransactionsList(
-            rawTransactionList.filter { it.confirmation_time == null }
+            allTransactions.filterIsInstance<Transaction.Unconfirmed>()
         )
         binding.confirmedTransactionsContent.text = confirmedTransactionsList(
-            rawTransactionList.filter { it.confirmation_time != null }
+            allTransactions.filterIsInstance<Transaction.Confirmed>()
         )
 
         val navController = Navigation.findNavController(view)
@@ -57,39 +51,40 @@ class TransactionsFragment : Fragment() {
         }
     }
 
-    private fun confirmedTransactionsList(transactions: List<TransactionDetails>): String {
+    private fun confirmedTransactionsList(transactions: List<Transaction.Confirmed>): String {
         if (transactions.isEmpty()) {
-            Log.i("SobiWallet", "Confirmed transaction list is empty")
+            Log.i(TAG, "Confirmed transaction list is empty")
             return "No confirmed transactions"
         } else {
+            val sortedTransactions = transactions.sortedByDescending { it.confirmation.height }
             return buildString {
-                for (item in transactions) {
-                    Log.i("SobiWallet", "Transaction list item: $item")
-                    appendLine("Timestamp: ${item.confirmation_time!!.timestampToString()}")
-                    appendLine("Received: ${item.received}")
-                    appendLine("Sent: ${item.sent}")
-                    appendLine("Fees: ${item.fee}")
-                    appendLine("Block: ${item.confirmation_time!!.height}")
-                    appendLine("Txid: ${item.txid}")
+                for (item in sortedTransactions) {
+                    Log.i(TAG, "Transaction list item: $item")
+                    appendLine("Timestamp: ${item.confirmation.timestamp.timestampToString()}")
+                    appendLine("Received: ${item.details.received}")
+                    appendLine("Sent: ${item.details.sent}")
+                    appendLine("Fees: ${item.details.fees}")
+                    appendLine("Block: ${item.confirmation.height}")
+                    appendLine("Txid: ${item.details.txid}")
                     appendLine()
                 }
             }
         }
     }
 
-    private fun pendingTransactionsList(transactions: List<TransactionDetails>): String {
+    private fun pendingTransactionsList(transactions: List<Transaction.Unconfirmed>): String {
         if (transactions.isEmpty()) {
-            Log.i("SobiWallet", "Pending transaction list is empty")
+            Log.i(TAG, "Pending transaction list is empty")
             return "No pending transactions"
         } else {
             return buildString {
                 for (item in transactions) {
-                    Log.i("SobiWallet", "Pending transaction list item: $item")
+                    Log.i(TAG, "Pending transaction list item: $item")
                     appendLine("Timestamp: Pending")
-                    appendLine("Received: ${item.received}")
-                    appendLine("Sent: ${item.sent}")
-                    appendLine("Fees: ${item.fee}")
-                    appendLine("Txid: ${item.txid}")
+                    appendLine("Received: ${item.details.received}")
+                    appendLine("Sent: ${item.details.sent}")
+                    appendLine("Fees: ${item.details.fees}")
+                    appendLine("Txid: ${item.details.txid}")
                     appendLine()
                 }
             }
