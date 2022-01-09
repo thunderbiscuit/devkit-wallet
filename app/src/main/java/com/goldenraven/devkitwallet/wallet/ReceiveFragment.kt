@@ -10,11 +10,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidmads.library.qrgenearator.QRGContents
-import androidmads.library.qrgenearator.QRGEncoder
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.goldenraven.bdksampleapp.utilities.QRCodeGenerator
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.databinding.FragmentReceiveBinding
 import com.goldenraven.devkitwallet.data.Wallet
@@ -52,14 +51,14 @@ class ReceiveFragment : Fragment() {
         val newGeneratedAddress: String = Wallet.getLastUnusedAddress()
         Log.i(TAG, "New deposit address is $newGeneratedAddress")
 
-        val qrgEncoder: QRGEncoder = QRGEncoder(newGeneratedAddress, null, QRGContents.Type.TEXT, 1000)
-        qrgEncoder.colorBlack = ContextCompat.getColor(requireContext(), R.color.night_1)
-        qrgEncoder.colorWhite = ContextCompat.getColor(requireContext(), R.color.snow_1)
+        val colorBlack = ContextCompat.getColor(requireContext(), R.color.night_1)
+        val colorWhite = ContextCompat.getColor(requireContext(), R.color.snow_1)
         try {
-            val bitmap = qrgEncoder.bitmap
+            val bitmap = QRCodeGenerator(colorBlack, colorWhite)
+                .generate(newGeneratedAddress, 1000)
             binding.qrCode.setImageBitmap(bitmap)
         } catch (e: Throwable) {
-            Log.i(TAG, "Error with QRCode generator, ${e.toString()}")
+            Log.i(TAG, "Error with QRCode generator", e)
         }
         binding.receiveAddress.text = newGeneratedAddress
     }
