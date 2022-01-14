@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.wallet
+package com.goldenraven.devkitwallet.wallet
 
 import android.os.Bundle
 import android.util.Log
@@ -15,9 +15,10 @@ import androidmads.library.qrgenearator.QRGEncoder
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.goldenraven.bdksampleapp.R
-import com.goldenraven.bdksampleapp.databinding.FragmentReceiveBinding
-import com.goldenraven.bdksampleapp.data.Wallet
+import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.databinding.FragmentReceiveBinding
+import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.utilities.TAG
 
 class ReceiveFragment : Fragment() {
 
@@ -42,14 +43,14 @@ class ReceiveFragment : Fragment() {
         }
 
         binding.generateNewAddressButton.setOnClickListener {
-            Log.i("BDK Sample App", Wallet.getLastUnusedAddress())
+            Log.i(TAG, Wallet.getLastUnusedAddress())
             displayNewAddress()
         }
     }
 
     private fun displayNewAddress() {
         val newGeneratedAddress: String = Wallet.getLastUnusedAddress()
-        Log.i("BDK Sample App", "New deposit address is $newGeneratedAddress")
+        Log.i(TAG, "New deposit address is $newGeneratedAddress")
 
         val qrgEncoder: QRGEncoder = QRGEncoder(newGeneratedAddress, null, QRGContents.Type.TEXT, 1000)
         qrgEncoder.colorBlack = ContextCompat.getColor(requireContext(), R.color.night_1)
@@ -58,7 +59,7 @@ class ReceiveFragment : Fragment() {
             val bitmap = qrgEncoder.bitmap
             binding.qrCode.setImageBitmap(bitmap)
         } catch (e: Throwable) {
-            Log.i("SobiWallet", "Error with QRCode generator, ${e.toString()}")
+            Log.i(TAG, "Error with QRCode generator, ${e.toString()}")
         }
         binding.receiveAddress.text = newGeneratedAddress
     }

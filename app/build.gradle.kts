@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.goldenraven.bdksampleapp"
+        applicationId = "com.goldenraven.devkitwallet"
         minSdk = 26
         targetSdk = 30
         versionCode = 1

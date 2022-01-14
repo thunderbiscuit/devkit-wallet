@@ -3,14 +3,14 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp
+package com.goldenraven.devkitwallet
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.goldenraven.bdksampleapp.data.Repository
-import com.goldenraven.bdksampleapp.data.Wallet
-import com.goldenraven.bdksampleapp.wallet.WalletActivity
+import com.goldenraven.devkitwallet.data.Repository
+import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.wallet.WalletActivity
 
 class DispatchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

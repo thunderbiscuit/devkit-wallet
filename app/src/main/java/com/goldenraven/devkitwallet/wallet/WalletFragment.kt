@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.wallet
+package com.goldenraven.devkitwallet.wallet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +12,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import com.goldenraven.bdksampleapp.R
-import com.goldenraven.bdksampleapp.databinding.FragmentWalletBinding
+import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.databinding.FragmentWalletBinding
 import java.text.DecimalFormat
 
 class WalletFragment : Fragment() {

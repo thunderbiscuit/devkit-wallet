@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp
+package com.goldenraven.devkitwallet
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,11 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.goldenraven.bdksampleapp.data.Wallet
-import com.goldenraven.bdksampleapp.databinding.FragmentRecoverBinding
-import com.goldenraven.bdksampleapp.utilities.SnackbarLevel
-import com.goldenraven.bdksampleapp.utilities.showSnackbar
-import com.goldenraven.bdksampleapp.wallet.WalletActivity
+import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.databinding.FragmentRecoverBinding
+import com.goldenraven.devkitwallet.utilities.SnackbarLevel
+import com.goldenraven.devkitwallet.utilities.TAG
+import com.goldenraven.devkitwallet.utilities.showSnackbar
+import com.goldenraven.devkitwallet.wallet.WalletActivity
 import java.util.*
 
 class RecoverWalletFragment : Fragment() {
@@ -53,7 +54,7 @@ class RecoverWalletFragment : Fragment() {
                 val intent: Intent = Intent(this@RecoverWalletFragment.context, WalletActivity::class.java)
                 startActivity(intent)
             } else {
-                Log.i("BDK Sample App", "Recovery phrase was invalid")
+                Log.i(TAG, "Recovery phrase was invalid")
             }
         }
     }
@@ -67,11 +68,11 @@ class RecoverWalletFragment : Fragment() {
         for (word in 0..11) {
             val mnemonicWord: String = requireView().findViewById<TextView>(mnemonicWordsTextViews[word]).text.toString()
                 .trim().lowercase(Locale.getDefault())
-            Log.i("BDK Sample App", "Verifying word $word: $mnemonicWord")
+            Log.i(TAG, "Verifying word $word: $mnemonicWord")
 
             when {
                 mnemonicWord.isEmpty() -> {
-                    Log.i("BDK Sample App", "Word #$word is empty!")
+                    Log.i(TAG, "Word #$word is empty!")
                     showSnackbar(
                         requireView(),
                         SnackbarLevel.ERROR,
@@ -80,7 +81,7 @@ class RecoverWalletFragment : Fragment() {
                     return false
                 }
                 mnemonicWord !in this.wordList -> {
-                    Log.i("BDK Sample App", "Word #$word, $mnemonicWord, is not valid!")
+                    Log.i(TAG, "Word #$word, $mnemonicWord, is not valid!")
                     showSnackbar(
                         requireView(),
                         SnackbarLevel.ERROR,
@@ -89,7 +90,7 @@ class RecoverWalletFragment : Fragment() {
                     return false
                 }
                 else -> {
-                    Log.i("BDK Sample App", "Word #$word, $mnemonicWord, is valid")
+                    Log.i(TAG, "Word #$word, $mnemonicWord, is valid")
                 }
             }
         }
@@ -110,7 +111,7 @@ class RecoverWalletFragment : Fragment() {
         }
 
         val recoveryPhraseString = mnemonicWordList.joinToString(" ")
-        Log.i("BDK Sample App", "The recovery phrase is $recoveryPhraseString")
+        Log.i(TAG, "The recovery phrase is $recoveryPhraseString")
         return recoveryPhraseString
     }
 }

@@ -3,14 +3,14 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.utilities
+package com.goldenraven.devkitwallet.utilities
 
 import android.graphics.Color
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import com.goldenraven.bdksampleapp.R
+import com.goldenraven.devkitwallet.R
 
 fun showSnackbar(view: View, level: SnackbarLevel, message: String): Unit {
 

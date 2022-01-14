@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.wallet
+package com.goldenraven.devkitwallet.wallet
 
 import android.os.Bundle
 import android.util.Log
@@ -12,15 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.goldenraven.bdksampleapp.databinding.FragmentSendBinding
-import com.goldenraven.bdksampleapp.R
+import com.goldenraven.devkitwallet.databinding.FragmentSendBinding
+import com.goldenraven.devkitwallet.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.bitcoindevkit.*
-import com.goldenraven.bdksampleapp.data.Wallet
-import com.goldenraven.bdksampleapp.utilities.SnackbarLevel
-import com.goldenraven.bdksampleapp.utilities.showSnackbar
+import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.utilities.SnackbarLevel
+import com.goldenraven.devkitwallet.utilities.TAG
+import com.goldenraven.devkitwallet.utilities.showSnackbar
 
-private const val TAG = "Devkit Wallet"
 
 class SendFragment : Fragment() {
 
@@ -65,7 +65,7 @@ class SendFragment : Fragment() {
     private fun buildConfirmTransactionMessage(): String {
         val sendToAddress: String = binding.sendToAddress.text.toString().trim()
         val sendAmount: String = binding.sendAmount.text.toString().trim()
-        Log.i("BDK Sample App", "Message has inputs $sendToAddress, $sendAmount")
+        Log.i(TAG, "Message has inputs $sendToAddress, $sendAmount")
         val message: String = "Send to:\n$sendToAddress\n\nAmount:\n$sendAmount satoshis\n"
         return message
     }

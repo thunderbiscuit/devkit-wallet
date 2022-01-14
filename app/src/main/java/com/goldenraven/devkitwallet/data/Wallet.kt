@@ -3,13 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.data
+package com.goldenraven.devkitwallet.data
 
 import android.util.Log
+import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.*
 
-
-private const val TAG = "Devkit Wallet"
 
 object Wallet {
 

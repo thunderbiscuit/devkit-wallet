@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.wallet
+package com.goldenraven.devkitwallet.wallet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,9 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.goldenraven.bdksampleapp.R
-import com.goldenraven.bdksampleapp.databinding.FragmentRecoveryPhraseBinding
-import com.goldenraven.bdksampleapp.data.Repository
+import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.databinding.FragmentRecoveryPhraseBinding
+import com.goldenraven.devkitwallet.data.Repository
 
 class RecoveryPhraseFragment : Fragment() {
 

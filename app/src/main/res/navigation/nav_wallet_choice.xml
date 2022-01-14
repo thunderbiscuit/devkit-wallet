@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/walletChoiceFragment"
-        android:name="com.goldenraven.bdksampleapp.WalletChoiceFragment"
+        android:name="com.goldenraven.devkitwallet.WalletChoiceFragment"
         android:label="WalletChoiceFragment"
         tools:layout="@layout/fragment_wallet_choice">
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/recoverWalletFragment"
-        android:name="com.goldenraven.bdksampleapp.RecoverWalletFragment"
+        android:name="com.goldenraven.devkitwallet.RecoverWalletFragment"
         android:label="RecoverWalletFragment"
         tools:layout="@layout/fragment_recover">
     </fragment>

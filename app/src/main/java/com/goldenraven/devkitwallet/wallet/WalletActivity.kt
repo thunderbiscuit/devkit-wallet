@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.wallet
+package com.goldenraven.devkitwallet.wallet
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
-import com.goldenraven.bdksampleapp.R
+import com.goldenraven.devkitwallet.R
 
 class WalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

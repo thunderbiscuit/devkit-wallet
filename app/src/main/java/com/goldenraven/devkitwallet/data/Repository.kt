@@ -3,10 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp.data
+package com.goldenraven.devkitwallet.data
 
 import android.util.Log
-import com.goldenraven.bdksampleapp.utilities.SharedPreferencesManager
+import com.goldenraven.devkitwallet.utilities.SharedPreferencesManager
+import com.goldenraven.devkitwallet.utilities.TAG
 
 object Repository {
 
@@ -20,7 +21,7 @@ object Repository {
     // take a look at shared preferences and see if the user already has a wallet saved on device
     fun doesWalletExist(): Boolean {
         val walletInitialized: Boolean = sharedPreferencesManager.walletInitialised
-        Log.i("BDK Sample App", "Value of walletInitialized at launch: $walletInitialized")
+        Log.i(TAG, "Value of walletInitialized at launch: $walletInitialized")
         return walletInitialized
     }
 
@@ -28,7 +29,7 @@ object Repository {
     // upon application launch, the wallet can initialize itself using that data
     fun saveWallet(path: String, descriptor: String, changeDescriptor: String) {
         Log.i(
-            "BDK Sample App",
+            TAG,
             "Saved wallet:\npath -> $path \ndescriptor -> $descriptor \nchange descriptor -> $changeDescriptor"
         )
         sharedPreferencesManager.walletInitialised = true
@@ -38,7 +39,7 @@ object Repository {
     }
 
     fun saveMnemonic(mnemonic: String) {
-        Log.i("BDK Sample App", "The recovery phrase is: $mnemonic")
+        Log.i(TAG, "The recovery phrase is: $mnemonic")
         sharedPreferencesManager.mnemonic = mnemonic
     }
 

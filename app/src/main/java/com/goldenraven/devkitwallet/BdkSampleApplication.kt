@@ -3,13 +3,13 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp
+package com.goldenraven.devkitwallet
 
 import android.app.Application
 import android.content.Context
-import com.goldenraven.bdksampleapp.utilities.SharedPreferencesManager
-import com.goldenraven.bdksampleapp.data.Repository
-import com.goldenraven.bdksampleapp.data.Wallet
+import com.goldenraven.devkitwallet.utilities.SharedPreferencesManager
+import com.goldenraven.devkitwallet.data.Repository
+import com.goldenraven.devkitwallet.data.Wallet
 
 class BdkSampleApplication : Application() {
     override fun onCreate() {

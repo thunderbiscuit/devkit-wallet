@@ -1,5 +1,5 @@
 
-package com.goldenraven.bdksampleapp.utilities
+package com.goldenraven.devkitwallet.utilities
 
 import android.content.SharedPreferences
 
