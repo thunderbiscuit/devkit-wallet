@@ -1,17 +1,3 @@
----
-layout: default
-title: Getting Started
-nav_order: 1
-description: A testnet only wallet using the bitcoindevkit
-permalink: /
----
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"> 
-<link rel="stylesheet" href="./styles.css">
-
-<br/>
 <!-- logos -->
 <div style="display: flex; justify-content: space-evenly; align-items: center; margin-top: 1rem;">
   <!-- <p>➕</p> -->

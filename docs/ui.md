@@ -1,16 +1,3 @@
----
-layout: default
-title: User Interface
-nav_order: 2
-description: A testnet only wallet using the bitcoindevkit
-permalink: /ui
----
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"> 
-<link rel="stylesheet" href="./styles.css">
-
 # Building the UI
 This page is the UI part of a walkthrough tutorial of the [DevKit Wallet codebase](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app).
 
@@ -34,7 +21,7 @@ task-ui4           build the target ui
 # [Task 1](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui1): Create a basic Android activity
 
 <center>
-  <img class="screenshot" src="./images/screenshots/task-ui1.png" width="300px" />
+  <img class="screenshot" src="../images/screenshots/task-ui1.png" width="300px" />
 </center>
 
 Our first tag is the easiest to accomplish yet one of the more complicated one to understand if you are new to Android. While the goal of this tutorial is not to teach the Android framework in depth, we nonetheless need to go over the main pieces of the puzzle at play here. Note that almost all of the code at this point was generated automatically by Android Studio (you can created similar empty shell apps by choosing `New Project -> Empty Activity -> [Choose options...]`).
@@ -68,7 +55,7 @@ startActivity(intent)
 # [Task 3](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui3): Add fragments to the wallet activity
 
 <center>
-  <img class="screenshot" src="./images/screenshots/task-3.gif" width="300px" />
+  <img class="screenshot" src="../images/screenshots/task-3.gif" width="300px" />
 </center>
 
 
@@ -115,7 +102,7 @@ Navigation between the fragments is done through the `NavHostFragment`. Notice h
 An important property of this `NavHostFragment` is the last one: `app:navGraph="@navigation/nav_wallet"`. This property defines where the navigation host will go and fetch the "mapping" for where to navigate and how to do it. Your IDE provides a visualization of the very important `nav_wallet.xml` file:
 
 <center>
-  <img src="./images/screenshots/navigation.png" width="600px" />
+  <img src="../images/screenshots/navigation.png" width="600px" />
 </center>
 
 The file contains instructions as to which fragments belong to the NavHostFragment, and the navigation actions between them, including the animations (devined in files under `res/anim/`). The screens in the IDE visualization correspond to the `<fragment>` tags in the xml file and the arrows correspond to the `<action>` tags in the xml file.
@@ -146,7 +133,7 @@ Note that resources are accessed using the following syntax: `@resourcetype/reso
 The UI we'll be building is simple with a clean color palette. The wireframes that were used to develop the original idea were made using a tool called [Figma](https://www.figma.com/) and look like this:
 
 <center>
-  <img class="screenshot" src="./images/screenshots/nord-theme.png" width="400px" />
+  <img class="screenshot" src="../images/screenshots/nord-theme.png" width="400px" />
 </center>
 
 The color palette is from a theme called [Nord](https://www.nordtheme.com/).
@@ -168,7 +155,7 @@ The testnet bitcoin logo (an svg file) is added to the `res/drawable/` directory
 It is often useful to define certain properties that can be applied broadly to many views. Android has a theming system that allows you to define new themes or extend the default one provided by Android. The app uses a bit of both. Take a look at the `res/values/themes.xml` file. Note that activities can be given a theme in the `AndroidManifest.xml` file; this is how we build the splash screen for the app (by providing a theme which has a single background image to the `DispatchActivity` activity).
 
 <center>
-  <img class="screenshot" src="./images/screenshots/ui-screenshots.png" width="600px" />
+  <img class="screenshot" src="../images/screenshots/ui-screenshots.png" width="600px" />
 </center>
 
 

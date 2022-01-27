@@ -1,16 +1,3 @@
----
-layout: default
-title: Simple Wallet
-nav_order: 3
-description: A testnet only wallet using the bitcoindevkit
-permalink: /simple-wallet
----
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"> 
-<link rel="stylesheet" href="./styles.css">
-
 # Building a Simple Testnet Wallet
 This page is the second part of a walkthrough tutorial of the [DevKit Wallet codebase](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app).
 
@@ -160,7 +147,7 @@ viewModel.balance.observe(viewLifecycleOwner, {
 This ensures that the balance displayed in the `balance` view is always up to date with the balance in the `WalletViewModel`. Easy Peasy Bitcoineesy.
 
 <center>
-  <img class="screenshot" src="./images/screenshots/task-6.gif" width="300px" />
+  <img class="screenshot" src="../images/screenshots/task-6.gif" width="300px" />
 </center>
 
 # [Task 3](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw3): Implement send
@@ -233,7 +220,7 @@ showSnackbar(
 Take a look at `utilities/Snackbars.kt` to get a sense for how they work.
 
 <center>
-  <img class="screenshot" src="./images/screenshots/task-7.gif" width="300px" />
+  <img class="screenshot" src="../images/screenshots/task-7.gif" width="300px" />
 </center>
 
 # [Task 4](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw4): Add transaction history
@@ -269,7 +256,7 @@ private fun transactionList(): String {
 ```
 
 <center>
-  <img class="screenshot" src="./images/screenshots/transaction-history.png" width="300px" />
+  <img class="screenshot" src="../images/screenshots/transaction-history.png" width="300px" />
 </center>
 
 # [Task 5](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw5): Display recovery phrase
@@ -305,7 +292,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 ```
 
 <center>
-  <img class="screenshot" src="./images/screenshots/recovery-phrase.png" width="300px" />
+  <img class="screenshot" src="../images/screenshots/recovery-phrase.png" width="300px" />
 </center>
 
 # [Task 6](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-sw6): Enable wallet recovery
@@ -388,5 +375,5 @@ fun recoverWallet(mnemonic: String) {
 ```
 
 <center>
-  <img class="screenshot" src="./images/screenshots/recover.png" width="300px" />
+  <img class="screenshot" src="../images/screenshots/recover.png" width="300px" />
 </center>
