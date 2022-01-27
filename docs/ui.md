@@ -1,5 +1,5 @@
 # Building the UI
-This page is the UI part of a walkthrough tutorial of the [DevKit Wallet codebase](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app).
+This page is the UI part of a walkthrough tutorial of the [DevKit Wallet codebase](https://github.com/thunderbiscuit/devkit-wallet).
 
 Note that this page concerns itself with the `ui` branch of the repository.
 
@@ -18,7 +18,7 @@ task-ui3           add fragments to the wallet activity
 task-ui4           build the target ui
 ```
 
-# [Task 1](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui1): Create a basic Android activity
+# [Task 1](https://github.com/thunderbiscuit/devkit-wallet/tree/task-ui1): Create a basic Android activity
 
 <center>
   <img class="screenshot" src="../images/screenshots/task-ui1.png" width="300px" />
@@ -37,7 +37,7 @@ The `main` directory breaks into two major parts: the Kotlin source code files a
 ### 3. The `app/src/main/AndroidManifest.xml` file
 The Android Manifest file describes the activities that are registered for the app, the permissions that the app will requires (internet, camera, etc.), as well as some other metadata information necessary for the OS to start your application.
 
-# [Task 2](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui2): Build multiple activities and navigate between them
+# [Task 2](https://github.com/thunderbiscuit/devkit-wallet/tree/task-ui2): Build multiple activities and navigate between them
 You can think of _activities_ in Android as the basic building blocks for apps. They group together multiple related "screens" (called _fragments_). Activities are heavier and costlier than fragments, and most apps do not require many activities (in fact many Android applications are single-activity applications).
 
 Our wallet has 3 activities:
@@ -52,7 +52,7 @@ val intent: Intent = Intent(this, WalletActivity::class.java)
 startActivity(intent)
 ```
 
-# [Task 3](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui3): Add fragments to the wallet activity
+# [Task 3](https://github.com/thunderbiscuit/devkit-wallet/tree/task-ui3): Add fragments to the wallet activity
 
 <center>
   <img class="screenshot" src="../images/screenshots/task-3.gif" width="300px" />
@@ -129,7 +129,7 @@ Note that resources are accessed using the following syntax: `@resourcetype/reso
 <!-- ... -->
 ```
 
-# [Task 4](https://github.com/thunderbiscuit/bitcoindevkit-android-sample-app/tree/task-ui4): Build the target UI
+# [Task 4](https://github.com/thunderbiscuit/devkit-wallet/tree/task-ui4): Build the target UI
 The UI we'll be building is simple with a clean color palette. The wireframes that were used to develop the original idea were made using a tool called [Figma](https://www.figma.com/) and look like this:
 
 <center>
@@ -157,5 +157,3 @@ It is often useful to define certain properties that can be applied broadly to m
 <center>
   <img class="screenshot" src="../images/screenshots/ui-screenshots.png" width="600px" />
 </center>
-
-
