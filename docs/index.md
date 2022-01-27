@@ -8,7 +8,7 @@
 </div>
 
 <center>
-  <h1 style="font-size: 42px !important; font-family: 'JetBrains Mono'; margin-top: 2rem">Bitcoindevkit Android<br>Demo Wallet</h1>
+  <h1 style="font-size: 42px !important; font-family: 'JetBrains Mono', monospace; margin-top: 2rem">Bitcoindevkit Android<br>Demo Wallet</h1>
   <hr>
   <br/>
 </center>
@@ -25,4 +25,4 @@ The repository works in the following way: multiple branches are maintained in p
 Each of those branches has a documentation page associated with it.
 
 # Prerequisites
-These tutorials assume you have a working Android development setup, including Android Studio 4.2.2 or above and a phone you can launch the app on or a working emulator on your development machine. It also requires you have downloaded or built the bitcoindevkit library for Android ([bdk-jni](https://github.com/bitcoindevkit/bdk-jni)). To ensure you can run through this tutorial without problems, you can build the `master` branch of the [test app](https://github.com/thunderbiscuit/android-bdk-development-testapp). The readme is comprehensive and should guide you through installing the proper software and testing the app.
+These tutorials assume you have a working Android development setup, including Android Studio 4.2.2 or above and a phone you can launch the app on or a working emulator on your development machine.
