@@ -54,7 +54,6 @@ dependencies {
     implementation("org.bitcoindevkit:bdk-android:0.2.2")
 
     // qr codes
-    implementation("androidmads.library.qrgenearator:QRGenearator:1.0.4")
     implementation("com.google.zxing:core:3.4.1")
 
     // tests
