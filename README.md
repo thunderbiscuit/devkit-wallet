@@ -21,7 +21,7 @@ The repository works in the following way: multiple branches are maintained in p
     <img src="./images/docs.png" width="500" />
 </div>
 
-You can find the companion tutorial website for this repository [here](https://thunderbiscuit.github.io/bitcoindevkit-android-sample-app/). To learn more about the bitcoindevkit, check out [the shiny new docs here](https://bitcoindevkit.org/).
+You can find the companion tutorial website for this repository [here](https://thunderbiscuit.github.io/devkit-wallet/). To learn more about the bitcoindevkit, check out [the shiny new docs here](https://bitcoindevkit.org/).
 
 <br/>
 
