@@ -8,11 +8,12 @@ package com.goldenraven.devkitwallet.data
 import android.util.Log
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.*
+import org.bitcoindevkit.Wallet as BdkWallet
 
 
 object Wallet {
 
-    private lateinit var wallet: OnlineWallet
+    private lateinit var wallet: BdkWallet
     private const val name: String = "devkit-testnet-0"
     private lateinit var path: String
     private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
@@ -34,7 +35,7 @@ object Wallet {
     ): Unit {
         val database = DatabaseConfig.Sled(SledDbConfiguration(path, name))
         val blockchain = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
-        wallet = OnlineWallet(
+        wallet = BdkWallet(
             descriptor,
             changeDescriptor,
             Network.TESTNET,
@@ -44,7 +45,7 @@ object Wallet {
     }
 
     fun createWallet(): Unit {
-        val keys: ExtendedKeyInfo = generateExtendedKey(Network.TESTNET, MnemonicType.WORDS12, null)
+        val keys: ExtendedKeyInfo = generateExtendedKey(Network.TESTNET, WordCount.WORDS12, null)
         val descriptor: String = createDescriptor(keys)
         val changeDescriptor: String = createChangeDescriptor(keys)
         initialize(
