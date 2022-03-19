@@ -80,16 +80,9 @@ class SendFragment : Fragment() {
             // create, sign, and broadcast
             val psbt: PartiallySignedBitcoinTransaction = Wallet.createTransaction(recipient, sendAmount, feeRate)
             Wallet.sign(psbt)
-            val transaction: Transaction = Wallet.broadcast(psbt)
+            val txid: String = Wallet.broadcast(psbt)
 
-            val details = when (transaction) {
-                is Transaction.Confirmed -> transaction.details
-                is Transaction.Unconfirmed -> transaction.details
-            }
-
-            val txidString = details.txid
-
-            Log.i(TAG, "Transaction was broadcast! txid: $txidString")
+            Log.i(TAG, "Transaction was broadcast! txid: $txid")
             showSnackbar(
                 requireView(),
                 SnackbarLevel.SUCCESS,

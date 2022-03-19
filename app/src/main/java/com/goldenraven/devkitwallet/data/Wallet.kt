@@ -14,13 +14,12 @@ import org.bitcoindevkit.Wallet as BdkWallet
 object Wallet {
 
     private lateinit var wallet: BdkWallet
-    private const val name: String = "devkit-testnet-0"
     private lateinit var path: String
     private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
 
     object LogProgress: BdkProgress {
         override fun update(progress: Float, message: String?) {
-            Log.i(TAG, "Sync wallet $progress $message")
+            Log.i(TAG, "Sync wallet")
         }
     }
 
@@ -33,7 +32,7 @@ object Wallet {
         descriptor: String,
         changeDescriptor: String,
     ): Unit {
-        val database = DatabaseConfig.Sled(SledDbConfiguration(path, name))
+        val database = DatabaseConfig.Sqlite(SqliteDbConfiguration("$path/bdk-sqlite"))
         val blockchain = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
         wallet = BdkWallet(
             descriptor,
@@ -98,7 +97,7 @@ object Wallet {
         wallet.sign(psbt)
     }
 
-    fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): Transaction {
+    fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): String {
         return wallet.broadcast(signedPsbt)
     }
 
