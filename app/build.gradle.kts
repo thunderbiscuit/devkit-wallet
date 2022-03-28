@@ -8,6 +8,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     defaultConfig {
@@ -38,6 +39,7 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.1.1"
+        // kotlinCompilerExtensionVersion = "1.1.1"
     }
 }
 

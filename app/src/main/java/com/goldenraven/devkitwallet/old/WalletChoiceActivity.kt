@@ -3,11 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet
+package com.goldenraven.devkitwallet.old
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.databinding.ActivityWalletChoiceBinding
 
 class WalletChoiceActivity : AppCompatActivity() {

@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet
+package com.goldenraven.devkitwallet.old
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.databinding.FragmentWalletBinding
 
 class WalletFragment : Fragment() {
