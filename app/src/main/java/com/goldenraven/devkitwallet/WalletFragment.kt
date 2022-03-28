@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp
+package com.goldenraven.devkitwallet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,18 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.goldenraven.bdksampleapp.databinding.FragmentTransactionsBinding
+import com.goldenraven.devkitwallet.databinding.FragmentWalletBinding
 
-class TransactionsFragment : Fragment() {
+class WalletFragment : Fragment() {
 
-    private lateinit var binding: FragmentTransactionsBinding
+    private lateinit var binding: FragmentWalletBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentTransactionsBinding.inflate(inflater, container, false)
+        binding = FragmentWalletBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -31,8 +31,14 @@ class TransactionsFragment : Fragment() {
 
         val navController = Navigation.findNavController(view)
 
-        binding.transactionsToWalletButton.setOnClickListener {
-            navController.navigate(R.id.action_transactionsFragment_to_walletFragment)
+        binding.toTransactionsButton.setOnClickListener {
+            navController.navigate(R.id.action_walletFragment_to_transactionsFragment)
+        }
+        binding.toReceiveButton.setOnClickListener {
+            navController.navigate(R.id.action_walletFragment_to_receiveFragment)
+        }
+        binding.toSendButton.setOnClickListener {
+            navController.navigate(R.id.action_walletFragment_to_sendFragment)
         }
     }
 }

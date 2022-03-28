@@ -3,12 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.bdksampleapp
+package com.goldenraven.devkitwallet
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.goldenraven.bdksampleapp.databinding.ActivityWalletChoiceBinding
+import com.goldenraven.devkitwallet.databinding.ActivityWalletChoiceBinding
 
 class WalletChoiceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

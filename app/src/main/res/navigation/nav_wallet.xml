@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/walletFragment"
-        android:name="com.goldenraven.bdksampleapp.WalletFragment"
+        android:name="com.goldenraven.devkitwallet.WalletFragment"
         android:label="WalletFragment"
         tools:layout="@layout/fragment_wallet" >
         <action
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/transactionsFragment"
-        android:name="com.goldenraven.bdksampleapp.TransactionsFragment"
+        android:name="com.goldenraven.devkitwallet.TransactionsFragment"
         android:label="TransactionsFragment"
         tools:layout="@layout/fragment_transactions" >
         <action
@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/sendFragment"
-        android:name="com.goldenraven.bdksampleapp.SendFragment"
+        android:name="com.goldenraven.devkitwallet.SendFragment"
         android:label="SendFragment"
         tools:layout="@layout/fragment_send">
         <action
@@ -64,7 +64,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.goldenraven.bdksampleapp.RecoveryPhraseFragment"
+        android:name="com.goldenraven.devkitwallet.RecoveryPhraseFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_recovery_phrase">
         <action
@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/receiveFragment"
-        android:name="com.goldenraven.bdksampleapp.ReceiveFragment"
+        android:name="com.goldenraven.devkitwallet.ReceiveFragment"
         android:label="ReceiveFragment"
         tools:layout="@layout/fragment_receive">
         <action
@@ -87,7 +87,7 @@
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.goldenraven.bdksampleapp.AboutFragment"
+        android:name="com.goldenraven.devkitwallet.AboutFragment"
         android:label="AboutFragment"
         tools:layout="@layout/fragment_about" >
         <action

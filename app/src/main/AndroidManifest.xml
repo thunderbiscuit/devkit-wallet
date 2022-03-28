@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.goldenraven.bdksampleapp">
+    package="com.goldenraven.devkitwallet">
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,8 @@
 
         <activity
             android:name=".DispatchActivity"
-            android:theme="@style/Theme.BitcoindevkitSampleApp.Launcher">
+            android:theme="@style/Theme.BitcoindevkitSampleApp.Launcher"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +25,8 @@
 
         <activity
             android:name=".WalletChoiceActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -33,7 +35,8 @@
 
         <activity
             android:name=".WalletActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
