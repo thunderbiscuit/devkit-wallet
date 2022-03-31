@@ -10,8 +10,13 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -19,6 +24,8 @@ import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.WalletNavigation
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
+import com.goldenraven.devkitwallet.ui.theme.firaMono
+import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -37,9 +44,9 @@ internal fun WalletScreen(navController: NavController) {
 
     // val navControllerWalletNavigation: NavHostController = rememberAnimatedNavController()
 
-    ModalNavigationDrawer(
+    ModalNavigationDrawer (
         drawerState = drawerState,
-        drawerContainerColor = MaterialTheme.colorScheme.background,
+        drawerContainerColor = DevkitWalletColors.night4,
         drawerContent = {
             Column(
                 Modifier
@@ -52,30 +59,50 @@ internal fun WalletScreen(navController: NavController) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_testnet_logo),
                     contentDescription = "Bitcoin testnet logo",
-                    Modifier.size(90.dp)
+                    Modifier.size(90.dp).padding(bottom = 16.dp)
+                )
+                Text(
+                    text = "Devkit Wallet",
+                    color = DevkitWalletColors.snow3
+                )
+                Text(
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = DevkitWalletColors.snow3)) {
+                            append("Version: ")
+                        }
+                        withStyle(style = SpanStyle(
+                            color = Color(0xFF2e3440),
+                            fontStyle = FontStyle.Italic,
+                            fontFamily = firaMonoMedium
+                        )) {
+                            append("UIOnly")
+                        }
+                    }
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
             NavigationDrawerItem(
-                // icon = { Icon(Icons.Default.Face, contentDescription = null) },
                 label = { Text("About") },
                 selected = items[0] == selectedItem.value,
                 onClick = { navController.navigate(Screen.AboutScreen.route) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                 colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = DevkitWalletColors.night1,
-                    unselectedContainerColor = DevkitWalletColors.night1,
+                    selectedContainerColor = DevkitWalletColors.night4,
+                    unselectedContainerColor = DevkitWalletColors.night4,
+                    selectedTextColor = DevkitWalletColors.snow3,
+                    unselectedTextColor = DevkitWalletColors.snow3
                 )
             )
             NavigationDrawerItem(
-                // icon = { painterResource(id = R.drawable.ic_baseline_tune_24) },
                 label = { Text("Recovery Phrase") },
                 selected = items[1] == selectedItem.value,
                 onClick = { navController.navigate(Screen.RecoveryPhraseScreen.route) },
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                 colors = NavigationDrawerItemDefaults.colors(
-                    selectedContainerColor = DevkitWalletColors.night1,
-                    unselectedContainerColor = DevkitWalletColors.night1,
+                    selectedContainerColor = DevkitWalletColors.night4,
+                    unselectedContainerColor = DevkitWalletColors.night4,
+                    selectedTextColor = DevkitWalletColors.snow3,
+                    unselectedTextColor = DevkitWalletColors.snow3
                 )
             )
         },
@@ -104,7 +131,7 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
                 )
             }
         },
-        actions = { }
+        actions = {  }
     )
 }
 

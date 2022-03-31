@@ -8,3 +8,7 @@ import com.goldenraven.devkitwallet.R
 val firaMono = FontFamily(
     Font(R.font.fira_mono, FontWeight.Normal),
 )
+
+val firaMonoMedium = FontFamily(
+    Font(R.font.fira_mono_medium, FontWeight.Medium)
+)
