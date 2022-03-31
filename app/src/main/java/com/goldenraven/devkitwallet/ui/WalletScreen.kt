@@ -42,7 +42,6 @@ internal fun WalletScreen(navController: NavController) {
     val items = listOf(Icons.Default.Favorite, Icons.Default.Face, Icons.Default.Email, Icons.Default.Face)
     val selectedItem = remember { mutableStateOf(items[0]) }
 
-    // val navControllerWalletNavigation: NavHostController = rememberAnimatedNavController()
 
     ModalNavigationDrawer (
         drawerState = drawerState,
@@ -51,7 +50,7 @@ internal fun WalletScreen(navController: NavController) {
             Column(
                 Modifier
                     .background(color = DevkitWalletColors.frost1)
-                    .height(200.dp)
+                    .height(300.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
@@ -59,26 +58,57 @@ internal fun WalletScreen(navController: NavController) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_testnet_logo),
                     contentDescription = "Bitcoin testnet logo",
-                    Modifier.size(90.dp).padding(bottom = 16.dp)
+                    Modifier
+                        .size(90.dp)
+                        .padding(bottom = 16.dp)
                 )
                 Text(
                     text = "Devkit Wallet",
                     color = DevkitWalletColors.snow3
                 )
-                Text(
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = DevkitWalletColors.snow3)) {
-                            append("Version: ")
-                        }
-                        withStyle(style = SpanStyle(
-                            color = Color(0xFF2e3440),
-                            fontStyle = FontStyle.Italic,
-                            fontFamily = firaMonoMedium
-                        )) {
-                            append("UIOnly")
-                        }
+                Spacer(modifier = Modifier.padding(16.dp))
+                Row(
+                    // verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "Version:  ",
+                        color = DevkitWalletColors.snow3,
+                    )
+                    Column() {
+                        Text(
+                            text = "\uD83D\uDE0E UIOnly",
+                            color = DevkitWalletColors.snow3,
+                            fontFamily = firaMono
+                        )
+                        Text(
+                            text = "\uD83D\uDE0E SimpleWallet",
+                            color = Color(0x60eceff4),
+                            // color = DevkitWalletColors.snow3,
+                            fontStyle = FontStyle.Normal,
+                            fontFamily = firaMono
+                        )
+                        Text(
+                            text = "\uD83D\uDE0E AdvancedWallet",
+                            color = Color(0x60eceff4),
+                            // color = DevkitWalletColors.snow3,
+                            fontFamily = firaMono
+                        )
                     }
-                )
+                }
+                // Text(
+                //     buildAnnotatedString {
+                //         withStyle(style = SpanStyle(color = DevkitWalletColors.snow3)) {
+                //             append("Version: ")
+                //         }
+                //         withStyle(style = SpanStyle(
+                //             color = Color(0xFF2e3440),
+                //             fontStyle = FontStyle.Italic,
+                //             fontFamily = firaMonoMedium
+                //         )) {
+                //             append("UIOnly")
+                //         }
+                //     }
+                // )
             }
             Spacer(modifier = Modifier.height(16.dp))
             NavigationDrawerItem(

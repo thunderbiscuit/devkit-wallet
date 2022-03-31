@@ -10,8 +10,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.goldenraven.devkitwallet.ui.intro.WalletChoiceScreen
-import com.goldenraven.devkitwallet.ui.intro.WalletRecoveryScreen
 import com.goldenraven.devkitwallet.ui.wallet.HomeScreen
 import com.goldenraven.devkitwallet.ui.wallet.ReceiveScreen
 import com.goldenraven.devkitwallet.ui.wallet.SendScreen
@@ -39,7 +37,7 @@ fun WalletNavigation() {
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
-        ) { HomeScreen() }
+        ) { HomeScreen(navController) }
 
         composable(
             route = Screen.ReceiveScreen.route,

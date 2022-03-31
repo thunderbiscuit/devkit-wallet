@@ -27,30 +27,26 @@ import com.goldenraven.devkitwallet.ui.theme.firaMono
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TransactionsScreen() {
-    Scaffold(
-        topBar = { DevkitWalletAppBar() }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(DevkitWalletColors.night4),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(DevkitWalletColors.night4),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_testnet_logo),
-                contentDescription = "Bitcoin testnet logo",
-                Modifier.size(90.dp)
-            )
-            Spacer(modifier = Modifier.padding(8.dp))
-            Text(
-                text = "Transactions\nScreen",
-                color = DevkitWalletColors.snow3,
-                fontSize = 28.sp,
-                fontFamily = firaMono,
-                textAlign = TextAlign.Center
-            )
-        }
+        Image(
+            painter = painterResource(id = R.drawable.ic_testnet_logo),
+            contentDescription = "Bitcoin testnet logo",
+            Modifier.size(90.dp)
+        )
+        Spacer(modifier = Modifier.padding(8.dp))
+        Text(
+            text = "Transactions\nScreen",
+            color = DevkitWalletColors.snow3,
+            fontSize = 28.sp,
+            fontFamily = firaMono,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
