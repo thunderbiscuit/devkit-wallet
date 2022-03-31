@@ -3,35 +3,30 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui.intro
+package com.goldenraven.devkitwallet.ui
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.DevkitWalletAppBar
+import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun WalletRecoveryScreen() {
+internal fun RecoveryPhraseScreen() {
     Scaffold(
         topBar = { DevkitWalletAppBar() }
     ) {
@@ -49,7 +44,7 @@ internal fun WalletRecoveryScreen() {
             )
             Spacer(modifier = Modifier.padding(8.dp))
             Text(
-                text = "Wallet\nRecovery\nScreen",
+                text = "Recovery Phrase\nScreen",
                 color = DevkitWalletColors.snow3,
                 fontSize = 28.sp,
                 fontFamily = firaMono,
@@ -61,6 +56,6 @@ internal fun WalletRecoveryScreen() {
 
 @Preview(device = Devices.PIXEL_4, showBackground = true)
 @Composable
-internal fun PreviewWalletRecoveryScreen() {
-    WalletRecoveryScreen()
+internal fun PreviewRecoveryPhraseScreen() {
+    RecoveryPhraseScreen()
 }

@@ -7,6 +7,7 @@ package com.goldenraven.devkitwallet
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import com.goldenraven.devkitwallet.ui.CreateWalletNavigation
 
@@ -14,8 +15,15 @@ class DevkitWalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent {
-            CreateWalletNavigation()
+        val onBuildWalletButtonClicked: () -> Unit = {
+            setContent {
+                HomeNavigation()
+            }
         }
+
+        setContent {
+            CreateWalletNavigation(onBuildWalletButtonClicked)
+        }
+
     }
 }

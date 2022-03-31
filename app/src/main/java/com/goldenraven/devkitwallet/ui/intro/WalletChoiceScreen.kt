@@ -5,7 +5,6 @@
 
 package com.goldenraven.devkitwallet.ui.intro
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,8 +32,11 @@ import com.goldenraven.devkitwallet.ui.theme.firaMono
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun WalletChoiceScreen(navController: NavController) {
-    Log.i("RecoveryScreen", "We're in the wallet choice")
+internal fun WalletChoiceScreen(
+    navController: NavController,
+    onBuildWalletButtonClicked: () -> Unit
+) {
+
     Scaffold(
         topBar = { DevkitWalletAppBar() }
     ) {
@@ -71,7 +72,7 @@ internal fun WalletChoiceScreen(navController: NavController) {
             }
 
             Button(
-                onClick = { },
+                onClick = { onBuildWalletButtonClicked() },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -119,8 +120,8 @@ internal fun WalletChoiceScreen(navController: NavController) {
     }
 }
 
-@Preview(device = Devices.PIXEL_4, showBackground = true)
-@Composable
-internal fun PreviewWalletChoiceScreen() {
-    WalletChoiceScreen(rememberNavController())
-}
+// @Preview(device = Devices.PIXEL_4, showBackground = true)
+// @Composable
+// internal fun PreviewWalletChoiceScreen() {
+//     WalletChoiceScreen(rememberNavController())
+// }

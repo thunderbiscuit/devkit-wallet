@@ -18,14 +18,14 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 @Composable
 internal fun DevkitWalletAppBar() {
     SmallTopAppBar(
-        title = { AppTitle() },
+        title = { IntroAppTitle() },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.night1),
         actions = { }
     )
 }
 
 @Composable
-internal fun AppTitle() {
+internal fun IntroAppTitle() {
     Text(
         text = stringResource(R.string.app_name),
         color = DevkitWalletColors.snow3,

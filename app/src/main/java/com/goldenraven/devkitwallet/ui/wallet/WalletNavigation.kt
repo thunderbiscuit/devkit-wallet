@@ -12,33 +12,37 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.ui.intro.WalletChoiceScreen
 import com.goldenraven.devkitwallet.ui.intro.WalletRecoveryScreen
+import com.goldenraven.devkitwallet.ui.wallet.HomeScreen
+import com.goldenraven.devkitwallet.ui.wallet.ReceiveScreen
+import com.goldenraven.devkitwallet.ui.wallet.SendScreen
+import com.goldenraven.devkitwallet.ui.wallet.TransactionsScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun CreateWalletNavigation(onBuildWalletButtonClicked: () -> Unit) {
+fun WalletNavigation() {
     val navController: NavHostController = rememberAnimatedNavController()
     val animationDuration = 400
 
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.WalletChoiceScreen.route,
+        startDestination = Screen.HomeScreen.route,
     ) {
 
         composable(
-            route = Screen.WalletChoiceScreen.route,
+            route = Screen.HomeScreen.route,
             exitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
-        ) { WalletChoiceScreen(navController = navController, onBuildWalletButtonClicked) }
+        ) { HomeScreen() }
 
         composable(
-            route = Screen.WalletRecoveryScreen.route,
+            route = Screen.ReceiveScreen.route,
             enterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
             },
@@ -51,6 +55,38 @@ fun CreateWalletNavigation(onBuildWalletButtonClicked: () -> Unit) {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { WalletRecoveryScreen() }
+        ) { ReceiveScreen() }
+
+        composable(
+            route = Screen.SendScreen.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            }
+        ) { SendScreen() }
+
+        composable(
+            route = Screen.TransactionsScreen.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            }
+        ) { TransactionsScreen() }
     }
 }
