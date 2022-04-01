@@ -92,20 +92,6 @@ internal fun WalletScreen(navController: NavController) {
                         )
                     }
                 }
-                // Text(
-                //     buildAnnotatedString {
-                //         withStyle(style = SpanStyle(color = DevkitWalletColors.snow3)) {
-                //             append("Version: ")
-                //         }
-                //         withStyle(style = SpanStyle(
-                //             color = Color(0xFF2e3440),
-                //             fontStyle = FontStyle.Italic,
-                //             fontFamily = firaMonoMedium
-                //         )) {
-                //             append("UIOnly")
-                //         }
-                //     }
-                // )
             }
             Spacer(modifier = Modifier.height(16.dp))
             NavigationDrawerItem(

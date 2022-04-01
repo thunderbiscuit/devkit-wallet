@@ -25,7 +25,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.R
-import com.goldenraven.devkitwallet.ui.DevkitWalletAppBar
+import com.goldenraven.devkitwallet.ui.AwayFromHomeAppBar
+import com.goldenraven.devkitwallet.ui.IntroAppBar
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
@@ -38,7 +39,7 @@ internal fun WalletChoiceScreen(
 ) {
 
     Scaffold(
-        topBar = { DevkitWalletAppBar() }
+        topBar = { IntroAppBar() }
     ) {
         ConstraintLayout(
             modifier = Modifier

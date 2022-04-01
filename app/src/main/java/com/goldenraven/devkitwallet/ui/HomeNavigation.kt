@@ -53,7 +53,7 @@ fun HomeNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { AboutScreen() }
+        ) { AboutScreen(navController = navController) }
 
         composable(
             route = Screen.RecoveryPhraseScreen.route,
@@ -69,6 +69,6 @@ fun HomeNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { RecoveryPhraseScreen() }
+        ) { RecoveryPhraseScreen(navController = navController) }
     }
 }

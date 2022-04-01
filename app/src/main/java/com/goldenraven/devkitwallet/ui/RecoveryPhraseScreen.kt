@@ -18,15 +18,17 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun RecoveryPhraseScreen() {
+internal fun RecoveryPhraseScreen(navController: NavController) {
     Scaffold(
-        topBar = { DevkitWalletAppBar() }
+        topBar = { AwayFromHomeAppBar(navController) }
     ) {
         Column(
             modifier = Modifier
@@ -55,5 +57,5 @@ internal fun RecoveryPhraseScreen() {
 @Preview(device = Devices.PIXEL_4, showBackground = true)
 @Composable
 internal fun PreviewRecoveryPhraseScreen() {
-    RecoveryPhraseScreen()
+    RecoveryPhraseScreen(rememberNavController())
 }

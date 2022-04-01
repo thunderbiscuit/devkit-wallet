@@ -5,18 +5,39 @@
 
 package com.goldenraven.devkitwallet.ui
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SmallTopAppBar
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DevkitWalletAppBar() {
+internal fun AwayFromHomeAppBar(navController: NavController) {
+    SmallTopAppBar(
+        title = { IntroAppTitle() },
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.night1),
+        navigationIcon = {
+            IconButton(onClick = { navController.navigate(Screen.WalletScreen.route) }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Go Back",
+                    tint = DevkitWalletColors.snow3
+                )
+            }
+        },
+        actions = { }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun IntroAppBar() {
     SmallTopAppBar(
         title = { IntroAppTitle() },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.night1),
@@ -29,9 +50,5 @@ internal fun IntroAppTitle() {
     Text(
         text = stringResource(R.string.app_name),
         color = DevkitWalletColors.snow3,
-        // style = TextStyle(
-        //     fontFamily = firaMono,
-        //     fontSize = 20.sp
-        // )
     )
 }
