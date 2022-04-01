@@ -1,26 +1,22 @@
+/*
+ * Copyright 2020-2022 thunderbiscuit and contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
+ */
+
 package com.goldenraven.devkitwallet.ui.wallet
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.goldenraven.devkitwallet.R
-import com.goldenraven.devkitwallet.ui.DevkitWalletAppBar
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
@@ -30,11 +26,11 @@ import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(navController: NavHostController) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(DevkitWalletColors.night4),
-        // verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.padding(24.dp))
