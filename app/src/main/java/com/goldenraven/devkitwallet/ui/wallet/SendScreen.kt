@@ -88,7 +88,8 @@ internal fun SendScreen(navController: NavController) {
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .size(width = 300.dp, height = 70.dp)
+                    .height(80.dp)
+                    .fillMaxWidth(0.9f)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
             ) {
@@ -105,8 +106,9 @@ internal fun SendScreen(navController: NavController) {
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .size(width = 300.dp, height = 70.dp)
-                    // .fillMaxWidth()
+                    // .size(width = 300.dp, height = 70.dp)
+                    .height(80.dp)
+                    .fillMaxWidth(0.9f)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
             ) {
@@ -128,7 +130,7 @@ private fun TransactionRecipientInput() {
         var text by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.8f),
+            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.9f),
             value = text,
             onValueChange = { text = it },
             label = {
@@ -154,7 +156,7 @@ private fun TransactionAmountInput() {
         var text by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.8f),
+            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.9f),
             value = text,
             onValueChange = { text = it },
             singleLine = true,
@@ -180,7 +182,7 @@ private fun TransactionFeeInput() {
         var text by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.8f),
+            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.9f),
             value = text,
             onValueChange = { text = it },
             singleLine = true,

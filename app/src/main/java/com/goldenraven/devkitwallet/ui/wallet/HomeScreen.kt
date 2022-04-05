@@ -5,6 +5,7 @@
 
 package com.goldenraven.devkitwallet.ui.wallet
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,11 +13,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
@@ -39,10 +43,20 @@ internal fun HomeScreen(navController: NavHostController) {
                 .fillMaxWidth()
                 .background(color = DevkitWalletColors.night2)
                 .height(110.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_bitcoin_logo),
+                contentDescription = "Bitcoin testnet logo",
+                Modifier
+                    // .size(90.dp)
+                    // .padding(bottom = 16.dp)
+                    .align(Alignment.CenterVertically)
+                    .rotate(-13f)
+            )
             Text(
-                "Balance here",
+                "0.00021000",
                 fontFamily = firaMonoMedium,
                 fontSize = 32.sp,
                 color = DevkitWalletColors.snow3
