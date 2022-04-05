@@ -18,9 +18,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AwayFromHomeAppBar(navController: NavController) {
+internal fun AwayFromHomeAppBar(navController: NavController, title: String) {
     SmallTopAppBar(
-        title = { IntroAppTitle() },
+        title = { IntroAppTitle(title) },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.night1),
         navigationIcon = {
             IconButton(onClick = { navController.navigate(Screen.WalletScreen.route) }) {
@@ -39,16 +39,16 @@ internal fun AwayFromHomeAppBar(navController: NavController) {
 @Composable
 internal fun IntroAppBar() {
     SmallTopAppBar(
-        title = { IntroAppTitle() },
+        title = { IntroAppTitle("Devkit Wallet") },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.night1),
         actions = { }
     )
 }
 
 @Composable
-internal fun IntroAppTitle() {
+internal fun IntroAppTitle(title: String) {
     Text(
-        text = stringResource(R.string.app_name),
+        text = title,
         color = DevkitWalletColors.snow3,
     )
 }

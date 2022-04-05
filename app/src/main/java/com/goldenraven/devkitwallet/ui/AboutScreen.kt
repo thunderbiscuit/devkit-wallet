@@ -28,7 +28,7 @@ import com.goldenraven.devkitwallet.ui.theme.firaMono
 @Composable
 internal fun AboutScreen(navController: NavController) {
     Scaffold(
-        topBar = { AwayFromHomeAppBar(navController) }
+        topBar = { AwayFromHomeAppBar(navController, "About") }
     ) {
         Column(
             modifier = Modifier
@@ -44,11 +44,11 @@ internal fun AboutScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.padding(8.dp))
             Text(
-                text = "About\nScreen",
+                text = "This wallet is build for developers to learn how to leverage the bitcoindevkit. You are currently running the \"UIOnly\" version of the app, which doesn't have any bitcoin-related functionality.",
                 color = DevkitWalletColors.snow3,
-                fontSize = 28.sp,
-                fontFamily = firaMono,
-                textAlign = TextAlign.Center
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
     }

@@ -28,7 +28,7 @@ import com.goldenraven.devkitwallet.ui.theme.firaMono
 @Composable
 internal fun RecoveryPhraseScreen(navController: NavController) {
     Scaffold(
-        topBar = { AwayFromHomeAppBar(navController) }
+        topBar = { AwayFromHomeAppBar(navController, "Recovery Phrase") }
     ) {
         Column(
             modifier = Modifier

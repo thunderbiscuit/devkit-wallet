@@ -69,7 +69,7 @@ fun WalletNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { SendScreen() }
+        ) { SendScreen(navController) }
 
         composable(
             route = Screen.TransactionsScreen.route,
