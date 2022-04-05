@@ -54,14 +54,15 @@ internal fun HomeScreen(navController: NavHostController) {
             colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
-                .size(width = 300.dp, height = 70.dp)
-                // .fillMaxWidth()
+                .height(80.dp)
+                // .size(width = 300.dp, height = 70.dp)
+                .fillMaxWidth(0.9f)
                 .padding(vertical = 8.dp, horizontal = 8.dp)
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
         ) {
             Text(
                 text = "sync",
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 fontFamily = firaMono,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
@@ -73,13 +74,14 @@ internal fun HomeScreen(navController: NavHostController) {
             colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
-                .size(width = 300.dp, height = 70.dp)
+                .height(80.dp)
+                .fillMaxWidth(0.9f)
                 .padding(vertical = 8.dp, horizontal = 8.dp)
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
         ) {
             Text(
                 text = "transaction history",
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 fontFamily = firaMono,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
@@ -88,24 +90,27 @@ internal fun HomeScreen(navController: NavHostController) {
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.height(140.dp).fillMaxWidth(0.9f)
         ) {
             Button(
                 onClick = { navController.navigate(Screen.ReceiveScreen.route) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .size(width = 150.dp, height = 120.dp)
-                    // .fillMaxWidth()
+                    .height(160.dp)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
             ) {
                 Text(
                     text = "receive",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontFamily = firaMono,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     lineHeight = 28.sp,
+                    modifier = Modifier
+                        .fillMaxWidth(0.4f)
+                        .align(Alignment.Bottom)
                 )
             }
 
@@ -114,16 +119,19 @@ internal fun HomeScreen(navController: NavHostController) {
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
-                    .size(width = 150.dp, height = 120.dp)
+                    .height(160.dp)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
                     .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
             ) {
                 Text(
                     text = "send",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontFamily = firaMono,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.End,
                     lineHeight = 28.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Bottom)
                 )
             }
         }

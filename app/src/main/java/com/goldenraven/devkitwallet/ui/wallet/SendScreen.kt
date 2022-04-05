@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -133,12 +134,15 @@ private fun TransactionRecipientInput() {
             label = {
                 Text(
                     text = "Recipient address",
-                    color = DevkitWalletColors.night1,
+                    color = DevkitWalletColors.snow1,
                 )
             },
+            singleLine = true,
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow3,
+                unfocusedBorderColor = DevkitWalletColors.snow1,
+                cursorColor = DevkitWalletColors.auroraGreen,
             ),
         )
     }
@@ -153,15 +157,18 @@ private fun TransactionAmountInput() {
             modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.8f),
             value = text,
             onValueChange = { text = it },
+            singleLine = true,
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
             label = {
                 Text(
                     text = "Amount",
-                    color = DevkitWalletColors.night1,
+                    color = DevkitWalletColors.snow1,
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow3,
+                unfocusedBorderColor = DevkitWalletColors.snow1,
+                cursorColor = DevkitWalletColors.auroraGreen,
             ),
         )
     }
@@ -176,15 +183,18 @@ private fun TransactionFeeInput() {
             modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.8f),
             value = text,
             onValueChange = { text = it },
+            singleLine = true,
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
             label = {
                 Text(
                     text = "Fee rate",
-                    color = DevkitWalletColors.night1,
+                    color = DevkitWalletColors.snow1,
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow3,
+                unfocusedBorderColor = DevkitWalletColors.snow1,
+                cursorColor = DevkitWalletColors.auroraGreen,
             ),
         )
     }
