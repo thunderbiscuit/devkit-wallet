@@ -85,6 +85,6 @@ fun WalletNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { TransactionsScreen() }
+        ) { TransactionsScreen(navController) }
     }
 }
