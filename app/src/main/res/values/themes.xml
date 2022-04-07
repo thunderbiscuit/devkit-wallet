@@ -12,17 +12,17 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
-    <style name="Theme.BitcoindevkitSampleApp.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">@color/night_1</item>
-    </style>
+<!--    <style name="Theme.BitcoindevkitSampleApp.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">-->
+<!--        <item name="android:background">@color/night_1</item>-->
+<!--    </style>-->
 
-    <style name="Theme.BitcoindevkitSampleApp.ToolbarPopup" parent="ThemeOverlay.AppCompat.Light">
-        <item name="popupMenuBackground">@color/snow_3</item>
-        <item name="android:background">@color/snow_3</item>
-        <item name="android:textColor">@color/night_1</item>
-    </style>
+<!--    <style name="Theme.BitcoindevkitSampleApp.ToolbarPopup" parent="ThemeOverlay.AppCompat.Light">-->
+<!--        <item name="popupMenuBackground">@color/snow_3</item>-->
+<!--        <item name="android:background">@color/snow_3</item>-->
+<!--        <item name="android:textColor">@color/night_1</item>-->
+<!--    </style>-->
 
-    <style name="Theme.BitcoindevkitSampleApp.Launcher">
-        <item name="android:background">@drawable/launch_screen</item>
-    </style>
+<!--    <style name="Theme.BitcoindevkitSampleApp.Launcher">-->
+<!--        <item name="android:background">@drawable/launch_screen</item>-->
+<!--    </style>-->
 </resources>

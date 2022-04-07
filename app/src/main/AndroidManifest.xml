@@ -13,7 +13,6 @@
 
         <activity
             android:name=".DevkitWalletActivity"
-            android:theme="@style/Theme.BitcoindevkitSampleApp.Launcher"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

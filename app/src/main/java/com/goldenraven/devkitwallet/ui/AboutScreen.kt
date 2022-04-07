@@ -38,11 +38,11 @@ internal fun AboutScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_testnet_logo),
+                painter = painterResource(id = R.drawable.bdk_logo),
                 contentDescription = "Bitcoin testnet logo",
-                Modifier.size(90.dp)
+                Modifier.size(270.dp)
             )
-            Spacer(modifier = Modifier.padding(8.dp))
+            Spacer(modifier = Modifier.padding(24.dp))
             Text(
                 text = "This wallet is build for developers to learn how to leverage the bitcoindevkit. You are currently running the \"UIOnly\" version of the app, which doesn't have any bitcoin-related functionality.",
                 color = DevkitWalletColors.snow3,
