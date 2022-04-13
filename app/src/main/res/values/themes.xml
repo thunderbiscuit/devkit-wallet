@@ -38,33 +38,33 @@
     </style>
 
     <!--  custom dialog  -->
-    <style name="NordDialogTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-<!--        <item name="colorSurface">@color/snow_1</item>-->
-<!--        <item name="colorOnSurface">@color/snow_1</item>-->
-<!--        <item name="colorAccent">@color/snow_1</item>-->
-<!--        <item name="android:windowBackground">@color/snow_1</item>-->
-        <item name="android:backgroundTint">@color/snow_3</item>
-<!--        <item name="colorOnPrimary">@color/night_1</item>-->
-<!--        <item name="android:background">@drawable/background_dialog</item>-->
-        <item name="materialAlertDialogTitleTextStyle">@style/CustomTitleTextStyle</item>
-        <item name="materialAlertDialogBodyTextStyle">@style/CustomBodyTextStyle</item>
-        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-    </style>
+<!--    <style name="NordDialogTheme" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">-->
+<!--&lt;!&ndash;        <item name="colorSurface">@color/snow_1</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="colorOnSurface">@color/snow_1</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="colorAccent">@color/snow_1</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:windowBackground">@color/snow_1</item>&ndash;&gt;-->
+<!--        <item name="android:backgroundTint">@color/snow_3</item>-->
+<!--&lt;!&ndash;        <item name="colorOnPrimary">@color/night_1</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item name="android:background">@drawable/background_dialog</item>&ndash;&gt;-->
+<!--        <item name="materialAlertDialogTitleTextStyle">@style/CustomTitleTextStyle</item>-->
+<!--        <item name="materialAlertDialogBodyTextStyle">@style/CustomBodyTextStyle</item>-->
+<!--        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>-->
+<!--        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>-->
+<!--    </style>-->
 
-    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/aurora_green</item>
-    </style>
+<!--    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">-->
+<!--        <item name="android:textColor">@color/aurora_green</item>-->
+<!--    </style>-->
 
-    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/night_4</item>
-    </style>
+<!--    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">-->
+<!--        <item name="android:textColor">@color/night_4</item>-->
+<!--    </style>-->
 
-    <style name="CustomTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="android:textSize">21sp</item>
-    </style>
+<!--    <style name="CustomTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">-->
+<!--        <item name="android:textSize">21sp</item>-->
+<!--    </style>-->
 
-    <style name="CustomBodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
-        <item name="android:textSize">16sp</item>
-    </style>
+<!--    <style name="CustomBodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">-->
+<!--        <item name="android:textSize">16sp</item>-->
+<!--    </style>-->
 </resources>
