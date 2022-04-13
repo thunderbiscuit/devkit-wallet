@@ -8,6 +8,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     defaultConfig {
@@ -33,6 +34,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.1"
+    }
 }
 
 dependencies {
@@ -43,9 +48,23 @@ dependencies {
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.0")
 
+    // compose
+    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.compose.material:material:1.1.1")
+    implementation("androidx.compose.animation:animation:1.1.1")
+    implementation("androidx.compose.ui:ui-tooling:1.1.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.1.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
+    implementation("androidx.navigation:navigation-compose:2.4.1")
+    implementation("androidx.compose.ui:ui:1.1.1")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha07")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.23.1")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
+
     // navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+    // implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
+    // implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
 
     // toolbar
     implementation("androidx.appcompat:appcompat:1.3.1")

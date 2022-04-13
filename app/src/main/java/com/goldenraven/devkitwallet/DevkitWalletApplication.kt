@@ -11,20 +11,17 @@ import com.goldenraven.devkitwallet.utilities.SharedPreferencesManager
 import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.data.Wallet
 
-class BdkSampleApplication : Application() {
+class DevkitWalletApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // initialize Wallet object with path variable
+        // initialize Wallet object (singleton) with path variable
         Wallet.setPath(applicationContext.filesDir.toString())
 
         // initialize shared preferences manager object (singleton)
         val sharedPreferencesManager = SharedPreferencesManager(
-                applicationContext.getSharedPreferences(
-                    "current_wallet",
-                    Context.MODE_PRIVATE
-                )
-            )
+            sharedPreferences = applicationContext.getSharedPreferences("current_wallet", Context.MODE_PRIVATE)
+        )
 
         // initialize Repository object with shared preferences
         Repository.setSharedPreferences(sharedPreferencesManager)

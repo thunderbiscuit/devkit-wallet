@@ -4,7 +4,7 @@
     package="com.goldenraven.devkitwallet">
 
     <application
-        android:name="com.goldenraven.devkitwallet.BdkSampleApplication"
+        android:name=".DevkitWalletApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,31 +13,13 @@
         android:theme="@style/Theme.BitcoindevkitSampleApp">
 
         <activity
-            android:name="com.goldenraven.devkitwallet.DispatchActivity"
-            android:theme="@style/Theme.BitcoindevkitSampleApp.Launcher">
+            android:name="com.goldenraven.devkitwallet.DevkitWalletActivity"
+            android:theme="@style/Theme.BitcoindevkitSampleApp.Launcher"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-
-        <activity
-            android:name="com.goldenraven.devkitwallet.WalletChoiceActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.goldenraven.devkitwallet.wallet.WalletActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

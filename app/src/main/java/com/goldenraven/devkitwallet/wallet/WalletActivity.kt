@@ -20,26 +20,26 @@ class WalletActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.toolbar))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.overflow_menu, menu)
-        return true
-    }
+    // override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    //     menuInflater.inflate(R.menu.overflow_menu, menu)
+    //     return true
+    // }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = Navigation.findNavController(this, R.id.navHostWallet)
-        when (item.itemId) {
-            R.id.menu_recovery_phrase -> {
-                navController.navigate(R.id.action_walletFragment_to_settingsFragment)
-                return true
-            }
-            R.id.menu_about -> {
-                navController.navigate(R.id.action_walletFragment_to_aboutFragment)
-                return true
-            }
-            else -> {
-                Log.i("WalletActivity", "Overflow menu choice didn't match available options")
-                return true
-            }
-        }
-    }
+    // override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // val navController = Navigation.findNavController(this, R.id.navHostWallet)
+        // when (item.itemId) {
+        //     R.id.menu_recovery_phrase -> {
+        //         navController.navigate(R.id.action_walletFragment_to_settingsFragment)
+        //         return true
+        //     }
+        //     R.id.menu_about -> {
+        //         navController.navigate(R.id.action_walletFragment_to_aboutFragment)
+        //         return true
+        //     }
+        //     else -> {
+        //         Log.i("WalletActivity", "Overflow menu choice didn't match available options")
+        //         return true
+        //     }
+        // }
+    // }
 }
