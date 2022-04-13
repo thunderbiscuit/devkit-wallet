@@ -46,10 +46,10 @@ class DevkitWalletActivity : AppCompatActivity() {
             setContent {
                 HomeNavigation()
             }
-        }
-
-        setContent {
-            CreateWalletNavigation(onBuildWalletButtonClicked)
+        } else {
+            setContent {
+                CreateWalletNavigation(onBuildWalletButtonClicked)
+            }
         }
     }
 }
