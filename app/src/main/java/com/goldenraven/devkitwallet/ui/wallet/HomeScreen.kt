@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.data.Wallet
@@ -31,7 +32,6 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 import com.goldenraven.devkitwallet.utilities.formatInBtc
-import java.text.DecimalFormat
 
 internal class WalletViewModel() : ViewModel() {
 
@@ -41,6 +41,7 @@ internal class WalletViewModel() : ViewModel() {
 
     fun updateBalance() {
         Wallet.sync()
+        // _balance.postValue(Wallet.getBalance())
         _balance.value = Wallet.getBalance()
     }
 }
@@ -49,7 +50,7 @@ internal class WalletViewModel() : ViewModel() {
 @Composable
 internal fun HomeScreen(
     navController: NavHostController,
-    walletViewModel: WalletViewModel = WalletViewModel()
+    walletViewModel: WalletViewModel = viewModel()
 ) {
 
     val balance by walletViewModel.balance.observeAsState()

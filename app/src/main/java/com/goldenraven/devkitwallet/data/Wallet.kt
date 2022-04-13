@@ -104,6 +104,7 @@ object Wallet {
     fun getTransactions(): List<Transaction> = wallet.getTransactions()
 
     fun sync(maxAddress: UInt?=null): Unit {
+        Log.i("Wallet", "Wallet is syncing")
         wallet.sync(LogProgress, maxAddress)
     }
 
