@@ -15,49 +15,49 @@ import androidx.navigation.Navigation
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.databinding.FragmentWalletBinding
 import java.text.DecimalFormat
-
-class WalletFragment : Fragment() {
-
-    private lateinit var binding: FragmentWalletBinding
-    private lateinit var viewModel: WalletViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentWalletBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(requireActivity()).get(WalletViewModel::class.java)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val navController = Navigation.findNavController(view)
-
-        viewModel.balance.observe(viewLifecycleOwner, {
-            val balanceInBitcoin: Float
-            if (it == 0UL) {
-                balanceInBitcoin = 0F
-            } else {
-                balanceInBitcoin = it.toFloat().div(100_000_000)
-            }
-            val humanReadableBalance = DecimalFormat("0.00000000").format(balanceInBitcoin)
-            binding.balance.text = humanReadableBalance
-        })
-
-        binding.syncButton.setOnClickListener {
-            viewModel.updateBalance()
-        }
-        binding.toTransactionsButton.setOnClickListener {
-            navController.navigate(R.id.action_walletFragment_to_transactionsFragment)
-        }
-        binding.toReceiveButton.setOnClickListener {
-            navController.navigate(R.id.action_walletFragment_to_receiveFragment)
-        }
-        binding.toSendButton.setOnClickListener {
-            navController.navigate(R.id.action_walletFragment_to_sendFragment)
-        }
-    }
-}
+//
+// class WalletFragment : Fragment() {
+//
+//     private lateinit var binding: FragmentWalletBinding
+//     private lateinit var viewModel: WalletViewModel
+//
+//     override fun onCreateView(
+//         inflater: LayoutInflater,
+//         container: ViewGroup?,
+//         savedInstanceState: Bundle?,
+//     ): View {
+//         binding = FragmentWalletBinding.inflate(inflater, container, false)
+//         viewModel = ViewModelProvider(requireActivity()).get(WalletViewModel::class.java)
+//         return binding.root
+//     }
+//
+//     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//         super.onViewCreated(view, savedInstanceState)
+//
+//         val navController = Navigation.findNavController(view)
+//
+//         viewModel.balance.observe(viewLifecycleOwner, {
+//             val balanceInBitcoin: Float
+//             if (it == 0UL) {
+//                 balanceInBitcoin = 0F
+//             } else {
+//                 balanceInBitcoin = it.toFloat().div(100_000_000)
+//             }
+//             val humanReadableBalance = DecimalFormat("0.00000000").format(balanceInBitcoin)
+//             binding.balance.text = humanReadableBalance
+//         })
+//
+//         binding.syncButton.setOnClickListener {
+//             viewModel.updateBalance()
+//         }
+//         binding.toTransactionsButton.setOnClickListener {
+//             navController.navigate(R.id.action_walletFragment_to_transactionsFragment)
+//         }
+//         binding.toReceiveButton.setOnClickListener {
+//             navController.navigate(R.id.action_walletFragment_to_receiveFragment)
+//         }
+//         binding.toSendButton.setOnClickListener {
+//             navController.navigate(R.id.action_walletFragment_to_sendFragment)
+//         }
+//     }
+// }

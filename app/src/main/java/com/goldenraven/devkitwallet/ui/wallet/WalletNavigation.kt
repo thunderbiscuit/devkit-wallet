@@ -10,10 +10,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import com.goldenraven.devkitwallet.ui.wallet.*
 import com.goldenraven.devkitwallet.ui.wallet.HomeScreen
 import com.goldenraven.devkitwallet.ui.wallet.ReceiveScreen
 import com.goldenraven.devkitwallet.ui.wallet.SendScreen
 import com.goldenraven.devkitwallet.ui.wallet.TransactionsScreen
+import com.goldenraven.devkitwallet.ui.wallet.WalletViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController

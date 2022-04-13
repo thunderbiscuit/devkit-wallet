@@ -12,14 +12,14 @@ import androidx.lifecycle.MutableLiveData
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.utilities.TAG
 
-class WalletViewModel(application: Application) : AndroidViewModel(application) {
-
-    public var balance: MutableLiveData<ULong> = MutableLiveData(0u)
-
-    public fun updateBalance() {
-        Wallet.sync(100u)
-        val newBalance = Wallet.getBalance()
-        Log.i(TAG, "New balance is $newBalance")
-        balance.postValue(newBalance)
-    }
-}
+// class WalletViewModel(application: Application) : AndroidViewModel(application) {
+//
+//     public var balance: MutableLiveData<ULong> = MutableLiveData(0u)
+//
+//     public fun updateBalance() {
+//         Wallet.sync(100u)
+//         val newBalance = Wallet.getBalance()
+//         Log.i(TAG, "New balance is $newBalance")
+//         balance.postValue(newBalance)
+//     }
+// }

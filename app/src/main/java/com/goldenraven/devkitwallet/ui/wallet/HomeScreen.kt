@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -19,17 +20,39 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
+import com.goldenraven.devkitwallet.utilities.formatInBtc
+import java.text.DecimalFormat
 
+internal class WalletViewModel() : ViewModel() {
+
+    private var _balance: MutableLiveData<ULong> = MutableLiveData(0u)
+    val balance: LiveData<ULong>
+        get() = _balance
+
+    fun updateBalance() {
+        Wallet.sync()
+        _balance.value = Wallet.getBalance()
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun HomeScreen(navController: NavHostController) {
+internal fun HomeScreen(
+    navController: NavHostController,
+    walletViewModel: WalletViewModel = WalletViewModel()
+) {
+
+    val balance by walletViewModel.balance.observeAsState()
 
     Column(
         modifier = Modifier
@@ -50,13 +73,11 @@ internal fun HomeScreen(navController: NavHostController) {
                 painter = painterResource(id = R.drawable.ic_bitcoin_logo),
                 contentDescription = "Bitcoin testnet logo",
                 Modifier
-                    // .size(90.dp)
-                    // .padding(bottom = 16.dp)
                     .align(Alignment.CenterVertically)
                     .rotate(-13f)
             )
             Text(
-                "0.00021000",
+                balance.formatInBtc(),
                 fontFamily = firaMonoMedium,
                 fontSize = 32.sp,
                 color = DevkitWalletColors.snow3
@@ -64,12 +85,11 @@ internal fun HomeScreen(navController: NavHostController) {
         }
         Spacer(modifier = Modifier.padding(16.dp))
         Button(
-            onClick = { },
+            onClick = { walletViewModel.updateBalance() },
             colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .height(80.dp)
-                // .size(width = 300.dp, height = 70.dp)
                 .fillMaxWidth(0.9f)
                 .padding(vertical = 8.dp, horizontal = 8.dp)
                 .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
