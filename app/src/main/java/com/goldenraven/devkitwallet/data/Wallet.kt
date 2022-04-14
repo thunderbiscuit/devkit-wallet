@@ -93,7 +93,7 @@ object Wallet {
         return PartiallySignedBitcoinTransaction(wallet, recipient, amount, fee_rate)
     }
 
-    fun sign(psbt: PartiallySignedBitcoinTransaction) {
+    fun sign(psbt: PartiallySignedBitcoinTransaction): Unit {
         wallet.sign(psbt)
     }
 

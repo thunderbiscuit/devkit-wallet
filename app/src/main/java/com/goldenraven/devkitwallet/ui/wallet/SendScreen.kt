@@ -5,19 +5,18 @@
 
 package com.goldenraven.devkitwallet.ui.wallet
 
-import androidx.compose.foundation.Image
+import android.icu.lang.UCharacter.isDigit
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -28,20 +27,29 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.goldenraven.devkitwallet.R
+import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
-import com.google.android.material.textfield.TextInputEditText
+import org.bitcoindevkit.PartiallySignedBitcoinTransaction
+import java.lang.Character.isDigit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SendScreen(navController: NavController) {
+
+    val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
+
+    val recipientAddress: MutableState<String> = remember { mutableStateOf("") }
+    var amount: MutableState<String> = remember { mutableStateOf("") }
+    val feeRate: MutableState<String> = remember { mutableStateOf("") }
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(DevkitWalletColors.night4)
     ) {
+        // val recipientAddress = remember { mutableStateOf("") }
         val (screenTitle, transactionInputs, bottomButtons) = createRefs()
         Text(
             text = "Send Bitcoin",
@@ -69,9 +77,16 @@ internal fun SendScreen(navController: NavController) {
                 height = Dimension.fillToConstraints
             }
         ) {
-            TransactionRecipientInput()
-            TransactionAmountInput()
-            TransactionFeeInput()
+            TransactionRecipientInput(recipientAddress)
+            TransactionAmountInput(amount)
+            TransactionFeeInput(feeRate)
+            Dialog(
+                recipientAddress = recipientAddress.value,
+                amount = amount.value,
+                feeRate = feeRate.value,
+                showDialog = showDialog,
+                setShowDialog = setShowDialog
+            )
         }
 
         Column(
@@ -84,7 +99,7 @@ internal fun SendScreen(navController: NavController) {
                 .padding(bottom = 24.dp)
         ) {
             Button(
-                onClick = { },
+                onClick = { setShowDialog(true) },
                 colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -125,14 +140,15 @@ internal fun SendScreen(navController: NavController) {
 }
 
 @Composable
-private fun TransactionRecipientInput() {
+private fun TransactionRecipientInput(recipientAddress: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        var text by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.9f),
-            value = text,
-            onValueChange = { text = it },
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth(0.9f),
+            value = recipientAddress.value,
+            onValueChange = { recipientAddress.value = it },
             label = {
                 Text(
                     text = "Recipient address",
@@ -151,14 +167,17 @@ private fun TransactionRecipientInput() {
 }
 
 @Composable
-private fun TransactionAmountInput() {
+private fun TransactionAmountInput(amount: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        var text by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.9f),
-            value = text,
-            onValueChange = { text = it },
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth(0.9f),
+            value = amount.value,
+            onValueChange = { value: String ->
+                amount.value = value.filter { it.isDigit() }
+            },
             singleLine = true,
             textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
             label = {
@@ -177,14 +196,17 @@ private fun TransactionAmountInput() {
 }
 
 @Composable
-private fun TransactionFeeInput() {
+private fun TransactionFeeInput(feeRate: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        var text by remember { mutableStateOf("") }
 
         OutlinedTextField(
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.9f),
-            value = text,
-            onValueChange = { text = it },
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth(0.9f),
+            value = feeRate.value,
+            onValueChange = { newValue: String ->
+                feeRate.value = newValue.filter { it.isDigit() }
+            },
             singleLine = true,
             textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
             label = {
@@ -199,6 +221,72 @@ private fun TransactionFeeInput() {
                 cursorColor = DevkitWalletColors.auroraGreen,
             ),
         )
+    }
+}
+
+@Composable
+fun Dialog(
+    recipientAddress: String,
+    amount: String,
+    feeRate: String,
+    showDialog: Boolean,
+    setShowDialog: (Boolean) -> Unit,
+) {
+    if (showDialog) {
+        AlertDialog(
+            containerColor = DevkitWalletColors.night4,
+            onDismissRequest = {},
+            title = {
+                Text(
+                    text = "Confirm transaction",
+                    color = DevkitWalletColors.snow3
+                )
+            },
+            text = {
+                Text(
+                    text = "Send $amount\nto $recipientAddress\nwith fee rate: ${feeRate.toFloat()}",
+                    color = DevkitWalletColors.snow3
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        // Log.i("SendScreen", "Broadcasting transaction now")
+                        broadcastTransaction(recipientAddress, amount.toULong(), feeRate.toFloat())
+                        setShowDialog(false)
+                    },
+                ) {
+                    Text(
+                        text = "Confirm",
+                        color = DevkitWalletColors.snow3
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        setShowDialog(false)
+                    },
+                ) {
+                    Text(
+                        text = "Cancel",
+                        color = DevkitWalletColors.snow3
+                    )
+                }
+            },
+        )
+    }
+}
+
+private fun broadcastTransaction(recipientAddress: String, amount: ULong, feeRate: Float = 1F) {
+    try {
+        // create, sign, and broadcast
+        val psbt: PartiallySignedBitcoinTransaction = Wallet.createTransaction(recipientAddress, amount, feeRate)
+        Wallet.sign(psbt)
+        val txid: String = Wallet.broadcast(psbt)
+        Log.i("SendScreen", "Transaction was broadcast! txid: $txid")
+    } catch (e: Throwable) {
+        Log.i("SendScreen", "Broadcast error: ${e.message}")
     }
 }
 
