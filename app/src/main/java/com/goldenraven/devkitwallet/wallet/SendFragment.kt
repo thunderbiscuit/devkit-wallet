@@ -45,21 +45,21 @@ class SendFragment : Fragment() {
         }
 
 
-        binding.toBroadcastConfirmation.setOnClickListener {
-            val broadcastTransactionDialog =
-                MaterialAlertDialogBuilder(this@SendFragment.requireContext(), R.style.NordDialogTheme)
-                    .setTitle("Confirm transaction")
-                    .setMessage(buildConfirmTransactionMessage())
-                    .setPositiveButton("Broadcast") { _, _ ->
-                        Log.i(TAG, "User is attempting to broadcast transaction")
-                        broadcastTransaction()
-                        navController.navigate(R.id.action_sendFragment_to_walletFragment)
-                    }
-                    .setNegativeButton("Go back") { _, _ ->
-                        Log.i(TAG, "User is not broadcasting")
-                    }
-            broadcastTransactionDialog.show()
-        }
+        // binding.toBroadcastConfirmation.setOnClickListener {
+        //     val broadcastTransactionDialog =
+        //         MaterialAlertDialogBuilder(this@SendFragment.requireContext(), R.style.NordDialogTheme)
+        //             .setTitle("Confirm transaction")
+        //             .setMessage(buildConfirmTransactionMessage())
+        //             .setPositiveButton("Broadcast") { _, _ ->
+        //                 Log.i(TAG, "User is attempting to broadcast transaction")
+        //                 broadcastTransaction()
+        //                 navController.navigate(R.id.action_sendFragment_to_walletFragment)
+        //             }
+        //             .setNegativeButton("Go back") { _, _ ->
+        //                 Log.i(TAG, "User is not broadcasting")
+        //             }
+        //     broadcastTransactionDialog.show()
+        // }
     }
 
     private fun buildConfirmTransactionMessage(): String {

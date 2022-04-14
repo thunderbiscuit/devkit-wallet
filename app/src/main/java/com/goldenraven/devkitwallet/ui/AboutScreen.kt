@@ -13,7 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,11 +49,32 @@ internal fun AboutScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.padding(24.dp))
             Text(
-                text = "This wallet is build for developers to learn how to leverage the bitcoindevkit. You are currently running the \"UIOnly\" version of the app, which doesn't have any bitcoin-related functionality.",
+                text = "This wallet is build for developers to learn how to leverage the bitcoindevkit. You are currently running the \"SimpleWallet\" version of the app, which implements the following basic bitcoin wallet capabilities: create a wallet, receive testnet coins, send coins, display transaction history, and recover from a mnemonic.",
                 color = DevkitWalletColors.snow3,
                 fontSize = 16.sp,
-                textAlign = TextAlign.Center,
-                 modifier = Modifier.padding(horizontal = 8.dp)
+                textAlign = TextAlign.Start,
+                modifier = Modifier.padding(all = 8.dp)
+            )
+
+            val features: List<String> = listOf(
+                "create a wallet",
+                "receive testnet coins",
+                "send coins",
+                "display transaction history",
+                "recover from a mnemonic"
+            )
+            val bullet = "\u2022"
+            Text(
+                buildAnnotatedString {
+                    features.forEach {
+                        withStyle(style = SpanStyle(color = DevkitWalletColors.snow3, fontSize = 16.sp)) {
+                            append(bullet)
+                            append("\t\t")
+                            append(it)
+                            append("\n")
+                        }
+                    }
+                }
             )
         }
     }
