@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
@@ -153,6 +154,7 @@ internal fun AppTitle() {
     Text(
         text = stringResource(R.string.app_name),
         color = DevkitWalletColors.snow1,
-        fontFamily = firaMonoMedium
+        fontFamily = firaMonoMedium,
+        fontSize = 20.sp
     )
 }
