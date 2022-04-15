@@ -15,6 +15,15 @@ The repository works in the following way: multiple branches are maintained in p
 
 <br/>
 
+## Design Choices
+The Devkit Wallet makes rather opinionated choices regarding its design and architecture, all with the goal of being as helpful to potential bitcoindevkit developers exploring the library and looking for a working example. The end users of this application are developers, not real users. Here are some of these choices:
+1. Be lean on Android-specific bells and whistles 
+2. Return types are explicitly stated for all code that touches bitcoin, even when the IDE doesn't like it
+3. Some bugs are left in and considered acceptable if squashing them requires a lot of polish/boilerplate code that does not add to the understanding of the bitcoindevkit
+4. Errors are not always communicated back to the user on-screen (for example through polished snackbars) for similar reasons as (3); if something is not working, take a look a the logcat output
+
+<br/>
+
 ## Companion Documentation Website
 
 <div align="center">
