@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.*
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
@@ -137,7 +138,7 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
         navigationIcon = {
             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                 Icon(
-                    imageVector = Icons.Filled.Menu,
+                    imageVector = Icons.Rounded.Menu,
                     contentDescription = "Open drawer",
                     tint = DevkitWalletColors.snow1
                 )
