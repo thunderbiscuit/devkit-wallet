@@ -40,7 +40,7 @@ internal fun WalletChoiceScreen(
 ) {
 
     Scaffold(
-        topBar = { IntroAppBar() }
+        topBar = { IntroAppBar() },
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -67,7 +67,7 @@ internal fun WalletChoiceScreen(
                 Spacer(modifier = Modifier.padding(8.dp))
                 Text(
                     text = stringResource(R.string.bitcoin_testnet),
-                    color = DevkitWalletColors.snow3,
+                    color = DevkitWalletColors.snow1,
                     fontSize = 28.sp,
                     fontFamily = firaMono,
                 )
@@ -75,7 +75,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { onBuildWalletButtonClicked(WalletCreateType.FROMSCRATCH()) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)
@@ -98,7 +98,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { navController.navigate(Screen.WalletRecoveryScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)

@@ -38,7 +38,7 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
                 Text(
                     text = "${index + 1}. $item",
                     modifier = Modifier.weight(weight = 1F),
-                    color = DevkitWalletColors.snow3,
+                    color = DevkitWalletColors.snow1,
                     fontFamily = firaMono
                 )
             }

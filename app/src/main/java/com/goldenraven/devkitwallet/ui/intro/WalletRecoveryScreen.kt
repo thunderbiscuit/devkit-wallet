@@ -73,7 +73,7 @@ internal fun WalletRecoveryScreen(
                 Column {
                     Text(
                         text = "Recover Wallet",
-                        color = DevkitWalletColors.snow3,
+                        color = DevkitWalletColors.snow1,
                         fontSize = 28.sp,
                         fontFamily = firaMono,
                         modifier = Modifier
@@ -178,16 +178,16 @@ fun WordField(
         label = {
             Text(
                 text = "Word $wordNumber",
-                color = DevkitWalletColors.snow3,
+                color = DevkitWalletColors.snow1,
             )
         },
         textStyle = TextStyle(
             fontSize = 18.sp,
-            color = DevkitWalletColors.snow3
+            color = DevkitWalletColors.snow1
         ),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = DevkitWalletColors.auroraGreen,
-            unfocusedBorderColor = DevkitWalletColors.snow3,
+            unfocusedBorderColor = DevkitWalletColors.snow1,
             cursorColor = DevkitWalletColors.auroraGreen,
         ),
         modifier = Modifier

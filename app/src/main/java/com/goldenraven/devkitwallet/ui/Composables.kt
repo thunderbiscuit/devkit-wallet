@@ -27,7 +27,7 @@ internal fun AwayFromHomeAppBar(navController: NavController, title: String) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Go Back",
-                    tint = DevkitWalletColors.snow3
+                    tint = DevkitWalletColors.snow1
                 )
             }
         },
@@ -49,6 +49,6 @@ internal fun IntroAppBar() {
 internal fun IntroAppTitle(title: String) {
     Text(
         text = title,
-        color = DevkitWalletColors.snow3,
+        color = DevkitWalletColors.snow1,
     )
 }

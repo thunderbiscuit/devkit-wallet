@@ -12,8 +12,7 @@ import androidx.activity.compose.setContent
 import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.intro.CreateWalletNavigation
-import com.goldenraven.devkitwallet.utilities.SnackbarLevel
-import com.goldenraven.devkitwallet.utilities.showSnackbar
+import com.goldenraven.devkitwallet.utilities.TAG
 
 class DevkitWalletActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,12 +31,7 @@ class DevkitWalletActivity : AppCompatActivity() {
                     HomeNavigation()
                 }
             } catch(e: Throwable) {
-                Log.i("DevkitWalletActivity", "Could not build wallet: $e")
-                showSnackbar(
-                    view = findViewById(android.R.id.content),
-                    level = SnackbarLevel.ERROR,
-                    message = "Error: $e"
-                )
+                Log.i(TAG, "Could not build wallet: $e")
             }
         }
 

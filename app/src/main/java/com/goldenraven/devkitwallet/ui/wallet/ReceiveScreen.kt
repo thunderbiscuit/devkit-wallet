@@ -73,7 +73,7 @@ internal fun ReceiveScreen(
         val (screenTitle, QRCode, bottomButtons) = createRefs()
         Text(
             text = "Receive Address",
-            color = DevkitWalletColors.snow3,
+            color = DevkitWalletColors.snow1,
             fontSize = 28.sp,
             fontFamily = firaMono,
             textAlign = TextAlign.Center,
@@ -110,7 +110,7 @@ internal fun ReceiveScreen(
                     Text(
                         text = address,
                         fontFamily = firaMono,
-                        color = DevkitWalletColors.snow3
+                        color = DevkitWalletColors.snow1
                     )
                 }
             }
@@ -146,7 +146,7 @@ internal fun ReceiveScreen(
             }
             Button(
                 onClick = { navController.navigate(Screen.HomeScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(80.dp)

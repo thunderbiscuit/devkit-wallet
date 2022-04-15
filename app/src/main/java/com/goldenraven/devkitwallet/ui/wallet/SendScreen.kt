@@ -31,6 +31,7 @@ import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
+import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.PartiallySignedBitcoinTransaction
 import java.lang.Character.isDigit
 
@@ -41,7 +42,7 @@ internal fun SendScreen(navController: NavController) {
     val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
 
     val recipientAddress: MutableState<String> = remember { mutableStateOf("") }
-    var amount: MutableState<String> = remember { mutableStateOf("") }
+    val amount: MutableState<String> = remember { mutableStateOf("") }
     val feeRate: MutableState<String> = remember { mutableStateOf("") }
 
     ConstraintLayout(
@@ -49,11 +50,10 @@ internal fun SendScreen(navController: NavController) {
             .fillMaxSize()
             .background(DevkitWalletColors.night4)
     ) {
-        // val recipientAddress = remember { mutableStateOf("") }
         val (screenTitle, transactionInputs, bottomButtons) = createRefs()
         Text(
             text = "Send Bitcoin",
-            color = DevkitWalletColors.snow3,
+            color = DevkitWalletColors.snow1,
             fontSize = 28.sp,
             fontFamily = firaMono,
             textAlign = TextAlign.Center,
@@ -118,7 +118,7 @@ internal fun SendScreen(navController: NavController) {
             }
             Button(
                 onClick = { navController.navigate(Screen.HomeScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     // .size(width = 300.dp, height = 70.dp)
@@ -156,7 +156,7 @@ private fun TransactionRecipientInput(recipientAddress: MutableState<String>) {
                 )
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = DevkitWalletColors.auroraGreen,
                 unfocusedBorderColor = DevkitWalletColors.snow1,
@@ -179,7 +179,7 @@ private fun TransactionAmountInput(amount: MutableState<String>) {
                 amount.value = value.filter { it.isDigit() }
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
             label = {
                 Text(
                     text = "Amount",
@@ -208,7 +208,7 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                 feeRate.value = newValue.filter { it.isDigit() }
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow3),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
             label = {
                 Text(
                     text = "Fee rate",
@@ -239,26 +239,25 @@ fun Dialog(
             title = {
                 Text(
                     text = "Confirm transaction",
-                    color = DevkitWalletColors.snow3
+                    color = DevkitWalletColors.snow1
                 )
             },
             text = {
                 Text(
-                    text = "Send $amount\nto $recipientAddress\nwith fee rate: ${feeRate.toFloat()}",
-                    color = DevkitWalletColors.snow3
+                    text = "Send: $amount\nto: $recipientAddress\nFee rate: ${feeRate.toFloat()}",
+                    color = DevkitWalletColors.snow1
                 )
             },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        // Log.i("SendScreen", "Broadcasting transaction now")
                         broadcastTransaction(recipientAddress, amount.toULong(), feeRate.toFloat())
                         setShowDialog(false)
                     },
                 ) {
                     Text(
                         text = "Confirm",
-                        color = DevkitWalletColors.snow3
+                        color = DevkitWalletColors.snow1
                     )
                 }
             },
@@ -270,7 +269,7 @@ fun Dialog(
                 ) {
                     Text(
                         text = "Cancel",
-                        color = DevkitWalletColors.snow3
+                        color = DevkitWalletColors.snow1
                     )
                 }
             },
@@ -279,14 +278,15 @@ fun Dialog(
 }
 
 private fun broadcastTransaction(recipientAddress: String, amount: ULong, feeRate: Float = 1F) {
+    Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient: $recipientAddress, amount: $amount, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
         val psbt: PartiallySignedBitcoinTransaction = Wallet.createTransaction(recipientAddress, amount, feeRate)
         Wallet.sign(psbt)
         val txid: String = Wallet.broadcast(psbt)
-        Log.i("SendScreen", "Transaction was broadcast! txid: $txid")
+        Log.i(TAG, "Transaction was broadcast! txid: $txid")
     } catch (e: Throwable) {
-        Log.i("SendScreen", "Broadcast error: ${e.message}")
+        Log.i(TAG, "Broadcast error: ${e.message}")
     }
 }
 

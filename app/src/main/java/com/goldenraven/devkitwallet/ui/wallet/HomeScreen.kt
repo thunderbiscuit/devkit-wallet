@@ -65,7 +65,7 @@ internal fun HomeScreen(
         Row(
             Modifier
                 .fillMaxWidth()
-                .background(color = DevkitWalletColors.night2)
+                .background(color = DevkitWalletColors.night3)
                 .height(110.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -81,13 +81,13 @@ internal fun HomeScreen(
                 balance.formatInBtc(),
                 fontFamily = firaMonoMedium,
                 fontSize = 32.sp,
-                color = DevkitWalletColors.snow3
+                color = DevkitWalletColors.snow1
             )
         }
         Spacer(modifier = Modifier.padding(16.dp))
         Button(
             onClick = { walletViewModel.updateBalance() },
-            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
+            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .height(80.dp)
@@ -106,7 +106,7 @@ internal fun HomeScreen(
 
         Button(
             onClick = { navController.navigate(Screen.TransactionsScreen.route) },
-            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost1),
+            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .height(80.dp)

@@ -50,7 +50,7 @@ internal fun AboutScreen(navController: NavController) {
             Spacer(modifier = Modifier.padding(24.dp))
             Text(
                 text = "This wallet is build for developers to learn how to leverage the bitcoindevkit. You are currently running the \"SimpleWallet\" version of the app, which implements the following basic bitcoin wallet capabilities: create a wallet, receive testnet coins, send coins, display transaction history, and recover from a mnemonic.",
-                color = DevkitWalletColors.snow3,
+                color = DevkitWalletColors.snow1,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.padding(all = 8.dp)
@@ -67,7 +67,7 @@ internal fun AboutScreen(navController: NavController) {
             Text(
                 buildAnnotatedString {
                     features.forEach {
-                        withStyle(style = SpanStyle(color = DevkitWalletColors.snow3, fontSize = 16.sp)) {
+                        withStyle(style = SpanStyle(color = DevkitWalletColors.snow1, fontSize = 16.sp)) {
                             append(bullet)
                             append("\t\t")
                             append(it)
