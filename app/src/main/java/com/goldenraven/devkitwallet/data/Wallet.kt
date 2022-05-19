@@ -16,8 +16,10 @@ object Wallet {
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
     private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
+    private lateinit var blockchainConfig: BlockchainConfig
+    private lateinit var blockchain: Blockchain
 
-    object LogProgress: BdkProgress {
+    object LogProgress: Progress {
         override fun update(progress: Float, message: String?) {
             Log.i(TAG, "Sync wallet")
         }
@@ -31,19 +33,22 @@ object Wallet {
     private fun initialize(
         descriptor: String,
         changeDescriptor: String,
-    ): Unit {
+    ) {
         val database = DatabaseConfig.Sqlite(SqliteDbConfiguration("$path/bdk-sqlite"))
-        val blockchain = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
         wallet = BdkWallet(
             descriptor,
             changeDescriptor,
             Network.TESTNET,
             database,
-            blockchain
         )
     }
 
-    fun createWallet(): Unit {
+    fun createBlockchain() {
+        blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
+        blockchain = Blockchain(blockchainConfig)
+    }
+
+    fun createWallet() {
         val keys: ExtendedKeyInfo = generateExtendedKey(Network.TESTNET, WordCount.WORDS12, null)
         val descriptor: String = createDescriptor(keys)
         val changeDescriptor: String = createChangeDescriptor(keys)
@@ -67,7 +72,7 @@ object Wallet {
     }
 
     // if the wallet already exists, its descriptors are stored in shared preferences
-    fun loadExistingWallet(): Unit {
+    fun loadExistingWallet() {
         val initialWalletData: RequiredInitialWalletData = Repository.getInitialWalletData()
         Log.i(TAG, "Loading existing wallet, descriptor is ${initialWalletData.descriptor}")
         Log.i(TAG, "Loading existing wallet, change descriptor is ${initialWalletData.changeDescriptor}")
@@ -89,23 +94,25 @@ object Wallet {
         Repository.saveMnemonic(keys.mnemonic)
     }
 
-    fun createTransaction(recipient: String, amount: ULong, fee_rate: Float?): PartiallySignedBitcoinTransaction {
-        return PartiallySignedBitcoinTransaction(wallet, recipient, amount, fee_rate)
+    fun createTransaction(recipient: String, amount: ULong, fee_rate: Float): PartiallySignedBitcoinTransaction {
+        val txBuilder = TxBuilder().addRecipient(recipient, amount).feeRate(satPerVbyte = fee_rate)
+        return txBuilder.finish(wallet)
     }
 
-    fun sign(psbt: PartiallySignedBitcoinTransaction): Unit {
+    fun sign(psbt: PartiallySignedBitcoinTransaction) {
         wallet.sign(psbt)
     }
 
     fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): String {
-        return wallet.broadcast(signedPsbt)
+        blockchain.broadcast(signedPsbt)
+        return signedPsbt.txid()
     }
 
     fun getTransactions(): List<Transaction> = wallet.getTransactions()
 
-    fun sync(maxAddress: UInt?=null): Unit {
+    fun sync() {
         Log.i("Wallet", "Wallet is syncing")
-        wallet.sync(LogProgress, maxAddress)
+        wallet.sync(blockchain, LogProgress)
     }
 
     fun getBalance(): ULong = wallet.getBalance()
