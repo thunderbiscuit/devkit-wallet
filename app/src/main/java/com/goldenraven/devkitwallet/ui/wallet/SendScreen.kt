@@ -33,6 +33,7 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.PartiallySignedBitcoinTransaction
+import org.bitcoindevkit.TxBuilder
 import java.lang.Character.isDigit
 
 @OptIn(ExperimentalMaterial3Api::class)
