@@ -17,12 +17,15 @@ The _Android Bitcoindevkit Demo Wallet_ (we're calling it the _Devkit Wallet_ fo
 
 The repository is built to help newcomers to the bitcoindevkit by layering complexity slowly while not adding too much UI polish to the app.
 
-The repository works in the following way: multiple branches are maintained in parallel, each of them focusing on a version of the app.
-1. the default branch `docs` is mostly empty, and is used for docs
+The repository works in the following way: multiple branches are maintained in parallel, each of them focusing on a version of the app.  
+
+1. the `docs` branch is mostly empty, and is used for building this website
 2. the `ui` branch builds the basic design and UI without any functionality
-3. the `simple-wallet` branch builds a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and BIP84-compatible wallet recovery.
+3. the `simple-wallet` branch builds a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and wallet recovery.
 
 Each of those branches has a documentation page associated with it.
+
+<br/>
 
 # Prerequisites
 These tutorials assume you have a working Android development setup, including Android Studio 4.2.2 or above and a phone you can launch the app on or a working emulator on your development machine.
