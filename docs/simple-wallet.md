@@ -33,3 +33,143 @@ We can see the library in action through the logs, for example when creating a n
 ```kotlin
 Log.i(TAG, "Loading existing wallet, descriptor is ${initialWalletData.descriptor}")
 ```
+<br/>
+
+# Task 2: Implement receive and sync
+It's now time to connect the `Wallet` object to the user interface. Note how the "generate new address" button has an on `onClick` parameter that triggers the `updateAddress()` method on the viewmodel:
+```kotlin
+// ReceiveScreen.kt
+
+Button(
+    onClick = { addressViewModel.updateAddress() },
+    colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+    shape = RoundedCornerShape(16.dp),
+) {
+    Text(
+        text = "generate new address",
+        fontSize = 14.sp,
+    )
+}
+```
+
+This viewmodel in turns calls the `Wallet.getLastUnusedAddress()`, which itself is a simple call to the bitcoin dev kit wallet object:
+```kotlin
+// Wallet.kt
+
+object Wallet {
+    // ...
+    
+    fun getLastUnusedAddress(): String = wallet.getLastUnusedAddress()
+}
+```
+
+## QR codes
+QR codes are generated using a library called zxing (you'll find the dependency in the `/app/build.gradle.kts` file).
+
+## Sync
+The sync functionality in Devkit Wallet is very simple (`Wallet.sync()` will do). The sync is a call to the blockstream testnet public Electrum server. But note that we also wish to update the UI to reflect the current balance upon sync, and this is done using something called the viewmodel, a very common pattern in Android applications. ViewModels are a way to implement the [observer pattern](https://www.youtube.com/watch?v=_BpmfnqjgzQ).
+
+Take a look at the `WalletViewModel` class:
+```kotlin
+class WalletViewModel() : ViewModel() {
+
+    private var _balance: MutableLiveData<ULong> = MutableLiveData(0u)
+    val balance: LiveData<ULong>
+        get() = _balance
+
+    fun updateBalance() {
+        Wallet.sync()
+        _balance.value = Wallet.getBalance()
+    }
+}
+```
+
+Fragment and activities can simply "observe" (subscribe to) particular variables in our ViewModel, and the ViewModel will update them as this value changes. This ensures that the balance displayed in the composable is always up to date with the balance in the `WalletViewModel`. Easy peasy bitcoineesy.
+
+<center>
+  <img class="screenshot" src="../images/screenshots/task-6.gif" width="300px" />
+</center>
+<br/>
+
+# Task 3: Implement send
+Sending bitcoin is a slightly more involved operation.
+
+The bitcoindevkit workflow for this operation is as follows:
+1. Create a transaction (you'll need amount, fee rate, and a recipient's address)
+2. Sign the transaction
+4. Broadcast it
+
+Note that all 3 of those steps are accomplished by the `broadcastTransaction()` method of the `SendScreen`:
+```kotlin
+private fun broadcastTransaction(recipientAddress: String, amount: ULong, feeRate: Float = 1F) {
+    try {
+        // create, sign, and broadcast
+        val psbt: PartiallySignedBitcoinTransaction = Wallet.createTransaction(recipientAddress, amount, feeRate)
+        Wallet.sign(psbt)
+        val txid: String = Wallet.broadcast(psbt)
+        Log.i(TAG, "Transaction was broadcast! txid: $txid")
+    } catch (e: Throwable) {
+        Log.i(TAG, "Broadcast error: ${e.message}")
+    }
+}
+```
+
+The required bitcoindevkit library calls inside the `Wallet` object are fairly simple:
+```kotlin
+    fun createTransaction(recipient: String, amount: ULong, fee_rate: Float?): PartiallySignedBitcoinTransaction {
+        return PartiallySignedBitcoinTransaction(wallet, recipient, amount, fee_rate)
+    }
+
+    fun sign(psbt: PartiallySignedBitcoinTransaction): Unit {
+        wallet.sign(psbt)
+    }
+
+    fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): String {
+        return wallet.broadcast(signedPsbt)
+    }
+```
+<br/>
+
+# Task 4: Add transaction history
+Adding a list of transactions to a wallet is a daunting task if one is to take it to a polished result. It involves using a database and keeping track of transactions, their state, and performing calculations on the raw material that the bitcoindevkit provides, and is slightly outside of the scope of this sample wallet. Simply displaying the list of transactions as one long string (with some small modifications), however, is quite easy, and this is what this wallet implements.
+
+Note that the list of transactions is simply a string built by the `confirmedTransactionsList()` method and displayed in a `Text()` composable (same is true for pending transactions).
+
+Creating the timestamp is the most involved part of this whole endeavour, and is done using a neat Kotlin feature called _extension functions_, where we define a method on the `ULong` type which returns a nicely formatted timestamp. Take a look at the `utilities/Timestamps.kt` file for more on this function. Building the string is otherwise a rather simple affair; the bitcoindevkit returns an object of type `List<Transaction>` through the `getTransactions()` method, and we iterate over them and pull the interesting components into a string template.
+
+```kotlin
+// TransactionsScreen.kt
+
+// ...
+
+Text(
+    text = confirmedTransactionsList(allTransactions.filterIsInstance<Transaction.Confirmed>()),
+    fontSize = 12.sp,
+    fontFamily = firaMono,
+    color = DevkitWalletColors.snow1
+)
+
+// ...
+
+private fun confirmedTransactionsList(transactions: List<Transaction.Confirmed>): String {
+    if (transactions.isEmpty()) {
+        Log.i(TAG, "Confirmed transaction list is empty")
+        return "No confirmed transactions"
+    } else {
+        val sortedTransactions = transactions.sortedByDescending { it.confirmation.height }
+        return buildString {
+            for (item in sortedTransactions) {
+                Log.i(TAG, "Transaction list item: $item")
+                appendLine("Timestamp: ${item.confirmation.timestamp.timestampToString()}")
+                appendLine("Received: ${item.details.received}")
+                appendLine("Sent: ${item.details.sent}")
+                appendLine("Fees: ${item.details.fees}")
+                appendLine("Block: ${item.confirmation.height}")
+                appendLine("Txid: ${item.details.txid}")
+                appendLine()
+            }
+        }
+    }
+}
+```
+<br/>
