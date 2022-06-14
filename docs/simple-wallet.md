@@ -172,4 +172,103 @@ private fun confirmedTransactionsList(transactions: List<Transaction.Confirmed>)
     }
 }
 ```
+
+<center>
+  <img class="screenshot" src="../images/screenshots/transaction-history.png" width="300px" />
+</center>
+
 <br/>
+
+# Task 5: Display recovery phrase
+Displaying the recovery phrase to the user is not a complicated task. Remember that we have stored the recovery phrase in shared preferences when creating the wallet
+```kotlin
+fun createWallet(): Unit {
+    val keys: ExtendedKeyInfo = generateExtendedKey(Network.TESTNET, WordCount.WORDS12, null)
+    val descriptor: String = createDescriptor(keys)
+    val changeDescriptor: String = createChangeDescriptor(keys)
+    initialize(
+        descriptor = descriptor,
+        changeDescriptor = changeDescriptor,
+    )
+    Repository.saveWallet(path, descriptor, changeDescriptor)
+    Repository.saveMnemonic(keys.mnemonic)
+}
+```
+
+Retrieving the recovery phrase is a simple call to the repository, which has a `getMnemonic()` method defined:
+```kotlin
+fun getMnemonic(): String {
+    return sharedPreferencesManager.mnemonic
+}
+```
+
+Upon creating the screen, the `getMnemonic()` method is simply called to populate series of text composables:
+```kotlin
+// RecoveryPhraseScreen.kt
+@Composable
+internal fun RecoveryPhraseScreen(navController: NavController) {
+
+    val seedPhrase: String = Repository.getMnemonic()
+    val wordList: List<String> = seedPhrase.split(" ")
+
+    Scaffold(
+        topBar = { AwayFromHomeAppBar(navController, "Recovery Phrase") },
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(all = 32.dp)
+        ) {
+            wordList.forEachIndexed { index, item ->
+                Text(
+                    text = "${index + 1}. $item",
+                    modifier = Modifier.weight(weight = 1F),
+                    color = DevkitWalletColors.snow1,
+                    fontFamily = firaMono
+                )
+            }
+        }
+    }
+}
+```
+
+<center>
+  <img class="screenshot" src="../images/screenshots/recovery-phrase.png" width="300px" />
+</center>
+
+# Task 6: Enable wallet recovery
+Enabling wallet recovery is a matter of collecting a recovery phrase from the user and passing it to the bitcoindevkit, which will create our BIP32 root key from it.
+
+The Devkit Wallet does not to much input cleaning, and mostly implements the "happy path" for wallet recovery in the spirit of keeping the sample application lean and easy to parse. Once the "Recover Wallet" button is pressed, we pass the list of words collected from the `OutlinedTextField` composables through the `buildRecoveryPhrase()` function:
+```kotlin
+// input words can have capital letters, space around them, space inside of them
+private fun buildRecoveryPhrase(recoveryPhraseWordMap: Map<Int, String>): String {
+    var recoveryPhrase = ""
+    recoveryPhraseWordMap.values.forEach() {
+        recoveryPhrase = recoveryPhrase.plus(it.trim().replace(" ", "").lowercase().plus(" "))
+    }
+    return recoveryPhrase.trim()
+}
+```
+
+and give them to the Wallet object as a string.  
+```kotlin
+// Wallet.kt
+fun recoverWallet(mnemonic: String) {
+    val keys: ExtendedKeyInfo = restoreExtendedKey(Network.TESTNET, mnemonic, null)
+    val descriptor: String = createDescriptor(keys)
+    val changeDescriptor: String = createChangeDescriptor(keys)
+    initialize(
+        descriptor = descriptor,
+        changeDescriptor = changeDescriptor,
+    )
+    Repository.saveWallet(path, descriptor, changeDescriptor)
+    Repository.saveMnemonic(keys.mnemonic)
+}
+```
+
+Note the use of the `restoreExtendedKey()` method where the mnemonic is passed to the bitcoindevkit, returning a object of type `ExtendedKeyInfo`, which contains the BIP32 root key (`ExtendedKeyInfo.xprv`).
+
+<center>
+  <img class="screenshot" src="../images/screenshots/recover.png" width="300px" />
+</center>
