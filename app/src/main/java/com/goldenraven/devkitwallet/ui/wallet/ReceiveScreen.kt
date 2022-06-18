@@ -5,24 +5,23 @@
 
 package com.goldenraven.devkitwallet.ui.wallet
 
-import android.graphics.Bitmap
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,18 +44,21 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
-internal class AddressViewModel() : ViewModel() {
+internal class AddressViewModel : ViewModel() {
 
     private var _address: MutableLiveData<String> = MutableLiveData("No address yet")
+    private var _addressIndex: MutableLiveData<UInt> = MutableLiveData(0u)
     val address: LiveData<String>
         get() = _address
+    val addressIndex: LiveData<UInt>
+        get() = _addressIndex
 
     fun updateAddress() {
-        _address.value = Wallet.getLastUnusedAddress()
+        _address.value = Wallet.getLastUnusedAddress().address
+        _addressIndex.value = Wallet.getLastUnusedAddress().index
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ReceiveScreen(
     navController: NavController,

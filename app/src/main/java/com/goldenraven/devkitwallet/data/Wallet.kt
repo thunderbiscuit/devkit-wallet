@@ -63,12 +63,12 @@ object Wallet {
     // only create BIP84 compatible wallets
     private fun createDescriptor(keys: ExtendedKeyInfo): String {
         Log.i(TAG, "Descriptor for receive addresses is wpkh(${keys.xprv}/84'/1'/0'/0/*)")
-        return ("wpkh(" + keys.xprv + "/84'/1'/0'/0/*)")
+        return ("wpkh(${keys.xprv}/84'/1'/0'/0/*)")
     }
 
     private fun createChangeDescriptor(keys: ExtendedKeyInfo): String {
         Log.i(TAG, "Descriptor for change addresses is wpkh(${keys.xprv}/84'/1'/0'/1/*)")
-        return ("wpkh(" + keys.xprv + "/84'/1'/0'/1/*)")
+        return ("wpkh(${keys.xprv}/84'/1'/0'/1/*)")
     }
 
     // if the wallet already exists, its descriptors are stored in shared preferences
@@ -95,8 +95,10 @@ object Wallet {
     }
 
     fun createTransaction(recipient: String, amount: ULong, fee_rate: Float): PartiallySignedBitcoinTransaction {
-        val txBuilder = TxBuilder().addRecipient(recipient, amount).feeRate(satPerVbyte = fee_rate)
-        return txBuilder.finish(wallet)
+        return TxBuilder()
+            .addRecipient(recipient, amount)
+            .feeRate(satPerVbyte = fee_rate)
+            .finish(wallet)
     }
 
     fun sign(psbt: PartiallySignedBitcoinTransaction) {
@@ -111,13 +113,15 @@ object Wallet {
     fun getTransactions(): List<Transaction> = wallet.getTransactions()
 
     fun sync() {
-        Log.i("Wallet", "Wallet is syncing")
+        Log.i(TAG, "Wallet is syncing")
         wallet.sync(blockchain, LogProgress)
     }
 
     fun getBalance(): ULong = wallet.getBalance()
 
-    fun getNewAddress(): String = wallet.getNewAddress()
+    fun getNewAddress(): AddressInfo = wallet.getAddress(AddressIndex.NEW)
 
-    fun getLastUnusedAddress(): String = wallet.getLastUnusedAddress()
+    fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LAST_UNUSED)
+
+    fun isBlockChainCreated() = ::blockchain.isInitialized
 }
