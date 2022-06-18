@@ -36,9 +36,10 @@ import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
+import com.goldenraven.devkitwallet.utilities.TAG
 import com.goldenraven.devkitwallet.utilities.formatInBtc
 
-internal class WalletViewModel() : ViewModel() {
+internal class WalletViewModel : ViewModel() {
 
     private var _balance: MutableLiveData<ULong> = MutableLiveData(0u)
     val balance: LiveData<ULong>
@@ -46,12 +47,11 @@ internal class WalletViewModel() : ViewModel() {
 
     fun updateBalance() {
         Wallet.sync()
-        // _balance.postValue(Wallet.getBalance())
         _balance.value = Wallet.getBalance()
+        Log.i(TAG, "Balance updated ${Wallet.getBalance()}")
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
     navController: NavHostController,
@@ -59,8 +59,10 @@ internal fun HomeScreen(
 ) {
 
     val balance by walletViewModel.balance.observeAsState()
-    if (isOnline(LocalContext.current))
+    if (isOnline(LocalContext.current) && !Wallet.isBlockChainCreated()) {
+        Log.i(TAG, "Creating new blockchain")
         Wallet.createBlockchain()
+    }
 
     Column(
         modifier = Modifier
