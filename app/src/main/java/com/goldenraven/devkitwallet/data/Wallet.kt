@@ -111,13 +111,15 @@ object Wallet {
     fun getTransactions(): List<Transaction> = wallet.getTransactions()
 
     fun sync() {
-        Log.i("Wallet", "Wallet is syncing")
+        Log.i(TAG, "Wallet is syncing")
         wallet.sync(blockchain, LogProgress)
     }
 
     fun getBalance(): ULong = wallet.getBalance()
 
-    fun getNewAddress(): String = wallet.getNewAddress()
+    fun getNewAddress(): AddressInfo = wallet.getAddress(AddressIndex.NEW)
 
-    fun getLastUnusedAddress(): String = wallet.getLastUnusedAddress()
+    fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LAST_UNUSED)
+
+    fun isBlockChainCreated() = ::blockchain.isInitialized
 }

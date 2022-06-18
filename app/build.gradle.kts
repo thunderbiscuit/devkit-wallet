@@ -70,7 +70,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 
     // bitcoindevkit
-    implementation("org.bitcoindevkit:bdk-android:0.6.0")
+    implementation("org.bitcoindevkit:bdk-android:0.7.0")
 
     // qr codes
     implementation("com.google.zxing:core:3.4.1")
