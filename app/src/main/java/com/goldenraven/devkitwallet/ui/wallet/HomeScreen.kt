@@ -58,8 +58,9 @@ internal fun HomeScreen(
     walletViewModel: WalletViewModel = viewModel()
 ) {
 
+    val networkAvailable: Boolean = isOnline(LocalContext.current)
     val balance by walletViewModel.balance.observeAsState()
-    if (isOnline(LocalContext.current) && !Wallet.isBlockChainCreated()) {
+    if (networkAvailable && !Wallet.isBlockChainCreated()) {
         Log.i(TAG, "Creating new blockchain")
         Wallet.createBlockchain()
     }
@@ -93,10 +94,31 @@ internal fun HomeScreen(
                 color = DevkitWalletColors.snow1
             )
         }
+        if (!networkAvailable) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = DevkitWalletColors.auroraYellow)
+                    .height(50.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "Network unavailable",
+                    fontFamily = firaMonoMedium,
+                    fontSize = 18.sp,
+                    color = DevkitWalletColors.snow1
+                )
+            }
+        }
         Spacer(modifier = Modifier.padding(16.dp))
         Button(
             onClick = { walletViewModel.updateBalance() },
-            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = DevkitWalletColors.frost4,
+                disabledContainerColor = DevkitWalletColors.frost4Disabled,
+            ),
+            enabled = networkAvailable,
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .height(80.dp)
@@ -113,10 +135,15 @@ internal fun HomeScreen(
             )
         }
 
+
         Button(
             onClick = { navController.navigate(Screen.TransactionsScreen.route) },
-            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = DevkitWalletColors.frost4,
+                disabledContainerColor = DevkitWalletColors.frost4Disabled,
+            ),
             shape = RoundedCornerShape(16.dp),
+            enabled = networkAvailable,
             modifier = Modifier
                 .height(80.dp)
                 .fillMaxWidth(0.9f)
@@ -135,7 +162,9 @@ internal fun HomeScreen(
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.height(140.dp).fillMaxWidth(0.9f)
+            modifier = Modifier
+                .height(140.dp)
+                .fillMaxWidth(0.9f)
         ) {
             Button(
                 onClick = { navController.navigate(Screen.ReceiveScreen.route) },
@@ -160,8 +189,12 @@ internal fun HomeScreen(
 
             Button(
                 onClick = { navController.navigate(Screen.SendScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = DevkitWalletColors.auroraRed,
+                    disabledContainerColor = DevkitWalletColors.auroraRedDisabled,
+                ),
                 shape = RoundedCornerShape(16.dp),
+                enabled = networkAvailable,
                 modifier = Modifier
                     .height(160.dp)
                     .padding(vertical = 8.dp, horizontal = 8.dp)
