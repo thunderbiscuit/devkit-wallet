@@ -21,6 +21,7 @@ The Devkit Wallet makes rather opinionated choices regarding its design and arch
 2. Return types are explicitly stated for all code that touches bitcoin, even when the IDE doesn't like it
 3. Some bugs are left in and considered acceptable if squashing them requires a lot of polish/boilerplate code that does not add to the understanding of the bitcoindevkit
 4. Errors are not always communicated back to the user on-screen (for example through polished snackbars) for similar reasons as (3); if something is not working, take a look a the logcat output
+5. I don't make use of string resources. This makes the codebase easier to search and simpler to parse on GitHub and platforms where the IDE doesn't show inline replacements of the string resources. In short, string resources, while a best practice, do not improve readability, the prime focus of this sample application.
 
 <br/>
 
