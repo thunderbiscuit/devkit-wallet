@@ -25,6 +25,9 @@ object DevkitWalletColors {
 
 
     val frost4: Color = Color(0xFF5e81ac)
+    val frost4Disabled: Color = Color(0x305e81ac)
     val auroraGreen: Color = Color(0xFFa3be8c)
     val auroraRed: Color = Color(0xFFbf616a)
+    val auroraRedDisabled: Color = Color(0x30bf616a)
+    val auroraYellow: Color = Color(0xFFebcb8b)
 }
