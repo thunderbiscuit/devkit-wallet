@@ -24,7 +24,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -126,7 +125,7 @@ internal fun WalletRecoveryScreen(
                             .shadow(elevation = 8.dp, shape = RoundedCornerShape(16.dp))
                     ) {
                         Text(
-                            stringResource(R.string.recover_wallet),
+                            text = "Recover Wallet",
                             fontSize = 20.sp,
                             textAlign = TextAlign.Center,
                             lineHeight = 28.sp,

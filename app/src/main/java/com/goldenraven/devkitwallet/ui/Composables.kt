@@ -7,14 +7,10 @@ package com.goldenraven.devkitwallet.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

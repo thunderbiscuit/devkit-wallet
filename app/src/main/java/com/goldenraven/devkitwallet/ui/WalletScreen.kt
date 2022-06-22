@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -152,7 +151,7 @@ internal fun WalletAppBar(scope: CoroutineScope, drawerState: DrawerState) {
 @Composable
 internal fun AppTitle() {
     Text(
-        text = stringResource(R.string.app_name),
+        text = "Devkit Wallet",
         color = DevkitWalletColors.snow1,
         fontFamily = firaMonoMedium,
         fontSize = 20.sp
