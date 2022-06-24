@@ -38,6 +38,8 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.1.1"
     }
+
+    namespace = "com.goldenraven.devkitwallet"
 }
 
 dependencies {
