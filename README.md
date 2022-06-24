@@ -47,7 +47,7 @@ The Devkit Wallet makes rather opinionated choices regarding its design and arch
 ## Companion Documentation Website
 
 <div align="center">
-    <img src="./images/docs.png" width="500" />
+    <img src="./images/docs-home.png" width="500" />
 </div>
 
 You can find the companion tutorial website for this repository [here](https://thunderbiscuit.github.io/devkit-wallet/). To learn more about the bitcoindevkit, check out [the shiny new docs here](https://bitcoindevkit.org/).
