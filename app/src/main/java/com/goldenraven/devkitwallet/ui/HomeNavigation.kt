@@ -10,9 +10,10 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import com.goldenraven.devkitwallet.ui.*
 import com.goldenraven.devkitwallet.ui.AboutScreen
+import com.goldenraven.devkitwallet.ui.ElectrumScreen
 import com.goldenraven.devkitwallet.ui.RecoveryPhraseScreen
-import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.WalletScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -70,5 +71,21 @@ fun HomeNavigation() {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
         ) { RecoveryPhraseScreen(navController = navController) }
+
+        composable(
+            route = Screen.ElectrumScreen.route,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            }
+        ) { ElectrumScreen(navController = navController) }
     }
 }
