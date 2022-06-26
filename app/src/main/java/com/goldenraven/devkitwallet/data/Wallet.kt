@@ -10,14 +10,11 @@ import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.*
 import org.bitcoindevkit.Wallet as BdkWallet
 
-
 object Wallet {
 
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
-    private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
-    private lateinit var blockchainConfig: BlockchainConfig
-    private lateinit var blockchain: Blockchain
+    private lateinit var electrumServer: ElectrumServer
 
     object LogProgress: Progress {
         override fun update(progress: Float, message: String?) {
@@ -44,8 +41,13 @@ object Wallet {
     }
 
     fun createBlockchain() {
-        blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
-        blockchain = Blockchain(blockchainConfig)
+        electrumServer = ElectrumServer()
+        Log.i(TAG, "Current electrum URL : ${electrumServer.getElectrumURL()}")
+    }
+
+    fun changeElectrumServer(electrumURL: String) {
+        electrumServer.createCustomElectrum(electrumURL = electrumURL)
+        wallet.sync(electrumServer.server, LogProgress)
     }
 
     fun createWallet() {
@@ -106,7 +108,7 @@ object Wallet {
     }
 
     fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): String {
-        blockchain.broadcast(signedPsbt)
+        electrumServer.server.broadcast(signedPsbt)
         return signedPsbt.txid()
     }
 
@@ -114,7 +116,7 @@ object Wallet {
 
     fun sync() {
         Log.i(TAG, "Wallet is syncing")
-        wallet.sync(blockchain, LogProgress)
+        wallet.sync(electrumServer.server, LogProgress)
     }
 
     fun getBalance(): ULong = wallet.getBalance()
@@ -123,5 +125,18 @@ object Wallet {
 
     fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LAST_UNUSED)
 
-    fun isBlockChainCreated() = ::blockchain.isInitialized
+    fun isBlockChainCreated() = ::electrumServer.isInitialized
+
+    fun getElectrumURL(): String = electrumServer.getElectrumURL()
+
+    fun isElectrumServerDefault(): Boolean = electrumServer.isElectrumServerDefault()
+
+    fun setElectrumSettings(electrumSettings: ElectrumSettings) {
+        when (electrumSettings) {
+            ElectrumSettings.DEFAULT -> electrumServer.useDefaultElectrum()
+            ElectrumSettings.CUSTOM ->  electrumServer.useCustomElectrum()
+        }
+    }
+
+    enum class ElectrumSettings { DEFAULT, CUSTOM }
 }

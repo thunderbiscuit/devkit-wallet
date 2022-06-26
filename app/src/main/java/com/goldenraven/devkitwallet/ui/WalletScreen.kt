@@ -118,6 +118,18 @@ internal fun WalletScreen(navController: NavController) {
                     unselectedTextColor = DevkitWalletColors.snow1
                 )
             )
+            NavigationDrawerItem(
+                label = { Text("Electrum Server") },
+                selected = items[2] == selectedItem.value,
+                onClick = { navController.navigate(Screen.ElectrumScreen.route) },
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                colors = NavigationDrawerItemDefaults.colors(
+                    selectedContainerColor = DevkitWalletColors.night4,
+                    unselectedContainerColor = DevkitWalletColors.night4,
+                    selectedTextColor = DevkitWalletColors.snow1,
+                    unselectedTextColor = DevkitWalletColors.snow1
+                )
+            )
         },
         content = {
             Scaffold(
