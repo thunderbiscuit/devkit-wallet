@@ -5,15 +5,18 @@
 
 package com.goldenraven.devkitwallet.ui.wallet
 
-import android.icu.lang.UCharacter.isDigit
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Switch
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -33,10 +36,7 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.PartiallySignedBitcoinTransaction
-import org.bitcoindevkit.TxBuilder
-import java.lang.Character.isDigit
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SendScreen(navController: NavController) {
 
@@ -46,14 +46,17 @@ internal fun SendScreen(navController: NavController) {
     val amount: MutableState<String> = remember { mutableStateOf("") }
     val feeRate: MutableState<String> = remember { mutableStateOf("") }
 
+    val sendFunc: MutableState<String> = remember { mutableStateOf("Send Bitcoin") }
+    val isChecked: MutableState<Boolean> = remember { mutableStateOf(false) }
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(DevkitWalletColors.night4)
     ) {
-        val (screenTitle, transactionInputs, bottomButtons) = createRefs()
+        val (screenTitle, transactionInputs, bottomButtons, sendFuncSwitch) = createRefs()
         Text(
-            text = "Send Bitcoin",
+            text = sendFunc.value,
             color = DevkitWalletColors.snow1,
             fontSize = 28.sp,
             fontFamily = firaMono,
@@ -79,14 +82,34 @@ internal fun SendScreen(navController: NavController) {
             }
         ) {
             TransactionRecipientInput(recipientAddress)
-            TransactionAmountInput(amount)
+            TransactionAmountInput(amount, isChecked.value)
             TransactionFeeInput(feeRate)
             Dialog(
                 recipientAddress = recipientAddress.value,
                 amount = amount.value,
                 feeRate = feeRate.value,
                 showDialog = showDialog,
-                setShowDialog = setShowDialog
+                setShowDialog = setShowDialog,
+                isChecked = isChecked.value
+            )
+        }
+
+        Column(
+            Modifier
+                .constrainAs(sendFuncSwitch) {
+                    end.linkTo(parent.end)
+                }
+                .padding(end = 16.dp, top = 16.dp)
+        ) {
+            SendFuncToggle(isChecked = isChecked.value, onCheckedChange = {
+                    if (it) {
+                        sendFunc.value = "Send All Bitcoin"
+                        isChecked.value = it
+                    } else {
+                        sendFunc.value = "Send Bitcoin"
+                        isChecked.value = it
+                    }
+                }
             )
         }
 
@@ -141,6 +164,23 @@ internal fun SendScreen(navController: NavController) {
 }
 
 @Composable
+fun SendFuncToggle(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = "Send All",
+            color = DevkitWalletColors.snow1,
+            fontSize = 14.sp,
+            fontFamily = firaMono,
+            textAlign = TextAlign.Center,
+        )
+        Switch(
+            checked = isChecked,
+            onCheckedChange = onCheckedChange
+        )
+    }
+}
+
+@Composable
 private fun TransactionRecipientInput(recipientAddress: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -168,7 +208,7 @@ private fun TransactionRecipientInput(recipientAddress: MutableState<String>) {
 }
 
 @Composable
-private fun TransactionAmountInput(amount: MutableState<String>) {
+private fun TransactionAmountInput(amount: MutableState<String>, isChecked: Boolean) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
         OutlinedTextField(
@@ -192,6 +232,7 @@ private fun TransactionAmountInput(amount: MutableState<String>) {
                 unfocusedBorderColor = DevkitWalletColors.snow1,
                 cursorColor = DevkitWalletColors.auroraGreen,
             ),
+            enabled = !isChecked
         )
     }
 }
@@ -232,8 +273,10 @@ fun Dialog(
     feeRate: String,
     showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
+    isChecked: Boolean,
 ) {
     if (showDialog) {
+        val confirmationText = if (!isChecked) "Send: $amount\nto: $recipientAddress\nFee rate: ${feeRate.toFloat()}" else "Send all to: $recipientAddress\nFee rate: ${feeRate.toFloat()}"
         AlertDialog(
             containerColor = DevkitWalletColors.night4,
             onDismissRequest = {},
@@ -245,14 +288,15 @@ fun Dialog(
             },
             text = {
                 Text(
-                    text = "Send: $amount\nto: $recipientAddress\nFee rate: ${feeRate.toFloat()}",
+                    text = confirmationText,
                     color = DevkitWalletColors.snow1
                 )
             },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        broadcastTransaction(recipientAddress, amount.toULong(), feeRate.toFloat())
+                        val parsedAmount = amount.ifEmpty { "0" }
+                        broadcastTransaction(recipientAddress, parsedAmount.toULong(), feeRate.toFloat(), isChecked)
                         setShowDialog(false)
                     },
                 ) {
@@ -278,11 +322,16 @@ fun Dialog(
     }
 }
 
-private fun broadcastTransaction(recipientAddress: String, amount: ULong, feeRate: Float = 1F) {
+private fun broadcastTransaction(
+    recipientAddress: String,
+    amount: ULong,
+    feeRate: Float = 1F,
+    isChecked: Boolean
+) {
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient: $recipientAddress, amount: $amount, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
-        val psbt: PartiallySignedBitcoinTransaction = Wallet.createTransaction(recipientAddress, amount, feeRate)
+        val psbt: PartiallySignedBitcoinTransaction = if (!isChecked) Wallet.createTransaction(recipientAddress, amount, feeRate) else Wallet.createSendAllTransaction(recipientAddress, feeRate)
         Wallet.sign(psbt)
         val txid: String = Wallet.broadcast(psbt)
         Log.i(TAG, "Transaction was broadcast! txid: $txid")
