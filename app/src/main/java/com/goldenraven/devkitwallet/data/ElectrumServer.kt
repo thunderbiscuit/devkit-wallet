@@ -27,6 +27,10 @@ class ElectrumServer {
     val server: Blockchain
         get() = if (useDefaultElectrum) this.default else this.custom!!
 
+    // if you're looking to test different public Electrum servers we recommend these 3:
+    // ssl://electrum.blockstream.info:60002
+    // tcp://electrum.blockstream.info:60001
+    // tcp://testnet.aranguren.org:51001
     fun createCustomElectrum(electrumURL: String) {
         customElectrumURL = electrumURL
         val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(customElectrumURL, null, 5u, null, 10u))
