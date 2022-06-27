@@ -75,7 +75,7 @@ internal fun WalletScreen(navController: NavController) {
                     )
                     Column() {
                         Text(
-                            text = "\uD83D\uDE0E UIOnly",
+                            text = "   UIOnly",
                             color = Color(0x60eceff4),
                             fontFamily = firaMono
                         )
@@ -86,7 +86,7 @@ internal fun WalletScreen(navController: NavController) {
                             fontFamily = firaMono
                         )
                         Text(
-                            text = "\uD83D\uDE0E AdvancedFeatures",
+                            text = "   AdvancedFeatures",
                             color = Color(0x60eceff4),
                             fontFamily = firaMono
                         )
