@@ -28,7 +28,7 @@ The repository works in the following way: multiple branches are maintained in p
 - [ ] Send to multiple recipients
 - [ ] "Send All" functionality
 - [ ] Replace-by-Fee (BIP125)
-- [ ] Choose custom Electrum server
+- [x] Choose custom Electrum server
 - [ ] Partial signatures on PSBTs
 - [ ] Create OP_RETURN outputs
 
