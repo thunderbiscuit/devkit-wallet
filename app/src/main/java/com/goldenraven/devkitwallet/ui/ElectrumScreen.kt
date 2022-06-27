@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.goldenraven.devkitwallet.data.ElectrumSettings
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
@@ -66,9 +67,9 @@ internal fun ElectrumScreen(navController: NavController) {
                     onCheckedChange = {
                         isChecked.value = it
                         if (it) {
-                            Wallet.setElectrumSettings(Wallet.ElectrumSettings.DEFAULT)
+                            Wallet.setElectrumSettings(ElectrumSettings.DEFAULT)
                         } else {
-                            Wallet.setElectrumSettings(Wallet.ElectrumSettings.CUSTOM)
+                            Wallet.setElectrumSettings(ElectrumSettings.CUSTOM)
                         }
                     },
                     enabled = isBlockChainCreated

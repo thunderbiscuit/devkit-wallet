@@ -137,6 +137,9 @@ object Wallet {
             ElectrumSettings.CUSTOM ->  electrumServer.useCustomElectrum()
         }
     }
+}
 
-    enum class ElectrumSettings { DEFAULT, CUSTOM }
+enum class ElectrumSettings {
+    DEFAULT,
+    CUSTOM
 }
