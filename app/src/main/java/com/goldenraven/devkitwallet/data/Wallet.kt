@@ -96,11 +96,15 @@ object Wallet {
         Repository.saveMnemonic(keys.mnemonic)
     }
 
-    fun createTransaction(recipient: String, amount: ULong, feeRate: Float): PartiallySignedBitcoinTransaction {
-        return TxBuilder()
-            .addRecipient(recipient, amount)
-            .feeRate(satPerVbyte = feeRate)
-            .finish(wallet)
+    fun createTransaction(recipientList: MutableList<Pair<String, ULong>>, feeRate: Float): PartiallySignedBitcoinTransaction {
+        var txBuilder = TxBuilder()
+        for (recipient in recipientList) {
+            Log.i(TAG, "Adding recipient : ${recipient.first} | ${recipient.second}")
+            txBuilder = txBuilder.addRecipient(address = recipient.first, amount = recipient.second)
+        }
+        Log.i(TAG, "Adding fee rate : $feeRate")
+        txBuilder = txBuilder.feeRate(satPerVbyte = feeRate)
+        return txBuilder.finish(wallet)
     }
 
     fun createSendAllTransaction(recipient: String, feeRate: Float): PartiallySignedBitcoinTransaction {
