@@ -21,6 +21,7 @@ object DevkitWalletColors {
 
     // most text uses snow1
     val snow1: Color = Color(0xFFeceff4)
+    val snow1Disabled: Color = Color(0x70eceff4)
     val snow3: Color = Color(0xFFd8dee9)
 
 
