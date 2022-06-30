@@ -46,7 +46,6 @@ internal fun SendScreen(navController: NavController) {
     val amount: MutableState<String> = remember { mutableStateOf("") }
     val feeRate: MutableState<String> = remember { mutableStateOf("") }
 
-    val sendFunc: MutableState<String> = remember { mutableStateOf("Send Bitcoin") }
     val isChecked: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     ConstraintLayout(
@@ -56,7 +55,7 @@ internal fun SendScreen(navController: NavController) {
     ) {
         val (screenTitle, transactionInputs, bottomButtons, sendFuncSwitch) = createRefs()
         Text(
-            text = sendFunc.value,
+            text = "Send Bitcoin",
             color = DevkitWalletColors.snow1,
             fontSize = 28.sp,
             fontFamily = firaMono,
@@ -103,10 +102,8 @@ internal fun SendScreen(navController: NavController) {
         ) {
             SendFuncToggle(isChecked = isChecked.value, onCheckedChange = {
                     if (it) {
-                        sendFunc.value = "Send All Bitcoin"
                         isChecked.value = it
                     } else {
-                        sendFunc.value = "Send Bitcoin"
                         isChecked.value = it
                     }
                 }
@@ -223,8 +220,8 @@ private fun TransactionAmountInput(amount: MutableState<String>, isChecked: Bool
             textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
             label = {
                 Text(
-                    text = "Amount",
-                    color = DevkitWalletColors.snow1,
+                    text = if (isChecked) "Amount (Send All)" else "Amount",
+                    color = if (isChecked) DevkitWalletColors.snow1Disabled else DevkitWalletColors.snow1,
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
