@@ -6,6 +6,7 @@
 package com.goldenraven.devkitwallet.data
 
 import android.util.Log
+import com.goldenraven.devkitwallet.ui.wallet.Recipient
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.*
 import org.bitcoindevkit.Wallet as BdkWallet
@@ -96,15 +97,18 @@ object Wallet {
         Repository.saveMnemonic(keys.mnemonic)
     }
 
-    fun createTransaction(recipientList: MutableList<Pair<String, ULong>>, feeRate: Float): PartiallySignedBitcoinTransaction {
+    fun createTransaction(recipientList: MutableList<Recipient>, feeRate: Float): PartiallySignedBitcoinTransaction {
+        /*
         var txBuilder = TxBuilder()
         for (recipient in recipientList) {
-            Log.i(TAG, "Adding recipient : ${recipient.first} | ${recipient.second}")
-            txBuilder = txBuilder.addRecipient(address = recipient.first, amount = recipient.second)
+            txBuilder  = txBuilder.addRecipient(address = recipient.first, amount = recipient.second)
         }
-        Log.i(TAG, "Adding fee rate : $feeRate")
-        txBuilder = txBuilder.feeRate(satPerVbyte = feeRate)
-        return txBuilder.finish(wallet)
+        txBuilder = txBuilder.feeRate(satPerVbyte = fee_rate)
+         */
+        val txBuilder = recipientList.fold(TxBuilder()) { builder, recipient ->
+            builder.addRecipient(recipient.address, recipient.amount)
+        }
+        return txBuilder.feeRate(satPerVbyte = feeRate).finish(wallet)
     }
 
     fun createSendAllTransaction(recipient: String, feeRate: Float): PartiallySignedBitcoinTransaction {

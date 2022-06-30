@@ -56,7 +56,7 @@ internal fun SendScreen(navController: NavController) {
     val amount: MutableState<String> = rememberSaveable { mutableStateOf("") }
     val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
-    val recipientList: MutableList<Pair<String, ULong>> = remember { mutableStateListOf() }
+    val recipientList: MutableList<Recipient> = remember { mutableStateListOf() }
 
     val context = LocalContext.current
 
@@ -198,7 +198,7 @@ fun SendFuncToggle(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
 @Composable
 private fun TransactionRecipientInput(
     recipientAddress: MutableState<String>,
-    recipientList: MutableList<Pair<String, ULong>>,
+    recipientList: MutableList<Recipient>,
     amount: MutableState<String>,
     context: Context
 ) {
@@ -230,7 +230,7 @@ private fun TransactionRecipientInput(
             modifier = Modifier.size(24.dp),
             onClick = {
                 if (checkRecipientList(recipientAddress = recipientAddress.value, recipientList = recipientList, amount = amount.value, context = context)) {
-                    recipientList.add(Pair(recipientAddress.value, amount.value.toULong()))
+                    recipientList.add(Recipient(address = recipientAddress.value, amount = amount.value.toULong()))
                     recipientAddress.value = ""
                     amount.value = ""
                 }
@@ -247,7 +247,7 @@ private fun TransactionRecipientInput(
 
 fun checkRecipientList(
     recipientAddress: String,
-    recipientList: MutableList<Pair<String, ULong>>,
+    recipientList: MutableList<Recipient>,
     amount: String,
     context: Context
 ): Boolean {
@@ -263,7 +263,7 @@ fun checkRecipientList(
         Toast.makeText(context, "Amount is empty", Toast.LENGTH_SHORT).show()
         return false
     }
-    if (recipientAddress in recipientList.map { it.first }){
+    if (recipientAddress in recipientList.map { it.address }){
         Toast.makeText(context, "Recipient already in list", Toast.LENGTH_SHORT).show()
         return false
     }
@@ -330,7 +330,7 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
 }
 
 @Composable
-fun RecipientList(recipientList: MutableList<Pair<String, ULong>>) {
+fun RecipientList(recipientList: MutableList<Recipient>) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(start = 16.dp, end = 16.dp)
@@ -341,7 +341,7 @@ fun RecipientList(recipientList: MutableList<Pair<String, ULong>>) {
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .weight(0.5f),
-                    value = item.first,
+                    value = item.address,
                     onValueChange = { },
                     label = {
                         Text(
@@ -365,7 +365,7 @@ fun RecipientList(recipientList: MutableList<Pair<String, ULong>>) {
                     modifier = Modifier
                         .padding(vertical = 8.dp)
                         .weight(0.2f),
-                    value = item.second.toString(),
+                    value = item.amount.toString(),
                     onValueChange = { },
                     label = {
                         Text(
@@ -409,20 +409,19 @@ fun Dialog(
     showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
     isChecked: Boolean,
-    recipientList: MutableList<Pair<String, ULong>>,
+    recipientList: MutableList<Recipient>,
     context: Context,
 ) {
     if (showDialog) {
-        val confirmationText = if (!isChecked) "Send: $amount\nto: $recipientAddress\nFee rate: ${feeRate.toFloat()}" else "Send all to: $recipientAddress\nFee rate: ${feeRate.toFloat()}"
         if (recipientAddress.value != "") {
             if (checkRecipientList(recipientAddress = recipientAddress.value, recipientList = recipientList, amount = amount.value, context = context)) {
-                recipientList.add(Pair(recipientAddress.value, amount.value.toULong()))
+                recipientList.add(Recipient(address = recipientAddress.value, amount = amount.value.toULong()))
                 recipientAddress.value = ""
                 amount.value = ""
             }
         }
         var confirmationText = "Confirm Transaction : \n"
-        recipientList.forEach { confirmationText += "${it.first}, ${it.second}\n"}
+        recipientList.forEach { confirmationText += "${it.address}, ${it.amount}\n"}
         confirmationText += "Fee Rate : $feeRate"
         AlertDialog(
             containerColor = DevkitWalletColors.night4,
@@ -444,7 +443,7 @@ fun Dialog(
                     onClick = {
                         if (recipientAddress.value != "") {
                             if (checkRecipientList(recipientAddress = recipientAddress.value, recipientList = recipientList, amount = amount.value, context = context)) {
-                                recipientList.add(Pair(recipientAddress.value, amount.value.toULong()))
+                                recipientList.add(Recipient(address = recipientAddress.value, amount = amount.value.toULong()))
                             }
                         }
                         broadcastTransaction(recipientList, feeRate.value.toFloat())
@@ -474,7 +473,7 @@ fun Dialog(
 }
 
 private fun broadcastTransaction(
-    recipientList: MutableList<Pair<String, ULong>>,
+    recipientList: MutableList<Recipient>,
     feeRate: Float = 1F,
     isChecked: Boolean
 ) {
@@ -489,6 +488,8 @@ private fun broadcastTransaction(
         Log.i(TAG, "Broadcast error: ${e.message}")
     }
 }
+
+data class Recipient(val address: String, val amount: ULong)
 
 @Preview(device = Devices.PIXEL_4, showBackground = true)
 @Composable
