@@ -14,17 +14,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Switch
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,24 +47,29 @@ import org.bitcoindevkit.PartiallySignedBitcoinTransaction
 @Composable
 internal fun SendScreen(navController: NavController) {
 
+    val context = LocalContext.current
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 
-    val recipientAddress: MutableState<String> = rememberSaveable { mutableStateOf("") }
-    val amount: MutableState<String> = rememberSaveable { mutableStateOf("") }
     val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
+    var recipientList: MutableList<Recipient> = mutableListOf(Recipient(address = "", amount = 0u))
 
-    val recipientList: MutableList<Recipient> = remember { mutableStateListOf() }
+    val transactionOptions = remember {
+        listOf(
+            TransactionType.DEFAULT,
+            TransactionType.SEND_ALL,
+        )
+    }
+    val transactionOption: MutableState<TransactionType> = rememberSaveable { mutableStateOf(transactionOptions[0]) }
 
-    val context = LocalContext.current
-
-    val isChecked: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val showMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(DevkitWalletColors.night4)
     ) {
-        val (screenTitle, transactionInputs, bottomButtons, sendFuncSwitch) = createRefs()
+        val (screenTitle, transactionInputs, bottomButtons, dropDownMenu) = createRefs()
+
         Text(
             text = "Send Bitcoin",
             color = DevkitWalletColors.snow1,
@@ -84,6 +86,60 @@ internal fun SendScreen(navController: NavController) {
         )
 
         Column(
+            modifier = Modifier
+                .constrainAs(dropDownMenu) {
+                    start.linkTo(screenTitle.end)
+                }
+                .padding(top = 67.dp),
+        ) {
+            IconButton(onClick = { showMenu.value = !showMenu.value }) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "More transaction options",
+                    tint = DevkitWalletColors.snow1
+                )
+            }
+            DropdownMenu(
+                expanded = showMenu.value,
+                onDismissRequest = { showMenu.value = false }
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        transactionOption.value = TransactionType.DEFAULT
+                        recipientList = recipientList.filterIndexed { index, _ ->  index == 0}.toMutableList()
+                        showMenu.value = false
+                    },
+                    text = { Text(text = "Default") }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        transactionOption.value = TransactionType.SEND_ALL
+                        recipientList = recipientList.filterIndexed { index, _ ->  index == 0}.toMutableList()
+                        showMenu.value = false
+                    },
+                    text = { Text(text = "Send All") }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        transactionOption.value = TransactionType.DEFAULT
+                        recipientList.add(Recipient("", 0u))
+                        showMenu.value = false
+                    },
+                    text = { Text(text = "Add Recipient") }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        transactionOption.value = TransactionType.DEFAULT
+                        if (recipientList.size > 1)
+                            recipientList.removeLast()
+                        showMenu.value = false
+                    },
+                    text = { Text(text = "Remove Recipient") }
+                )
+            }
+        }
+
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.constrainAs(transactionInputs) {
@@ -94,37 +150,16 @@ internal fun SendScreen(navController: NavController) {
                 height = Dimension.fillToConstraints
             }
         ) {
-            TransactionRecipientInput(recipientAddress, recipientList, amount, context)
-            TransactionAmountInput(amount, isChecked.value)
+            TransactionRecipientInput(recipientList = recipientList)
+            TransactionAmountInput(recipientList = recipientList, transactionOption = transactionOption.value)
             TransactionFeeInput(feeRate)
-            RecipientList(recipientList)
             Dialog(
-                recipientAddress = recipientAddress,
-                amount = amount,
+                recipientList = recipientList,
                 feeRate = feeRate,
                 showDialog = showDialog,
                 setShowDialog = setShowDialog,
-                isChecked = isChecked.value,
-                recipientList = recipientList,
+                transactionOption = transactionOption.value,
                 context = context
-            )
-        }
-
-        Column(
-            Modifier
-                .constrainAs(sendFuncSwitch) {
-                    end.linkTo(parent.end)
-                }
-                .padding(end = 16.dp, top = 16.dp)
-        ) {
-            SendFuncToggle(isChecked = isChecked.value, onCheckedChange = {
-                    if (it) {
-                        isChecked.value = it
-                    } else {
-                        isChecked.value = it
-                    }
-                }
-                setShowDialog = setShowDialog,
             )
         }
 
@@ -179,131 +214,111 @@ internal fun SendScreen(navController: NavController) {
 }
 
 @Composable
-fun SendFuncToggle(isChecked: Boolean, onCheckedChange: (Boolean) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = "Send All",
-            color = DevkitWalletColors.snow1,
-            fontSize = 14.sp,
-            fontFamily = firaMono,
-            textAlign = TextAlign.Center,
-        )
-        Switch(
-            checked = isChecked,
-            onCheckedChange = onCheckedChange
-        )
-    }
-}
+private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
+    LazyColumn (modifier = Modifier.fillMaxWidth(0.9f).heightIn(max = 100.dp)) {
+        itemsIndexed(recipientList) { index, _ ->
+            val recipientAddress: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
-@Composable
-private fun TransactionRecipientInput(
-    recipientAddress: MutableState<String>,
-    recipientList: MutableList<Recipient>,
-    amount: MutableState<String>,
-    context: Context
-) {
-    Row (verticalAlignment = Alignment.CenterVertically) {
-        OutlinedTextField(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .fillMaxWidth(0.8f),
-            value = recipientAddress.value,
-            onValueChange = { recipientAddress.value = it },
-            label = {
-                Text(
-                    text = "Recipient address",
-                    color = DevkitWalletColors.snow1,
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .weight(0.5f),
+                    value = recipientAddress.value,
+                    onValueChange = {
+                        recipientAddress.value = it
+                        recipientList[index].address = it
+                    },
+                    label = {
+                        Text(
+                            text = "Recipient address ${index + 1}",
+                            color = DevkitWalletColors.snow1,
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = DevkitWalletColors.auroraGreen,
+                        unfocusedBorderColor = DevkitWalletColors.snow1,
+                        cursorColor = DevkitWalletColors.auroraGreen,
+                    ),
                 )
-            },
-            singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
-            ),
-        )
-
-        Spacer(modifier = Modifier.size(8.dp))
-
-        IconButton(
-            modifier = Modifier.size(24.dp),
-            onClick = {
-                if (checkRecipientList(recipientAddress = recipientAddress.value, recipientList = recipientList, amount = amount.value, context = context)) {
-                    recipientList.add(Recipient(address = recipientAddress.value, amount = amount.value.toULong()))
-                    recipientAddress.value = ""
-                    amount.value = ""
-                }
             }
-        ) {
-            Icon(
-                Icons.Filled.Add,
-                contentDescription = "Add Recipient",
-                tint = DevkitWalletColors.snow1
-            )
         }
     }
 }
 
 fun checkRecipientList(
-    recipientAddress: String,
     recipientList: MutableList<Recipient>,
-    amount: String,
     context: Context
 ): Boolean {
     if (recipientList.size > 4) {
         Toast.makeText(context, "Too many recipients", Toast.LENGTH_SHORT).show()
         return false
     }
-    if (recipientAddress == "") {
-        Toast.makeText(context, "Address is empty", Toast.LENGTH_SHORT).show()
-        return false
-    }
-    if (amount == "") {
-        Toast.makeText(context, "Amount is empty", Toast.LENGTH_SHORT).show()
-        return false
-    }
-    if (recipientAddress in recipientList.map { it.address }){
-        Toast.makeText(context, "Recipient already in list", Toast.LENGTH_SHORT).show()
-        return false
+    for (recipient in recipientList) {
+        if (recipient.address == "") {
+            Toast.makeText(context, "Address is empty", Toast.LENGTH_SHORT).show()
+            return false
+        }
     }
     return true
 }
 
 @Composable
-private fun TransactionAmountInput(amount: MutableState<String>, isChecked: Boolean) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transactionOption: TransactionType) {
+    LazyColumn (modifier = Modifier.fillMaxWidth(0.9f).heightIn(max = 100.dp)) {
+        itemsIndexed(recipientList) { index, _ ->
+            val amount: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
-        OutlinedTextField(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .fillMaxWidth(0.9f),
-            value = amount.value,
-            onValueChange = { value: String ->
-                amount.value = value.filter { it.isDigit() }
-            },
-            singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
-            label = {
-                Text(
-                    text = if (isChecked) "Amount (Send All)" else "Amount",
-                    color = if (isChecked) DevkitWalletColors.snow1Disabled else DevkitWalletColors.snow1,
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .weight(0.5f),
+                    value = amount.value,
+                    onValueChange = {
+                        amount.value = it
+                        recipientList[index].amount = it.toULong()
+                    },
+                    label = {
+                        when (transactionOption) {
+                            TransactionType.SEND_ALL -> {
+                                Text(
+                                    text = "Amount (Send All)",
+                                    color = DevkitWalletColors.snow1Disabled,
+                                )
+                            }
+                            else -> {
+                                Text(
+                                    text = "Amount ${index + 1}",
+                                    color = DevkitWalletColors.snow1,
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = DevkitWalletColors.auroraGreen,
+                        unfocusedBorderColor = DevkitWalletColors.snow1,
+                        cursorColor = DevkitWalletColors.auroraGreen,
+                    ),
+                    enabled = (
+                        when (transactionOption) {
+                            TransactionType.SEND_ALL -> false
+                            else -> true
+                        }
+                    )
                 )
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
-            ),
-            enabled = !isChecked
-        )
+            }
+        }
     }
 }
 
 @Composable
 private fun TransactionFeeInput(feeRate: MutableState<String>) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
         OutlinedTextField(
             modifier = Modifier
                 .padding(vertical = 8.dp)
@@ -330,96 +345,15 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
 }
 
 @Composable
-fun RecipientList(recipientList: MutableList<Recipient>) {
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
-    ) {
-        itemsIndexed(recipientList) { index, item ->
-            Row (verticalAlignment = Alignment.CenterVertically) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .weight(0.5f),
-                    value = item.address,
-                    onValueChange = { },
-                    label = {
-                        Text(
-                            text = "Recipient address ${index + 1}",
-                            color = DevkitWalletColors.snow1,
-                        )
-                    },
-                    singleLine = true,
-                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = DevkitWalletColors.auroraGreen,
-                        unfocusedBorderColor = DevkitWalletColors.snow1,
-                        cursorColor = DevkitWalletColors.auroraGreen,
-                    ),
-                    enabled = false
-                )
-
-                Spacer(modifier = Modifier.size(8.dp))
-
-                OutlinedTextField(
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .weight(0.2f),
-                    value = item.amount.toString(),
-                    onValueChange = { },
-                    label = {
-                        Text(
-                            text = "Amount",
-                            color = DevkitWalletColors.snow1,
-                        )
-                    },
-                    singleLine = true,
-                    textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = DevkitWalletColors.auroraGreen,
-                        unfocusedBorderColor = DevkitWalletColors.snow1,
-                        cursorColor = DevkitWalletColors.auroraGreen,
-                    ),
-                    enabled = false
-                )
-
-                Spacer(modifier = Modifier.size(8.dp))
-
-                IconButton(
-                    modifier = Modifier.size(24.dp),
-                    onClick = { recipientList.remove(item) }
-                ) {
-                    Icon(
-                        Icons.Filled.Clear,
-                        contentDescription = "Remove Recipient",
-                        tint = DevkitWalletColors.snow1
-                    )
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
 fun Dialog(
-    recipientAddress: MutableState<String>,
-    amount: MutableState<String>,
+    recipientList: MutableList<Recipient>,
     feeRate: MutableState<String>,
     showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
-    isChecked: Boolean,
-    recipientList: MutableList<Recipient>,
+    transactionOption: TransactionType,
     context: Context,
 ) {
     if (showDialog) {
-        if (recipientAddress.value != "") {
-            if (checkRecipientList(recipientAddress = recipientAddress.value, recipientList = recipientList, amount = amount.value, context = context)) {
-                recipientList.add(Recipient(address = recipientAddress.value, amount = amount.value.toULong()))
-                recipientAddress.value = ""
-                amount.value = ""
-            }
-        }
         var confirmationText = "Confirm Transaction : \n"
         recipientList.forEach { confirmationText += "${it.address}, ${it.amount}\n"}
         confirmationText += "Fee Rate : $feeRate"
@@ -441,13 +375,14 @@ fun Dialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        if (recipientAddress.value != "") {
-                            if (checkRecipientList(recipientAddress = recipientAddress.value, recipientList = recipientList, amount = amount.value, context = context)) {
-                                recipientList.add(Recipient(address = recipientAddress.value, amount = amount.value.toULong()))
-                            }
+                        if (checkRecipientList(recipientList = recipientList, context = context)) {
+                            broadcastTransaction(
+                                recipientList,
+                                feeRate.value.toFloat(),
+                                transactionOption,
+                            )
+                            setShowDialog(false)
                         }
-                        broadcastTransaction(recipientList, feeRate.value.toFloat())
-                        setShowDialog(false)
                     },
                 ) {
                     Text(
@@ -475,12 +410,15 @@ fun Dialog(
 private fun broadcastTransaction(
     recipientList: MutableList<Recipient>,
     feeRate: Float = 1F,
-    isChecked: Boolean
+    transactionOption: TransactionType
 ) {
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
-        val psbt: PartiallySignedBitcoinTransaction = if (!isChecked) Wallet.createTransaction(recipientList, feeRate) else Wallet.createSendAllTransaction(recipientList, feeRate)
+        val psbt: PartiallySignedBitcoinTransaction = when (transactionOption) {
+            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate)
+            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate)
+        }
         Wallet.sign(psbt)
         val txid: String = Wallet.broadcast(psbt)
         Log.i(TAG, "Transaction was broadcast! txid: $txid")
@@ -489,7 +427,12 @@ private fun broadcastTransaction(
     }
 }
 
-data class Recipient(val address: String, val amount: ULong)
+data class Recipient(var address: String, var amount: ULong)
+
+enum class TransactionType {
+    DEFAULT,
+    SEND_ALL,
+}
 
 @Preview(device = Devices.PIXEL_4, showBackground = true)
 @Composable
