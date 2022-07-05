@@ -13,21 +13,24 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +54,7 @@ internal fun SendScreen(navController: NavController) {
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 
     val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
-    var recipientList: MutableList<Recipient> = mutableListOf(Recipient(address = "", amount = 0u))
+    val recipientList: MutableList<Recipient> = remember { mutableStateListOf(Recipient(address = "", amount = 0u)) }
 
     val transactionOptions = remember {
         listOf(
@@ -60,8 +63,19 @@ internal fun SendScreen(navController: NavController) {
         )
     }
     val transactionOption: MutableState<TransactionType> = rememberSaveable { mutableStateOf(transactionOptions[0]) }
-
     val showMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
+
+    val selectedTxnId = "selectedTxnId"
+    val inlineTxnIcon = mapOf(
+        Pair(
+            selectedTxnId,
+            InlineTextContent(
+                Placeholder(width = 15.sp, height = 15.sp, placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline)
+            ) {
+                Icon(Icons.Filled.Check, contentDescription = "Selected Txn Icon", tint = DevkitWalletColors.night1)
+            }
+        )
+    )
 
     ConstraintLayout(
         modifier = Modifier
@@ -106,18 +120,38 @@ internal fun SendScreen(navController: NavController) {
                 DropdownMenuItem(
                     onClick = {
                         transactionOption.value = TransactionType.DEFAULT
-                        recipientList = recipientList.filterIndexed { index, _ ->  index == 0}.toMutableList()
+                        while (recipientList.size > 1) { recipientList.removeLast() }
                         showMenu.value = false
                     },
-                    text = { Text(text = "Default") }
+                    text = {
+                        if (transactionOption.value == TransactionType.DEFAULT) {
+                            val text = buildAnnotatedString {
+                                append("Default")
+                                appendInlineContent(selectedTxnId, "[icon]")
+                            }
+                            Text(text = text, inlineContent = inlineTxnIcon)
+                        } else {
+                            Text(text = "Default")
+                        }
+                    }
                 )
                 DropdownMenuItem(
                     onClick = {
                         transactionOption.value = TransactionType.SEND_ALL
-                        recipientList = recipientList.filterIndexed { index, _ ->  index == 0}.toMutableList()
+                        while (recipientList.size > 1) { recipientList.removeLast() }
                         showMenu.value = false
                     },
-                    text = { Text(text = "Send All") }
+                    text = {
+                        if (transactionOption.value == TransactionType.SEND_ALL) {
+                            val text = buildAnnotatedString {
+                                append("Send All")
+                                appendInlineContent(selectedTxnId, "[icon]")
+                            }
+                            Text(text = text, inlineContent = inlineTxnIcon)
+                        } else {
+                            Text(text = "Send All")
+                        }
+                    }
                 )
                 DropdownMenuItem(
                     onClick = {
@@ -130,8 +164,7 @@ internal fun SendScreen(navController: NavController) {
                 DropdownMenuItem(
                     onClick = {
                         transactionOption.value = TransactionType.DEFAULT
-                        if (recipientList.size > 1)
-                            recipientList.removeLast()
+                        if (recipientList.size > 1) { recipientList.removeLast() }
                         showMenu.value = false
                     },
                     text = { Text(text = "Remove Recipient") }
@@ -215,7 +248,9 @@ internal fun SendScreen(navController: NavController) {
 
 @Composable
 private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
-    LazyColumn (modifier = Modifier.fillMaxWidth(0.9f).heightIn(max = 100.dp)) {
+    LazyColumn (modifier = Modifier
+        .fillMaxWidth(0.9f)
+        .heightIn(max = 100.dp)) {
         itemsIndexed(recipientList) { index, _ ->
             val recipientAddress: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
@@ -250,6 +285,7 @@ private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
 
 fun checkRecipientList(
     recipientList: MutableList<Recipient>,
+    feeRate: MutableState<String>,
     context: Context
 ): Boolean {
     if (recipientList.size > 4) {
@@ -262,12 +298,18 @@ fun checkRecipientList(
             return false
         }
     }
+    if (feeRate.value.isBlank()) {
+        Toast.makeText(context, "Fee rate is empty", Toast.LENGTH_SHORT).show()
+        return false
+    }
     return true
 }
 
 @Composable
 private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transactionOption: TransactionType) {
-    LazyColumn (modifier = Modifier.fillMaxWidth(0.9f).heightIn(max = 100.dp)) {
+    LazyColumn (modifier = Modifier
+        .fillMaxWidth(0.9f)
+        .heightIn(max = 100.dp)) {
         itemsIndexed(recipientList) { index, _ ->
             val amount: MutableState<String> = rememberSaveable { mutableStateOf("") }
 
@@ -356,7 +398,9 @@ fun Dialog(
     if (showDialog) {
         var confirmationText = "Confirm Transaction : \n"
         recipientList.forEach { confirmationText += "${it.address}, ${it.amount}\n"}
-        confirmationText += "Fee Rate : $feeRate"
+        if (feeRate.value.isNotEmpty()) {
+            confirmationText += "Fee Rate : ${feeRate.value.toULong()}"
+        }
         AlertDialog(
             containerColor = DevkitWalletColors.night4,
             onDismissRequest = {},
@@ -375,11 +419,11 @@ fun Dialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        if (checkRecipientList(recipientList = recipientList, context = context)) {
+                        if (checkRecipientList(recipientList = recipientList, feeRate = feeRate, context = context)) {
                             broadcastTransaction(
-                                recipientList,
-                                feeRate.value.toFloat(),
-                                transactionOption,
+                                recipientList = recipientList,
+                                feeRate = feeRate.value.toFloat(),
+                                transactionOption = transactionOption,
                             )
                             setShowDialog(false)
                         }
