@@ -55,7 +55,7 @@ internal fun SendScreen(navController: NavController) {
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 
     val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
-    val recipientList: MutableList<Recipient> =  mutableStateListOf(Recipient(address = "", amount = 0u))
+    val recipientList: MutableList<Recipient> = remember { mutableStateListOf(Recipient(address = "", amount = 0u)) }
 
     val transactionOptions = remember {
         listOf(
@@ -305,6 +305,7 @@ private fun TransactionRecipientInput(recipientList: MutableList<Recipient>) {
 
 fun checkRecipientList(
     recipientList: MutableList<Recipient>,
+    feeRate: MutableState<String>,
     context: Context
 ): Boolean {
     if (recipientList.size > 4) {
@@ -316,6 +317,10 @@ fun checkRecipientList(
             Toast.makeText(context, "Address is empty", Toast.LENGTH_SHORT).show()
             return false
         }
+    }
+    if (feeRate.value.isBlank()) {
+        Toast.makeText(context, "Fee rate is empty", Toast.LENGTH_SHORT).show()
+        return false
     }
     return true
 }
@@ -413,8 +418,10 @@ fun Dialog(
 ) {
     if (showDialog) {
         var confirmationText = "Confirm Transaction : \n"
-        recipientList.forEach { confirmationText += "Recipient : ${it.address}, ${it.amount}\n"}
-        confirmationText += "Fee Rate : ${feeRate.value.toULong()}"
+        recipientList.forEach { confirmationText += "${it.address}, ${it.amount}\n"}
+        if (feeRate.value.isNotEmpty()) {
+            confirmationText += "Fee Rate : ${feeRate.value.toULong()}"
+        }
         AlertDialog(
             containerColor = DevkitWalletColors.night4,
             onDismissRequest = {},
@@ -433,12 +440,12 @@ fun Dialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        if (checkRecipientList(recipientList = recipientList, context = context)) {
+                        if (checkRecipientList(recipientList = recipientList, feeRate = feeRate, context = context)) {
                             broadcastTransaction(
-                                recipientList,
-                                feeRate.value.toFloat(),
-                                transactionOption,
-                                enableRBF.value,
+                                recipientList = recipientList,
+                                feeRate = feeRate.value.toFloat(),
+                                transactionOption = transactionOption,
+                                enableRBF = enableRBF.value,
                             )
                             setShowDialog(false)
                         }
