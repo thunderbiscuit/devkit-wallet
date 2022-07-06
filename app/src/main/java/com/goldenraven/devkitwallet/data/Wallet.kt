@@ -6,6 +6,7 @@
 package com.goldenraven.devkitwallet.data
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import com.goldenraven.devkitwallet.ui.wallet.Recipient
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.*
@@ -97,7 +98,11 @@ object Wallet {
         Repository.saveMnemonic(keys.mnemonic)
     }
 
-    fun createTransaction(recipientList: MutableList<Recipient>, feeRate: Float): PartiallySignedBitcoinTransaction {
+    fun createTransaction(
+        recipientList: MutableList<Recipient>,
+        feeRate: Float,
+        enableRBF: Boolean
+    ): PartiallySignedBitcoinTransaction {
         /*
         var txBuilder = TxBuilder()
         for (recipient in recipientList) {
@@ -105,18 +110,31 @@ object Wallet {
         }
         txBuilder = txBuilder.feeRate(satPerVbyte = fee_rate)
          */
-        val txBuilder = recipientList.fold(TxBuilder()) { builder, recipient ->
+        var txBuilder = recipientList.fold(TxBuilder()) { builder, recipient ->
             builder.addRecipient(recipient.address, recipient.amount)
+        }
+
+        if (enableRBF) {
+            txBuilder = txBuilder.enableRbf()
         }
         return txBuilder.feeRate(satPerVbyte = feeRate).finish(wallet)
     }
 
-    fun createSendAllTransaction(recipient: String, feeRate: Float): PartiallySignedBitcoinTransaction {
-        return TxBuilder()
+    fun createSendAllTransaction(
+        recipient: String,
+        feeRate: Float,
+        enableRBF: Boolean
+    ): PartiallySignedBitcoinTransaction {
+        var txBuilder = TxBuilder()
             .drainWallet()
             .drainTo(address = recipient)
             .feeRate(satPerVbyte = feeRate)
-            .finish(wallet)
+
+        if (enableRBF) {
+            txBuilder = txBuilder.enableRbf()
+        }
+
+        return txBuilder.finish(wallet)
     }
 
     fun sign(psbt: PartiallySignedBitcoinTransaction) {
