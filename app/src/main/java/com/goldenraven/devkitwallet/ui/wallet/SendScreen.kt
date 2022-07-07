@@ -65,18 +65,6 @@ internal fun SendScreen(navController: NavController) {
     val transactionOption: MutableState<TransactionType> = rememberSaveable { mutableStateOf(transactionOptions[0]) }
     val showMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
 
-    val selectedTxnId = "selectedTxnId"
-    val inlineTxnIcon = mapOf(
-        Pair(
-            selectedTxnId,
-            InlineTextContent(
-                Placeholder(width = 15.sp, height = 15.sp, placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline)
-            ) {
-                Icon(Icons.Filled.Check, contentDescription = "Selected Txn Icon", tint = DevkitWalletColors.night1)
-            }
-        )
-    )
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -125,11 +113,7 @@ internal fun SendScreen(navController: NavController) {
                     },
                     text = {
                         if (transactionOption.value == TransactionType.DEFAULT) {
-                            val text = buildAnnotatedString {
-                                append("Default")
-                                appendInlineContent(selectedTxnId, "[icon]")
-                            }
-                            Text(text = text, inlineContent = inlineTxnIcon)
+                            Text("Default ✓")
                         } else {
                             Text(text = "Default")
                         }
@@ -143,11 +127,7 @@ internal fun SendScreen(navController: NavController) {
                     },
                     text = {
                         if (transactionOption.value == TransactionType.SEND_ALL) {
-                            val text = buildAnnotatedString {
-                                append("Send All")
-                                appendInlineContent(selectedTxnId, "[icon]")
-                            }
-                            Text(text = text, inlineContent = inlineTxnIcon)
+                            Text(text = "Send All ✓")
                         } else {
                             Text(text = "Send All")
                         }
