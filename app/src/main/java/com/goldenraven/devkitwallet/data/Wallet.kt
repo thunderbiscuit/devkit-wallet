@@ -7,7 +7,6 @@ package com.goldenraven.devkitwallet.data
 
 import android.util.Log
 import com.goldenraven.devkitwallet.ui.wallet.Recipient
-import androidx.compose.runtime.MutableState
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.*
 import org.bitcoindevkit.Wallet as BdkWallet
@@ -103,21 +102,21 @@ object Wallet {
         feeRate: Float,
         enableRBF: Boolean
     ): PartiallySignedBitcoinTransaction {
-        /*
-        var txBuilder = TxBuilder()
-        for (recipient in recipientList) {
-            txBuilder  = txBuilder.addRecipient(address = recipient.first, amount = recipient.second)
-        }
-        txBuilder = txBuilder.feeRate(satPerVbyte = fee_rate)
-         */
+        // technique 1 for adding a list of recipients to the TxBuilder
+        // var txBuilder = TxBuilder()
+        // for (recipient in recipientList) {
+        //     txBuilder  = txBuilder.addRecipient(address = recipient.first, amount = recipient.second)
+        // }
+        // txBuilder = txBuilder.feeRate(satPerVbyte = fee_rate)
+
+        // technique 2 for adding a list of recipients to the TxBuilder
         var txBuilder = recipientList.fold(TxBuilder()) { builder, recipient ->
             builder.addRecipient(recipient.address, recipient.amount)
         }
-
         if (enableRBF) {
             txBuilder = txBuilder.enableRbf()
         }
-        return txBuilder.feeRate(satPerVbyte = feeRate).finish(wallet)
+        return txBuilder.feeRate(feeRate).finish(wallet)
     }
 
     fun createSendAllTransaction(
@@ -133,7 +132,6 @@ object Wallet {
         if (enableRBF) {
             txBuilder = txBuilder.enableRbf()
         }
-
         return txBuilder.finish(wallet)
     }
 
