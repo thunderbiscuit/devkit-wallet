@@ -151,9 +151,9 @@ internal fun SendScreen(navController: NavController) {
                     },
                     text = {
                         if (enableRBF.value) {
-                            Text(text = "Replace-By-Fee ✓")
+                            Text(text = "Enable Replace-By-Fee ✓")
                         } else {
-                            Text(text = "Replace-By-Fee")
+                            Text(text = "Enable Replace-By-Fee")
                         }
                     }
                 )
