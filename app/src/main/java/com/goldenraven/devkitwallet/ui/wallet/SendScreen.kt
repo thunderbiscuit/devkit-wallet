@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,8 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -65,18 +61,6 @@ internal fun SendScreen(navController: NavController) {
     val transactionOption: MutableState<TransactionType> = rememberSaveable { mutableStateOf(transactionOptions[0]) }
     val showMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
     val enableRBF: MutableState<Boolean> = remember { mutableStateOf(false) }
-
-    val selectedTxnId = "selectedTxnId"
-    val inlineTxnIcon = mapOf(
-        Pair(
-            selectedTxnId,
-            InlineTextContent(
-                Placeholder(width = 15.sp, height = 15.sp, placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline)
-            ) {
-                Icon(Icons.Filled.Check, contentDescription = "Selected Txn Icon", tint = DevkitWalletColors.night1)
-            }
-        )
-    )
 
     ConstraintLayout(
         modifier = Modifier
@@ -126,11 +110,7 @@ internal fun SendScreen(navController: NavController) {
                     },
                     text = {
                         if (transactionOption.value == TransactionType.DEFAULT) {
-                            val text = buildAnnotatedString {
-                                append("Default")
-                                appendInlineContent(selectedTxnId, "[icon]")
-                            }
-                            Text(text = text, inlineContent = inlineTxnIcon)
+                            Text("Default ✓")
                         } else {
                             Text(text = "Default")
                         }
@@ -144,11 +124,7 @@ internal fun SendScreen(navController: NavController) {
                     },
                     text = {
                         if (transactionOption.value == TransactionType.SEND_ALL) {
-                            val text = buildAnnotatedString {
-                                append("Send All")
-                                appendInlineContent(selectedTxnId, "[icon]")
-                            }
-                            Text(text = text, inlineContent = inlineTxnIcon)
+                            Text(text = "Send All ✓")
                         } else {
                             Text(text = "Send All")
                         }
@@ -179,11 +155,7 @@ internal fun SendScreen(navController: NavController) {
                         if (!enableRBF.value) {
                             Text(text = "Replace-By-Fee")
                         } else {
-                            val text = buildAnnotatedString {
-                                append("Replace-By-Fee")
-                                appendInlineContent(selectedTxnId, "[icon]")
-                            }
-                            Text(text = text, inlineContent = inlineTxnIcon)
+                            Text(text = "Replace-By-Fee ✓")
                         }
                     }
                 )
