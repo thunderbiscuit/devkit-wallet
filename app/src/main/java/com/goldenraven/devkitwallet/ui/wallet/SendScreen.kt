@@ -13,12 +13,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,10 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +58,7 @@ internal fun SendScreen(navController: NavController) {
     }
     val transactionOption: MutableState<TransactionType> = rememberSaveable { mutableStateOf(transactionOptions[0]) }
     val showMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val enableRBF: MutableState<Boolean> = remember { mutableStateOf(false) }
 
     ConstraintLayout(
         modifier = Modifier
@@ -149,6 +144,19 @@ internal fun SendScreen(navController: NavController) {
                     },
                     text = { Text(text = "Remove Recipient") }
                 )
+                DropdownMenuItem(
+                    onClick = {
+                        enableRBF.value = !enableRBF.value
+                        showMenu.value = false
+                    },
+                    text = {
+                        if (enableRBF.value) {
+                            Text(text = "Replace-By-Fee ✓")
+                        } else {
+                            Text(text = "Replace-By-Fee")
+                        }
+                    }
+                )
             }
         }
 
@@ -165,13 +173,14 @@ internal fun SendScreen(navController: NavController) {
         ) {
             TransactionRecipientInput(recipientList = recipientList)
             TransactionAmountInput(recipientList = recipientList, transactionOption = transactionOption.value)
-            TransactionFeeInput(feeRate)
+            TransactionFeeInput(feeRate = feeRate)
             Dialog(
                 recipientList = recipientList,
                 feeRate = feeRate,
                 showDialog = showDialog,
                 setShowDialog = setShowDialog,
                 transactionOption = transactionOption.value,
+                enableRBF = enableRBF,
                 context = context
             )
         }
@@ -327,11 +336,11 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
                         cursorColor = DevkitWalletColors.auroraGreen,
                     ),
                     enabled = (
-                        when (transactionOption) {
-                            TransactionType.SEND_ALL -> false
-                            else -> true
-                        }
-                    )
+                            when (transactionOption) {
+                                TransactionType.SEND_ALL -> false
+                                else -> true
+                            }
+                            )
                 )
             }
         }
@@ -373,6 +382,7 @@ fun Dialog(
     showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
     transactionOption: TransactionType,
+    enableRBF: MutableState<Boolean>,
     context: Context,
 ) {
     if (showDialog) {
@@ -404,6 +414,7 @@ fun Dialog(
                                 recipientList = recipientList,
                                 feeRate = feeRate.value.toFloat(),
                                 transactionOption = transactionOption,
+                                enableRBF = enableRBF.value,
                             )
                             setShowDialog(false)
                         }
@@ -434,14 +445,15 @@ fun Dialog(
 private fun broadcastTransaction(
     recipientList: MutableList<Recipient>,
     feeRate: Float = 1F,
-    transactionOption: TransactionType
+    transactionOption: TransactionType,
+    enableRBF: Boolean,
 ) {
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
         val psbt: PartiallySignedBitcoinTransaction = when (transactionOption) {
-            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate)
-            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate)
+            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate, enableRBF)
+            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate, enableRBF)
         }
         Wallet.sign(psbt)
         val txid: String = Wallet.broadcast(psbt)
