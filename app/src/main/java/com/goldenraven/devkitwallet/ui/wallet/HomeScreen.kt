@@ -55,6 +55,7 @@ internal class WalletViewModel : ViewModel() {
 @Composable
 internal fun HomeScreen(
     navController: NavHostController,
+    paddingValues: PaddingValues,
     walletViewModel: WalletViewModel = viewModel()
 ) {
 
@@ -68,7 +69,8 @@ internal fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DevkitWalletColors.night4),
+            .background(DevkitWalletColors.night4)
+            .padding(paddingValues),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.padding(24.dp))

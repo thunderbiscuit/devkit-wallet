@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
 
     buildFeatures {
         viewBinding = true
@@ -51,7 +51,7 @@ dependencies {
     implementation ("androidx.constraintlayout:constraintlayout:2.1.0")
 
     // compose
-    implementation("androidx.activity:activity-compose:1.4.0")
+    implementation("androidx.activity:activity-compose:1.5.0")
     implementation("androidx.compose.material:material:1.1.1")
     implementation("androidx.compose.animation:animation:1.1.1")
     implementation("androidx.compose.ui:ui-tooling:1.1.1")
@@ -59,7 +59,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
     implementation("androidx.navigation:navigation-compose:2.4.1")
     implementation("androidx.compose.ui:ui:1.1.1")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha07")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha14")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.23.1")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")

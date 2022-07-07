@@ -8,21 +8,20 @@ package com.goldenraven.devkitwallet.ui
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.goldenraven.devkitwallet.ui.wallet.*
 import com.goldenraven.devkitwallet.ui.wallet.HomeScreen
 import com.goldenraven.devkitwallet.ui.wallet.ReceiveScreen
 import com.goldenraven.devkitwallet.ui.wallet.SendScreen
 import com.goldenraven.devkitwallet.ui.wallet.TransactionsScreen
-import com.goldenraven.devkitwallet.ui.wallet.WalletViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun WalletNavigation() {
+fun WalletNavigation(paddingValues: PaddingValues) {
     val navController: NavHostController = rememberAnimatedNavController()
     val animationDuration = 400
 
@@ -39,7 +38,7 @@ fun WalletNavigation() {
             popEnterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             },
-        ) { HomeScreen(navController) }
+        ) { HomeScreen(navController, paddingValues) }
 
         composable(
             route = Screen.ReceiveScreen.route,
@@ -55,7 +54,7 @@ fun WalletNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { ReceiveScreen(navController) }
+        ) { ReceiveScreen(navController, paddingValues) }
 
         composable(
             route = Screen.SendScreen.route,
@@ -71,7 +70,7 @@ fun WalletNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { SendScreen(navController) }
+        ) { SendScreen(navController, paddingValues) }
 
         composable(
             route = Screen.TransactionsScreen.route,
@@ -87,6 +86,6 @@ fun WalletNavigation() {
             popExitTransition = {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
-        ) { TransactionsScreen(navController) }
+        ) { TransactionsScreen(navController, paddingValues) }
     }
 }

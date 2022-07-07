@@ -35,7 +35,7 @@ import org.bitcoindevkit.Transaction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TransactionsScreen(navController: NavController) {
+internal fun TransactionsScreen(navController: NavController, paddingValues: PaddingValues) {
 
     val allTransactions: List<Transaction> = Wallet.getTransactions()
 
@@ -43,7 +43,7 @@ internal fun TransactionsScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(DevkitWalletColors.night4)
-            .padding(bottom = 24.dp)
+            .padding(paddingValues)
     ) {
         val (screenTitle, transactions, bottomButton) = createRefs()
         Text(
@@ -204,8 +204,8 @@ private fun pendingTransactionsList(transactions: List<Transaction.Unconfirmed>)
     }
 }
 
-@Preview(device = Devices.PIXEL_4, showBackground = true)
-@Composable
-internal fun PreviewTransactionsScreen() {
-    TransactionsScreen(rememberNavController())
-}
+// @Preview(device = Devices.PIXEL_4, showBackground = true)
+// @Composable
+// internal fun PreviewTransactionsScreen() {
+//     TransactionsScreen(rememberNavController())
+// }

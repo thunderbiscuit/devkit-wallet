@@ -135,8 +135,8 @@ internal fun WalletScreen(navController: NavController) {
         content = {
             Scaffold(
                 topBar = { WalletAppBar(scope, drawerState) },
-            ) {
-                WalletNavigation()
+            ) { padding ->
+                WalletNavigation(padding)
             }
         }
     )

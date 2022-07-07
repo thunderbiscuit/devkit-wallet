@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -26,211 +28,229 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.PartiallySignedBitcoinTransaction
+import androidx.compose.material3.TextButton
+import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
 @Composable
-internal fun SendScreen(navController: NavController) {
+internal fun SendScreen(
+    navController: NavController,
+    paddingValues: PaddingValues,
+) {
 
     val context = LocalContext.current
+
+    val recipientList: MutableList<Recipient> = remember { mutableStateListOf(Recipient(address = "", amount = 0u)) }
+    val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 
-    val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
-    val recipientList: MutableList<Recipient> = remember { mutableStateListOf(Recipient(address = "", amount = 0u)) }
+    val sendAll: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val rbfEnabled: MutableState<Boolean> = remember { mutableStateOf(false) }
 
-    val transactionOptions = remember {
-        listOf(
-            TransactionType.DEFAULT,
-            TransactionType.SEND_ALL,
-        )
-    }
-    val transactionOption: MutableState<TransactionType> = rememberSaveable { mutableStateOf(transactionOptions[0]) }
-    val showMenu: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val enableRBF: MutableState<Boolean> = remember { mutableStateOf(false) }
-
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(DevkitWalletColors.night4)
+    BottomSheetScaffold(
+        sheetContent = { AdvancedOptions(sendAll, rbfEnabled, recipientList) },
+        sheetBackgroundColor = DevkitWalletColors.night1,
+        sheetElevation = 12.dp,
+        sheetPeekHeight = 32.dp,
+        modifier = Modifier.padding(paddingValues)
     ) {
-        val (screenTitle, transactionInputs, bottomButtons, dropDownMenu) = createRefs()
-
-        Text(
-            text = "Send Bitcoin",
-            color = DevkitWalletColors.snow1,
-            fontSize = 28.sp,
-            fontFamily = firaMono,
-            textAlign = TextAlign.Center,
+        ConstraintLayout(
             modifier = Modifier
-                .constrainAs(screenTitle) {
-                    top.linkTo(parent.top)
+                .fillMaxSize()
+                .background(DevkitWalletColors.night4)
+        ) {
+            val (screenTitle, transactionInputs, bottomButtons) = createRefs()
+
+            Text(
+                text = "Send Bitcoin",
+                color = DevkitWalletColors.snow1,
+                fontSize = 28.sp,
+                fontFamily = firaMono,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .constrainAs(screenTitle) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(top = 70.dp)
+            )
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.constrainAs(transactionInputs) {
+                    top.linkTo(screenTitle.bottom)
+                    bottom.linkTo(bottomButtons.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    height = Dimension.fillToConstraints
                 }
-                .padding(top = 70.dp)
-        )
-
-        Column(
-            modifier = Modifier
-                .constrainAs(dropDownMenu) {
-                    start.linkTo(screenTitle.end)
-                }
-                .padding(top = 67.dp),
-        ) {
-            IconButton(onClick = { showMenu.value = !showMenu.value }) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "More transaction options",
-                    tint = DevkitWalletColors.snow1
+            ) {
+                TransactionRecipientInput(recipientList = recipientList)
+                TransactionAmountInput(
+                    recipientList = recipientList,
+                    transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.DEFAULT
+                )
+                TransactionFeeInput(feeRate = feeRate)
+                Dialog(
+                    recipientList = recipientList,
+                    feeRate = feeRate,
+                    showDialog = showDialog,
+                    setShowDialog = setShowDialog,
+                    transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.DEFAULT,
+                    rbfEnabled = rbfEnabled.value,
+                    context = context
                 )
             }
-            DropdownMenu(
-                expanded = showMenu.value,
-                onDismissRequest = { showMenu.value = false }
+            Column(
+                Modifier
+                    .constrainAs(bottomButtons) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(bottom = 32.dp)
             ) {
-                DropdownMenuItem(
-                    onClick = {
-                        transactionOption.value = TransactionType.DEFAULT
-                        while (recipientList.size > 1) { recipientList.removeLast() }
-                        showMenu.value = false
-                    },
-                    text = {
-                        if (transactionOption.value == TransactionType.DEFAULT) {
-                            Text("Default ✓")
-                        } else {
-                            Text(text = "Default")
-                        }
-                    }
-                )
-                DropdownMenuItem(
-                    onClick = {
-                        transactionOption.value = TransactionType.SEND_ALL
-                        while (recipientList.size > 1) { recipientList.removeLast() }
-                        showMenu.value = false
-                    },
-                    text = {
-                        if (transactionOption.value == TransactionType.SEND_ALL) {
-                            Text(text = "Send All ✓")
-                        } else {
-                            Text(text = "Send All")
-                        }
-                    }
-                )
-                DropdownMenuItem(
-                    onClick = {
-                        transactionOption.value = TransactionType.DEFAULT
-                        recipientList.add(Recipient("", 0u))
-                        showMenu.value = false
-                    },
-                    text = { Text(text = "Add Recipient") }
-                )
-                DropdownMenuItem(
-                    onClick = {
-                        transactionOption.value = TransactionType.DEFAULT
-                        if (recipientList.size > 1) { recipientList.removeLast() }
-                        showMenu.value = false
-                    },
-                    text = { Text(text = "Remove Recipient") }
-                )
-                DropdownMenuItem(
-                    onClick = {
-                        enableRBF.value = !enableRBF.value
-                        showMenu.value = false
-                    },
-                    text = {
-                        if (enableRBF.value) {
-                            Text(text = "Enable Replace-By-Fee ✓")
-                        } else {
-                            Text(text = "Enable Replace-By-Fee")
-                        }
-                    }
-                )
+                // Button(
+                //     onClick = { },
+                //     colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+                //     shape = RoundedCornerShape(16.dp),
+                //     modifier = Modifier
+                //         .height(80.dp)
+                //         .fillMaxWidth(0.9f)
+                //         .padding(vertical = 8.dp, horizontal = 8.dp)
+                //         .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                // ) {
+                //     Text(
+                //         text = "advanced options",
+                //         fontSize = 14.sp,
+                //         fontFamily = firaMono,
+                //         textAlign = TextAlign.Center,
+                //         lineHeight = 28.sp,
+                //     )
+                // }
+                Button(
+                    onClick = { setShowDialog(true) },
+                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .height(80.dp)
+                        .fillMaxWidth(0.9f)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                ) {
+                    Text(
+                        text = "broadcast transaction",
+                        fontSize = 14.sp,
+                        fontFamily = firaMono,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 28.sp,
+                    )
+                }
+                Button(
+                    onClick = { navController.navigate(Screen.HomeScreen.route) },
+                    colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .height(80.dp)
+                        .fillMaxWidth(0.9f)
+                        .padding(vertical = 8.dp, horizontal = 8.dp)
+                        .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
+                ) {
+                    Text(
+                        text = "back to wallet",
+                        fontSize = 14.sp,
+                        fontFamily = firaMono,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 28.sp,
+                    )
+                }
             }
         }
+    }
+}
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.constrainAs(transactionInputs) {
-                top.linkTo(screenTitle.bottom)
-                bottom.linkTo(bottomButtons.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                height = Dimension.fillToConstraints
-            }
-        ) {
-            TransactionRecipientInput(recipientList = recipientList)
-            TransactionAmountInput(recipientList = recipientList, transactionOption = transactionOption.value)
-            TransactionFeeInput(feeRate = feeRate)
-            Dialog(
-                recipientList = recipientList,
-                feeRate = feeRate,
-                showDialog = showDialog,
-                setShowDialog = setShowDialog,
-                transactionOption = transactionOption.value,
-                enableRBF = enableRBF,
-                context = context
+@Composable
+internal fun AdvancedOptions(
+    sendAll: MutableState<Boolean>,
+    rbfEnabled: MutableState<Boolean>,
+    recipientList: MutableList<Recipient>
+) {
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center)
+        {
+            Text(
+                text = "Advanced Options",
+                color = DevkitWalletColors.snow3,
+                fontSize = 18.sp,
+                fontFamily = firaMonoMedium,
             )
         }
 
-        Column(
-            Modifier
-                .constrainAs(bottomButtons) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "Send All",
+                color = DevkitWalletColors.snow3,
+                fontSize = 14.sp,
+                fontFamily = firaMono,
+                textAlign = TextAlign.Center,
+                lineHeight = 28.sp,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Switch(
+                checked = sendAll.value,
+                onCheckedChange = {
+                    sendAll.value = !sendAll.value
+                    while (recipientList.size > 1) { recipientList.removeLast() }
                 }
-                .padding(bottom = 24.dp)
+            )
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "Enable Replace-by-Fee",
+                color = DevkitWalletColors.snow3,
+                fontSize = 14.sp,
+                fontFamily = firaMono,
+                textAlign = TextAlign.Center,
+                lineHeight = 28.sp,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Switch(
+                checked = rbfEnabled.value,
+                onCheckedChange = {
+                    rbfEnabled.value = !rbfEnabled.value
+                }
+            )
+        }
+
+        Button(
+            onClick = { recipientList.add(Recipient("", 0u)) },
+            enabled = !sendAll.value
         ) {
-            Button(
-                onClick = { setShowDialog(true) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .height(80.dp)
-                    .fillMaxWidth(0.9f)
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
-                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-            ) {
-                Text(
-                    text = "broadcast transaction",
-                    fontSize = 14.sp,
-                    fontFamily = firaMono,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 28.sp,
-                )
-            }
-            Button(
-                onClick = { navController.navigate(Screen.HomeScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    // .size(width = 300.dp, height = 70.dp)
-                    .height(80.dp)
-                    .fillMaxWidth(0.9f)
-                    .padding(vertical = 8.dp, horizontal = 8.dp)
-                    .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-            ) {
-                Text(
-                    text = "back to wallet",
-                    fontSize = 14.sp,
-                    fontFamily = firaMono,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 28.sp,
-                )
-            }
+            Text(text = "Add recipient")
+        }
+
+        Button(
+            onClick = { if (recipientList.size > 1) { recipientList.removeLast() } },
+            enabled = !sendAll.value
+        ) {
+            Text(text = "Remove recipient")
         }
     }
 }
@@ -295,7 +315,7 @@ fun checkRecipientList(
 }
 
 @Composable
-private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transactionOption: TransactionType) {
+private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transactionType: TransactionType) {
     LazyColumn (modifier = Modifier
         .fillMaxWidth(0.9f)
         .heightIn(max = 100.dp)) {
@@ -313,7 +333,7 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
                         recipientList[index].amount = it.toULong()
                     },
                     label = {
-                        when (transactionOption) {
+                        when (transactionType) {
                             TransactionType.SEND_ALL -> {
                                 Text(
                                     text = "Amount (Send All)",
@@ -336,11 +356,11 @@ private fun TransactionAmountInput(recipientList: MutableList<Recipient>, transa
                         cursorColor = DevkitWalletColors.auroraGreen,
                     ),
                     enabled = (
-                            when (transactionOption) {
+                            when (transactionType) {
                                 TransactionType.SEND_ALL -> false
-                                else -> true
+                                else                     -> true
                             }
-                            )
+                    )
                 )
             }
         }
@@ -381,8 +401,8 @@ fun Dialog(
     feeRate: MutableState<String>,
     showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
-    transactionOption: TransactionType,
-    enableRBF: MutableState<Boolean>,
+    transactionType: TransactionType,
+    rbfEnabled: Boolean,
     context: Context,
 ) {
     if (showDialog) {
@@ -413,8 +433,8 @@ fun Dialog(
                             broadcastTransaction(
                                 recipientList = recipientList,
                                 feeRate = feeRate.value.toFloat(),
-                                transactionOption = transactionOption,
-                                enableRBF = enableRBF.value,
+                                transactionType = transactionType,
+                                rbfEnabled = rbfEnabled,
                             )
                             setShowDialog(false)
                         }
@@ -445,15 +465,15 @@ fun Dialog(
 private fun broadcastTransaction(
     recipientList: MutableList<Recipient>,
     feeRate: Float = 1F,
-    transactionOption: TransactionType,
-    enableRBF: Boolean,
+    transactionType: TransactionType,
+    rbfEnabled: Boolean,
 ) {
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
-        val psbt: PartiallySignedBitcoinTransaction = when (transactionOption) {
-            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate, enableRBF)
-            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate, enableRBF)
+        val psbt: PartiallySignedBitcoinTransaction = when (transactionType) {
+            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate, rbfEnabled)
+            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate, rbfEnabled)
         }
         Wallet.sign(psbt)
         val txid: String = Wallet.broadcast(psbt)
@@ -470,8 +490,8 @@ enum class TransactionType {
     SEND_ALL,
 }
 
-@Preview(device = Devices.PIXEL_4, showBackground = true)
-@Composable
-internal fun PreviewSendScreen() {
-    SendScreen(rememberNavController())
-}
+// @Preview(device = Devices.PIXEL_4, showBackground = true)
+// @Composable
+// internal fun PreviewSendScreen() {
+//     SendScreen(rememberNavController())
+// }

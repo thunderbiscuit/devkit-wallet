@@ -62,6 +62,7 @@ internal class AddressViewModel : ViewModel() {
 @Composable
 internal fun ReceiveScreen(
     navController: NavController,
+    paddingValues: PaddingValues,
     addressViewModel: AddressViewModel = viewModel()
 ) {
 
@@ -69,6 +70,7 @@ internal fun ReceiveScreen(
 
     ConstraintLayout(
         modifier = Modifier
+            .padding(paddingValues)
             .fillMaxSize()
             .background(DevkitWalletColors.night4)
     ) {
@@ -188,8 +190,8 @@ private fun addressToQR(address: String): ImageBitmap? {
     return null
 }
 
-@Preview(device = Devices.PIXEL_4, showBackground = true)
-@Composable
-internal fun PreviewReceiveScreen() {
-    ReceiveScreen(rememberNavController())
-}
+// @Preview(device = Devices.PIXEL_4, showBackground = true)
+// @Composable
+// internal fun PreviewReceiveScreen() {
+//     ReceiveScreen(rememberNavController())
+// }
