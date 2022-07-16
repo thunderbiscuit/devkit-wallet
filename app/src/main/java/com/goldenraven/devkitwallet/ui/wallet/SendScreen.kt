@@ -8,17 +8,20 @@ package com.goldenraven.devkitwallet.ui.wallet
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.*
 import androidx.compose.material3.*
+import androidx.compose.material.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -40,16 +43,22 @@ import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.PartiallySignedBitcoinTransaction
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun SendScreen(
     navController: NavController,
     paddingValues: PaddingValues,
 ) {
-
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     val recipientList: MutableList<Recipient> = remember { mutableStateListOf(Recipient(address = "", amount = 0u)) }
     val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
@@ -58,8 +67,13 @@ internal fun SendScreen(
     val sendAll: MutableState<Boolean> = remember { mutableStateOf(false) }
     val rbfEnabled: MutableState<Boolean> = remember { mutableStateOf(false) }
 
+    val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+    )
+
     BottomSheetScaffold(
         sheetContent = { AdvancedOptions(sendAll, rbfEnabled, recipientList) },
+        scaffoldState = bottomSheetScaffoldState,
         sheetBackgroundColor = DevkitWalletColors.night1,
         sheetElevation = 12.dp,
         sheetPeekHeight = 32.dp,
@@ -104,6 +118,7 @@ internal fun SendScreen(
                     transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.DEFAULT
                 )
                 TransactionFeeInput(feeRate = feeRate)
+                MoreOptions(coroutineScope = coroutineScope, bottomSheetScaffoldState = bottomSheetScaffoldState)
                 Dialog(
                     recipientList = recipientList,
                     feeRate = feeRate,
@@ -188,8 +203,11 @@ internal fun AdvancedOptions(
     rbfEnabled: MutableState<Boolean>,
     recipientList: MutableList<Recipient>
 ) {
-
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center)
@@ -392,6 +410,46 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                 cursorColor = DevkitWalletColors.auroraGreen,
             ),
         )
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: BottomSheetScaffoldState) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    if (bottomSheetScaffoldState.bottomSheetState.isCollapsed) {
+                        bottomSheetScaffoldState.bottomSheetState.expand()
+                    } else {
+                        bottomSheetScaffoldState.bottomSheetState.collapse()
+                    }
+                }
+            },
+            colors = ButtonDefaults.buttonColors(Color.Transparent),
+            modifier = Modifier
+                .height(50.dp)
+                .fillMaxWidth(fraction = 0.9f)
+                .padding(vertical = 8.dp)
+                .border(
+                    BorderStroke(width = 1.dp, color = DevkitWalletColors.snow1),
+                    shape = RoundedCornerShape(5.dp)
+                )
+        ) {
+            Text(
+                text = "more options",
+                fontSize = 14.sp,
+                fontFamily = firaMono,
+                textAlign = TextAlign.Center,
+                lineHeight = 28.sp,
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_down_arrow),
+                tint = DevkitWalletColors.snow1,
+                contentDescription = "More Options"
+            )
+        }
     }
 }
 
