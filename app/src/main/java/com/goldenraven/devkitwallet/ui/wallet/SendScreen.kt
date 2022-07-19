@@ -76,7 +76,7 @@ internal fun SendScreen(
         scaffoldState = bottomSheetScaffoldState,
         sheetBackgroundColor = DevkitWalletColors.night1,
         sheetElevation = 12.dp,
-        sheetPeekHeight = 32.dp,
+        sheetPeekHeight = 0.dp,
         modifier = Modifier.padding(paddingValues)
     ) {
         ConstraintLayout(
@@ -138,24 +138,6 @@ internal fun SendScreen(
                     }
                     .padding(bottom = 32.dp)
             ) {
-                // Button(
-                //     onClick = { },
-                //     colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
-                //     shape = RoundedCornerShape(16.dp),
-                //     modifier = Modifier
-                //         .height(80.dp)
-                //         .fillMaxWidth(0.9f)
-                //         .padding(vertical = 8.dp, horizontal = 8.dp)
-                //         .shadow(elevation = 4.dp, shape = RoundedCornerShape(16.dp))
-                // ) {
-                //     Text(
-                //         text = "advanced options",
-                //         fontSize = 14.sp,
-                //         fontFamily = firaMono,
-                //         textAlign = TextAlign.Center,
-                //         lineHeight = 28.sp,
-                //     )
-                // }
                 Button(
                     onClick = { setShowDialog(true) },
                     colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
@@ -416,7 +398,10 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: BottomSheetScaffoldState) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(vertical = 8.dp)
+    ) {
         Button(
             onClick = {
                 coroutineScope.launch {
@@ -445,7 +430,7 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
                 lineHeight = 28.sp,
             )
             Icon(
-                painter = painterResource(id = R.drawable.ic_down_arrow),
+                painter = painterResource(id = R.drawable.ic_round_expand_more_24),
                 tint = DevkitWalletColors.snow1,
                 contentDescription = "More Options"
             )
