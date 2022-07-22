@@ -7,24 +7,24 @@ package com.goldenraven.devkitwallet.ui.wallet
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.data.Wallet
 import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
@@ -33,11 +33,13 @@ import com.goldenraven.devkitwallet.utilities.TAG
 import com.goldenraven.devkitwallet.utilities.timestampToString
 import org.bitcoindevkit.Transaction
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TransactionsScreen(navController: NavController, paddingValues: PaddingValues) {
+    val allTransactions: List<Transaction> = Wallet.getAllTransactions()
 
-    val allTransactions: List<Transaction> = Wallet.getTransactions()
+    val unconfirmedTransactions = allTransactions.filterIsInstance<Transaction.Unconfirmed>()
+    val confirmedTransactions = allTransactions.filterIsInstance<Transaction.Confirmed>()
+    val sortedTransactions = confirmedTransactions.sortedByDescending { it.confirmation.height }
 
     ConstraintLayout(
         modifier = Modifier
@@ -94,14 +96,30 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
             ) {
                 val scrollState = rememberScrollState()
                 Column(
-                    modifier = Modifier.fillMaxWidth().verticalScroll(state = scrollState)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(state = scrollState)
                 ) {
-                    Text(
-                        text = pendingTransactionsList(allTransactions.filterIsInstance<Transaction.Unconfirmed>()),
-                        fontSize = 12.sp,
-                        fontFamily = firaMono,
-                        color = DevkitWalletColors.snow1
-                    )
+                    if (unconfirmedTransactions.isNotEmpty()) {
+                        unconfirmedTransactions.forEach {
+                            Text(
+                                text = pendingTransactionsList(it),
+                                fontSize = 12.sp,
+                                fontFamily = firaMono,
+                                color = DevkitWalletColors.snow1,
+                                modifier = Modifier
+                                    .padding(all = 4.dp)
+                                    .clickable { viewTransaction(navController = navController, txid = it.details.txid) }
+                            )
+                        }
+                    } else {
+                        Text(
+                            text = "No Pending Transactions",
+                            fontSize = 12.sp,
+                            fontFamily = firaMono,
+                            color = DevkitWalletColors.snow1,
+                        )
+                    }
                 }
             }
             Box(
@@ -126,14 +144,30 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
             ) {
                 val scrollState = rememberScrollState()
                 Column(
-                    modifier = Modifier.fillMaxWidth().verticalScroll(state = scrollState)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(state = scrollState)
                 ) {
-                    Text(
-                        text = confirmedTransactionsList(allTransactions.filterIsInstance<Transaction.Confirmed>()),
-                        fontSize = 12.sp,
-                        fontFamily = firaMono,
-                        color = DevkitWalletColors.snow1
-                    )
+                    if (sortedTransactions.isNotEmpty()) {
+                        sortedTransactions.forEach {
+                            Text(
+                                text = confirmedTransactionsList(it),
+                                fontSize = 12.sp,
+                                fontFamily = firaMono,
+                                color = DevkitWalletColors.snow1,
+                                modifier = Modifier
+                                    .padding(all = 4.dp)
+                                    .clickable { viewTransaction(navController = navController, txid = it.details.txid) }
+                            )
+                        }
+                    } else {
+                        Text(
+                            text = "No Confirmed Transactions",
+                            fontSize = 12.sp,
+                            fontFamily = firaMono,
+                            color = DevkitWalletColors.snow1
+                        )
+                    }
                 }
             }
         }
@@ -164,43 +198,30 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
     }
 }
 
-private fun confirmedTransactionsList(transactions: List<Transaction.Confirmed>): String {
-    if (transactions.isEmpty()) {
-        Log.i(TAG, "Confirmed transaction list is empty")
-        return "No confirmed transactions"
-    } else {
-        val sortedTransactions = transactions.sortedByDescending { it.confirmation.height }
-        return buildString {
-            for (item in sortedTransactions) {
-                Log.i(TAG, "Transaction list item: $item")
-                appendLine("Timestamp: ${item.confirmation.timestamp.timestampToString()}")
-                appendLine("Received: ${item.details.received}")
-                appendLine("Sent: ${item.details.sent}")
-                appendLine("Fees: ${item.details.fee}")
-                appendLine("Block: ${item.confirmation.height}")
-                appendLine("Txid: ${item.details.txid}")
-                appendLine()
-            }
-        }
+private fun viewTransaction(navController: NavController, txid: String) {
+    navController.navigate("${Screen.TransactionScreen.route}/txid=$txid")
+}
+
+private fun confirmedTransactionsList(transactions: Transaction.Confirmed): String {
+    return buildString {
+        Log.i(TAG, "Transaction list item: $transactions")
+        appendLine("Timestamp: ${transactions.confirmation.timestamp.timestampToString()}")
+        appendLine("Received: ${transactions.details.received}")
+        appendLine("Sent: ${transactions.details.sent}")
+        appendLine("Fees: ${transactions.details.fee}")
+        appendLine("Block: ${transactions.confirmation.height}")
+        appendLine("Txid: ${transactions.details.txid}")
     }
 }
 
-private fun pendingTransactionsList(transactions: List<Transaction.Unconfirmed>): String {
-    if (transactions.isEmpty()) {
-        Log.i(TAG, "Pending transaction list is empty")
-        return "No pending transactions"
-    } else {
-        return buildString {
-            for (item in transactions) {
-                Log.i(TAG, "Pending transaction list item: $item")
-                appendLine("Timestamp: Pending")
-                appendLine("Received: ${item.details.received}")
-                appendLine("Sent: ${item.details.sent}")
-                appendLine("Fees: ${item.details.fee}")
-                appendLine("Txid: ${item.details.txid}")
-                appendLine()
-            }
-        }
+private fun pendingTransactionsList(transactions: Transaction.Unconfirmed): String {
+    return buildString {
+        Log.i(TAG, "Pending transaction list item: $transactions")
+        appendLine("Timestamp: Pending")
+        appendLine("Received: ${transactions.details.received}")
+        appendLine("Sent: ${transactions.details.sent}")
+        appendLine("Fees: ${transactions.details.fee}")
+        appendLine("Txid: ${transactions.details.txid}")
     }
 }
 

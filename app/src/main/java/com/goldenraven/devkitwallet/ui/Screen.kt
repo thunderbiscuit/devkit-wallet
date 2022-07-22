@@ -20,5 +20,7 @@ sealed class Screen(val route: String) {
     object HomeScreen : Screen("home_screen")
     object SendScreen : Screen("send_screen")
     object ReceiveScreen : Screen("receive_screen")
+    object RBFScreen : Screen("rbf_screen")
     object TransactionsScreen : Screen("transactions_screen")
+    object TransactionScreen : Screen("transaction_screen")
 }

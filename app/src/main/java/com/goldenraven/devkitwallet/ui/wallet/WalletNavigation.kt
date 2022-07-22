@@ -11,6 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import com.goldenraven.devkitwallet.ui.wallet.*
 import com.goldenraven.devkitwallet.ui.wallet.HomeScreen
 import com.goldenraven.devkitwallet.ui.wallet.ReceiveScreen
 import com.goldenraven.devkitwallet.ui.wallet.SendScreen
@@ -73,6 +74,26 @@ fun WalletNavigation(paddingValues: PaddingValues) {
         ) { SendScreen(navController, paddingValues) }
 
         composable(
+            route = "${Screen.RBFScreen.route}/txid={txid}",
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            }
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString("txid")?.let {
+                RBFScreen(navController, paddingValues, backStackEntry.arguments?.getString("txid"))
+            }
+        }
+
+        composable(
             route = Screen.TransactionsScreen.route,
             enterTransition = {
                 slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
@@ -87,5 +108,25 @@ fun WalletNavigation(paddingValues: PaddingValues) {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
             }
         ) { TransactionsScreen(navController, paddingValues) }
+
+        composable(
+            route = "${Screen.TransactionScreen.route}/txid={txid}",
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Start, animationSpec = tween(animationDuration))
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.End, animationSpec = tween(animationDuration))
+            }
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString("txid")?.let {
+                TransactionScreen(navController, paddingValues, backStackEntry.arguments?.getString("txid"))
+            }
+        }
     }
 }
