@@ -135,6 +135,12 @@ object Wallet {
         return txBuilder.finish(wallet)
     }
 
+    fun createBumpFeeTransaction(txid: String, feeRate: Float): PartiallySignedBitcoinTransaction {
+        return BumpFeeTxBuilder(txid = txid, newFeeRate = feeRate)
+            .enableRbf()
+            .finish(wallet = wallet)
+    }
+
     fun sign(psbt: PartiallySignedBitcoinTransaction) {
         wallet.sign(psbt)
     }
@@ -144,7 +150,17 @@ object Wallet {
         return signedPsbt.txid()
     }
 
-    fun getTransactions(): List<Transaction> = wallet.getTransactions()
+    fun getAllTransactions(): List<Transaction> = wallet.getTransactions()
+
+    fun getTransaction(txid: String): Transaction? {
+        val allTransactions = getAllTransactions()
+        allTransactions.forEach {
+            if ((it is Transaction.Confirmed && it.details.txid == txid) || (it is Transaction.Unconfirmed && it.details.txid == txid)) {
+                return it
+            }
+        }
+        return null
+    }
 
     fun sync() {
         Log.i(TAG, "Wallet is syncing")
