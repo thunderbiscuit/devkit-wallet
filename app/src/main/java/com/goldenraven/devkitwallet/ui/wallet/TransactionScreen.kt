@@ -169,15 +169,15 @@ fun getTransactionDetails(transaction: Transaction): List<Pair<String, String>> 
     if (transaction is Transaction.Confirmed) {
         transactionDetails.add(Pair("Status", "Confirmed"))
         transactionDetails.add(Pair("Timestamp", transaction.confirmation.timestamp.timestampToString()))
-        transactionDetails.add(Pair("Received", transaction.details.received.toString()))
-        transactionDetails.add(Pair("Sent", transaction.details.sent.toString()))
+        transactionDetails.add(Pair("Received", (if (transaction.details.received < transaction.details.sent) 0 else transaction.details.received).toString()))
+        transactionDetails.add(Pair("Sent", (if (transaction.details.sent < transaction.details.received) 0 else transaction.details.sent - transaction.details.received - transaction.details.fee!!).toString()))
         transactionDetails.add(Pair("Fees", transaction.details.fee.toString()))
         transactionDetails.add(Pair("Block", transaction.confirmation.height.toString()))
     } else if (transaction is Transaction.Unconfirmed) {
         transactionDetails.add(Pair("Status", "Pending"))
         transactionDetails.add(Pair("Timestamp", "Pending"))
-        transactionDetails.add(Pair("Received", transaction.details.received.toString()))
-        transactionDetails.add(Pair("Sent", transaction.details.sent.toString()))
+        transactionDetails.add(Pair("Received", (if (transaction.details.received < transaction.details.sent) 0 else transaction.details.received).toString()))
+        transactionDetails.add(Pair("Sent", (if (transaction.details.sent < transaction.details.received) 0 else transaction.details.sent - transaction.details.received - transaction.details.fee!!).toString()))
         transactionDetails.add(Pair("Fees", transaction.details.fee.toString()))
     }
     return transactionDetails
