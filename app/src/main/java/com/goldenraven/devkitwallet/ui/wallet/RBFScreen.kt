@@ -55,8 +55,8 @@ internal fun RBFScreen(
     transaction = transaction as Transaction.Unconfirmed
     val context = LocalContext.current
 
-    val amount = transaction.details.sent.toString()
-    val feeRate: MutableState<String> = rememberSaveable { mutableStateOf(transaction.details.fee.toString()) }
+    val amount = (transaction.details.sent - transaction.details.received - (transaction.details.fee ?: 0UL)).toString()
+    val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 
     ConstraintLayout(
@@ -199,7 +199,7 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
             textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
             label = {
                 Text(
-                    text = "Fee rate",
+                    text = "New fee rate",
                     color = DevkitWalletColors.snow1,
                 )
             },
