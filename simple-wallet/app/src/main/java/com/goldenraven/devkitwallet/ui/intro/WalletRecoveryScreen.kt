@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.WalletCreateType
 import com.goldenraven.devkitwallet.ui.IntroAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors

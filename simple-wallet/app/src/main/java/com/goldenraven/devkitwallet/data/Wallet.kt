@@ -15,6 +15,7 @@ object Wallet {
 
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
+    // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
     private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
     private lateinit var blockchainConfig: BlockchainConfig
     private lateinit var blockchain: Blockchain
@@ -38,18 +39,26 @@ object Wallet {
         wallet = BdkWallet(
             descriptor,
             changeDescriptor,
-            Network.TESTNET,
+            Network.REGTEST,
+            // Network.TESTNET,
             database,
         )
     }
 
     fun createBlockchain() {
-        blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
+        blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 10u, 20u, 10u))
+        // blockchainConfig = BlockchainConfig.Esplora(EsploraConfig(esploraUrl, null, 5u, 20u, 10u))
+        // blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u))
         blockchain = Blockchain(blockchainConfig)
     }
 
     fun createWallet() {
-        val keys: ExtendedKeyInfo = generateExtendedKey(Network.TESTNET, WordCount.WORDS12, null)
+        val keys: ExtendedKeyInfo = generateExtendedKey(
+            Network.REGTEST,
+            // Network.TESTNET,
+            WordCount.WORDS12,
+            null
+        )
         val descriptor: String = createDescriptor(keys)
         val changeDescriptor: String = createChangeDescriptor(keys)
         initialize(
@@ -119,7 +128,11 @@ object Wallet {
 
     fun getBalance(): ULong = wallet.getBalance()
 
-    fun getNewAddress(): AddressInfo = wallet.getAddress(AddressIndex.NEW)
+    fun getNewAddress(): AddressInfo {
+        val newAddress = wallet.getAddress(AddressIndex.NEW)
+        Log.i("Wallet", "New address is $newAddress.address")
+        return newAddress
+    }
 
     fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LAST_UNUSED)
 

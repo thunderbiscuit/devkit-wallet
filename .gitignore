@@ -1,6 +1,6 @@
 *.iml
 .gradle
-/local.properties
+/simple-wallet/local.properties
 /.idea/
 .DS_Store
 /build
@@ -8,4 +8,5 @@
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+simple-wallet/local.properties
+simple-wallet/app/build/
