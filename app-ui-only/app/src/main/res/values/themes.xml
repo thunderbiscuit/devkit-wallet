@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.BitcoindevkitSampleApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--  nord theme  -->
+        <item name="colorPrimary">@color/night_1</item>
+        <item name="colorPrimaryVariant">@color/night_1</item>
+        <item name="colorOnPrimary">@color/snow_3</item>
+        <item name="android:background">@color/night_4</item>
+        <item name="android:textColor">@color/snow_3</item>
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+    </style>
+
+<!--    <style name="Theme.BitcoindevkitSampleApp.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">-->
+<!--        <item name="android:background">@color/night_1</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.BitcoindevkitSampleApp.ToolbarPopup" parent="ThemeOverlay.AppCompat.Light">-->
+<!--        <item name="popupMenuBackground">@color/snow_3</item>-->
+<!--        <item name="android:background">@color/snow_3</item>-->
+<!--        <item name="android:textColor">@color/night_1</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.BitcoindevkitSampleApp.Launcher">-->
+<!--        <item name="android:background">@drawable/launch_screen</item>-->
+<!--    </style>-->
+</resources>
