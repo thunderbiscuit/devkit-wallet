@@ -15,7 +15,7 @@ object Wallet {
     private lateinit var wallet: BdkWallet
     private lateinit var path: String
     // private const val regtestEsploraUrl: String = "http://10.0.2.2:3002"
-    private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
+    // private const val electrumURL: String = "ssl://electrum.blockstream.info:60002"
     private lateinit var blockchainConfig: BlockchainConfig
     private lateinit var blockchain: Blockchain
 
@@ -45,8 +45,9 @@ object Wallet {
     }
 
     fun createBlockchain() {
-        blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 10u, 20u, 10u))
+        // blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 10u, 20u, 10u))
         // blockchainConfig = BlockchainConfig.Esplora(EsploraConfig(esploraUrl, null, 5u, 20u, 10u))
+        blockchainConfig = BlockchainConfig.Cbf(CbfConfig(Network.TESTNET, null))
         blockchain = Blockchain(blockchainConfig)
     }
 
