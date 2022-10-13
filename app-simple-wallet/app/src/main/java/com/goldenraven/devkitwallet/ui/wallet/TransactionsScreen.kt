@@ -31,13 +31,13 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
 import com.goldenraven.devkitwallet.utilities.timestampToString
-import org.bitcoindevkit.Transaction
+import org.bitcoindevkit.TransactionDetails
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TransactionsScreen(navController: NavController) {
 
-    val allTransactions: List<Transaction> = Wallet.getTransactions()
+    val allTransactions: List<TransactionDetails> = Wallet.getTransactions()
 
     ConstraintLayout(
         modifier = Modifier
@@ -97,7 +97,7 @@ internal fun TransactionsScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth().verticalScroll(state = scrollState)
                 ) {
                     Text(
-                        text = pendingTransactionsList(allTransactions.filterIsInstance<Transaction.Unconfirmed>()),
+                        text = pendingTransactionsList(allTransactions),
                         fontSize = 12.sp,
                         fontFamily = firaMono,
                         color = DevkitWalletColors.snow1
@@ -129,7 +129,7 @@ internal fun TransactionsScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth().verticalScroll(state = scrollState)
                 ) {
                     Text(
-                        text = confirmedTransactionsList(allTransactions.filterIsInstance<Transaction.Confirmed>()),
+                        text = confirmedTransactionsList(allTransactions),
                         fontSize = 12.sp,
                         fontFamily = firaMono,
                         color = DevkitWalletColors.snow1
@@ -164,40 +164,48 @@ internal fun TransactionsScreen(navController: NavController) {
     }
 }
 
-private fun confirmedTransactionsList(transactions: List<Transaction.Confirmed>): String {
-    if (transactions.isEmpty()) {
+private fun confirmedTransactionsList(transactions: List<TransactionDetails>): String {
+    val confirmedTransactions = transactions.filter {
+        it.confirmationTime != null
+    }
+
+    if (confirmedTransactions.isEmpty()) {
         Log.i(TAG, "Confirmed transaction list is empty")
         return "No confirmed transactions"
     } else {
-        val sortedTransactions = transactions.sortedByDescending { it.confirmation.height }
+        val sortedTransactions = confirmedTransactions.sortedByDescending { it.confirmationTime!!.height }
         return buildString {
             for (item in sortedTransactions) {
                 Log.i(TAG, "Transaction list item: $item")
-                appendLine("Timestamp: ${item.confirmation.timestamp.timestampToString()}")
-                appendLine("Received: ${item.details.received}")
-                appendLine("Sent: ${item.details.sent}")
-                appendLine("Fees: ${item.details.fee}")
-                appendLine("Block: ${item.confirmation.height}")
-                appendLine("Txid: ${item.details.txid}")
+                appendLine("Timestamp: ${item.confirmationTime!!.timestamp.timestampToString()}")
+                appendLine("Received: ${item.received}")
+                appendLine("Sent: ${item.sent}")
+                appendLine("Fees: ${item.fee}")
+                appendLine("Block: ${item.confirmationTime!!.height}")
+                appendLine("Txid: ${item.txid}")
                 appendLine()
             }
         }
     }
 }
 
-private fun pendingTransactionsList(transactions: List<Transaction.Unconfirmed>): String {
-    if (transactions.isEmpty()) {
+private fun pendingTransactionsList(transactions: List<TransactionDetails>): String {
+    val unconfirmedTransactions = transactions.filter {
+        it.confirmationTime == null
+    }
+
+    if (unconfirmedTransactions.isEmpty()) {
         Log.i(TAG, "Pending transaction list is empty")
         return "No pending transactions"
     } else {
         return buildString {
-            for (item in transactions) {
+            for (item in unconfirmedTransactions) {
                 Log.i(TAG, "Pending transaction list item: $item")
                 appendLine("Timestamp: Pending")
-                appendLine("Received: ${item.details.received}")
-                appendLine("Sent: ${item.details.sent}")
-                appendLine("Fees: ${item.details.fee}")
-                appendLine("Txid: ${item.details.txid}")
+                appendLine("Received: ${item.received}")
+                appendLine("Sent: ${item.sent}")
+                appendLine("Fees: ${item.fee}")
+                appendLine("Txid: ${item.txid}")
                 appendLine()
             }
         }
