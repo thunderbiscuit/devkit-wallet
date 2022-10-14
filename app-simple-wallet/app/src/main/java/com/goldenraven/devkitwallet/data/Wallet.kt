@@ -21,7 +21,7 @@ object Wallet {
 
     object LogProgress: Progress {
         override fun update(progress: Float, message: String?) {
-            Log.i(TAG, "Sync wallet")
+            Log.i(TAG, "Wallet: $progress, $message")
         }
     }
 
