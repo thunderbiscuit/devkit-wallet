@@ -37,7 +37,7 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
 import org.bitcoindevkit.PartiallySignedBitcoinTransaction
-import org.bitcoindevkit.Transaction
+import org.bitcoindevkit.TransactionDetails
 
 @Composable
 internal fun RBFScreen(
@@ -48,14 +48,14 @@ internal fun RBFScreen(
     if (txid.isNullOrEmpty()) {
         navController.popBackStack()
     }
-    var transaction: Transaction? = getTransaction(txid = txid)
+    var transaction: TransactionDetails? = getTransaction(txid = txid)
     if (transaction == null) {
         navController.popBackStack()
     }
-    transaction = transaction as Transaction.Unconfirmed
+    transaction = transaction as TransactionDetails
     val context = LocalContext.current
 
-    val amount = (transaction.details.sent - transaction.details.received - (transaction.details.fee ?: 0UL)).toString()
+    val amount = (transaction.sent - transaction.received - (transaction.fee ?: 0UL)).toString()
     val feeRate: MutableState<String> = rememberSaveable { mutableStateOf("") }
     val (showDialog, setShowDialog) =  rememberSaveable { mutableStateOf(false) }
 

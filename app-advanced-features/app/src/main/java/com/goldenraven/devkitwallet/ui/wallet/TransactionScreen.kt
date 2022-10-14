@@ -28,7 +28,7 @@ import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.timestampToString
-import org.bitcoindevkit.Transaction
+import org.bitcoindevkit.TransactionDetails
 
 @Composable
 internal fun TransactionScreen(
@@ -124,10 +124,8 @@ internal fun TransactionScreen(
                     end.linkTo(parent.end)
                 }
         ) {
-            if (transaction is Transaction.Unconfirmed) {
-                TransactionDetailButton(content = "increase fees", navController = navController, txid = txid)
-                Spacer(modifier = Modifier.padding(all = 8.dp))
-            }
+            TransactionDetailButton(content = "increase fees", navController = navController, txid = txid)
+            Spacer(modifier = Modifier.padding(all = 8.dp))
             TransactionDetailButton(
                 content = "back to transaction list", navController = navController, txid = null)
         }
@@ -163,34 +161,31 @@ fun TransactionDetailButton(content: String, navController: NavController, txid:
     }
 }
 
-fun getTransactionDetails(transaction: Transaction): List<Pair<String, String>> {
+fun getTransactionDetails(transaction: TransactionDetails): List<Pair<String, String>> {
     val transactionDetails = mutableListOf<Pair<String, String>>()
 
-    if (transaction is Transaction.Confirmed) {
+    if (transaction.confirmationTime != null) {
         transactionDetails.add(Pair("Status", "Confirmed"))
-        transactionDetails.add(Pair("Timestamp", transaction.confirmation.timestamp.timestampToString()))
-        transactionDetails.add(Pair("Received", (if (transaction.details.received < transaction.details.sent) 0 else transaction.details.received).toString()))
-        transactionDetails.add(Pair("Sent", (if (transaction.details.sent < transaction.details.received) 0 else transaction.details.sent - transaction.details.received - transaction.details.fee!!).toString()))
-        transactionDetails.add(Pair("Fees", transaction.details.fee.toString()))
-        transactionDetails.add(Pair("Block", transaction.confirmation.height.toString()))
-    } else if (transaction is Transaction.Unconfirmed) {
+        transactionDetails.add(Pair("Timestamp", transaction.confirmationTime!!.timestamp.timestampToString()))
+        transactionDetails.add(Pair("Received", (if (transaction.received < transaction.sent) 0 else transaction.received).toString()))
+        transactionDetails.add(Pair("Sent", (if (transaction.sent < transaction.received) 0 else transaction.sent - transaction.received - transaction.fee!!).toString()))
+        transactionDetails.add(Pair("Fees", transaction.fee.toString()))
+        transactionDetails.add(Pair("Block", transaction.confirmationTime!!.height.toString()))
+    } else {
         transactionDetails.add(Pair("Status", "Pending"))
         transactionDetails.add(Pair("Timestamp", "Pending"))
-        transactionDetails.add(Pair("Received", (if (transaction.details.received < transaction.details.sent) 0 else transaction.details.received).toString()))
-        transactionDetails.add(Pair("Sent", (if (transaction.details.sent < transaction.details.received) 0 else transaction.details.sent - transaction.details.received - transaction.details.fee!!).toString()))
-        transactionDetails.add(Pair("Fees", transaction.details.fee.toString()))
+        transactionDetails.add(Pair("Received", (if (transaction.received < transaction.sent) 0 else transaction.received).toString()))
+        transactionDetails.add(Pair("Sent", (if (transaction.sent < transaction.received) 0 else transaction.sent - transaction.received - transaction.fee!!).toString()))
+        transactionDetails.add(Pair("Fees", transaction.fee.toString()))
     }
     return transactionDetails
 }
 
-fun transactionTitle(transaction: Transaction): String {
-    if (transaction is Transaction.Confirmed) {
-        return transaction.details.txid
-    }
-    return (transaction as Transaction.Unconfirmed).details.txid
+fun transactionTitle(transaction: TransactionDetails): String {
+    return transaction.txid
 }
 
-fun getTransaction(txid: String?): Transaction? {
+fun getTransaction(txid: String?): TransactionDetails? {
     if (txid.isNullOrEmpty()) {
         return null
     }

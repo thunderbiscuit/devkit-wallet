@@ -31,15 +31,12 @@ import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
 import com.goldenraven.devkitwallet.utilities.timestampToString
-import org.bitcoindevkit.Transaction
+import org.bitcoindevkit.TransactionDetails
 
 @Composable
 internal fun TransactionsScreen(navController: NavController, paddingValues: PaddingValues) {
-    val allTransactions: List<Transaction> = Wallet.getAllTransactions()
-
-    val unconfirmedTransactions = allTransactions.filterIsInstance<Transaction.Unconfirmed>()
-    val confirmedTransactions = allTransactions.filterIsInstance<Transaction.Confirmed>()
-    val sortedTransactions = confirmedTransactions.sortedByDescending { it.confirmation.height }
+    val allTransactions: List<TransactionDetails> = Wallet.getAllTransactions()
+    val (confirmedTransactions, unconfirmedTransactions) = sortTransactions(allTransactions)
 
     ConstraintLayout(
         modifier = Modifier
@@ -103,13 +100,13 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
                     if (unconfirmedTransactions.isNotEmpty()) {
                         unconfirmedTransactions.forEach {
                             Text(
-                                text = pendingTransactionsList(it),
+                                text = pendingTransactionsItem(it),
                                 fontSize = 12.sp,
                                 fontFamily = firaMono,
                                 color = DevkitWalletColors.snow1,
                                 modifier = Modifier
                                     .padding(all = 4.dp)
-                                    .clickable { viewTransaction(navController = navController, txid = it.details.txid) }
+                                    .clickable { viewTransaction(navController = navController, txid = it.txid) }
                             )
                         }
                     } else {
@@ -148,16 +145,16 @@ internal fun TransactionsScreen(navController: NavController, paddingValues: Pad
                         .fillMaxWidth()
                         .verticalScroll(state = scrollState)
                 ) {
-                    if (sortedTransactions.isNotEmpty()) {
-                        sortedTransactions.forEach {
+                    if (confirmedTransactions.isNotEmpty()) {
+                        confirmedTransactions.forEach {
                             Text(
-                                text = confirmedTransactionsList(it),
+                                text = confirmedTransactionsItem(it),
                                 fontSize = 12.sp,
                                 fontFamily = firaMono,
                                 color = DevkitWalletColors.snow1,
                                 modifier = Modifier
                                     .padding(all = 4.dp)
-                                    .clickable { viewTransaction(navController = navController, txid = it.details.txid) }
+                                    .clickable { viewTransaction(navController = navController, txid = it.txid) }
                             )
                         }
                     } else {
@@ -202,28 +199,45 @@ private fun viewTransaction(navController: NavController, txid: String) {
     navController.navigate("${Screen.TransactionScreen.route}/txid=$txid")
 }
 
-private fun confirmedTransactionsList(transactions: Transaction.Confirmed): String {
+private fun sortTransactions(transactions: List<TransactionDetails>): Transactions {
+    val confirmedTransactions = mutableListOf<TransactionDetails>()
+    val unconfirmedTransactions = mutableListOf<TransactionDetails>()
+    transactions.forEach { tx ->
+        if (tx.confirmationTime != null) confirmedTransactions.add(tx) else unconfirmedTransactions.add(tx)
+    }
+    return Transactions(
+        confirmedTransactions = confirmedTransactions,
+        unconfirmedTransactions = unconfirmedTransactions
+    )
+}
+
+private fun pendingTransactionsItem(transaction: TransactionDetails): String {
     return buildString {
-        Log.i(TAG, "Transaction list item: $transactions")
-        appendLine("Timestamp: ${transactions.confirmation.timestamp.timestampToString()}")
-        appendLine("Received: ${transactions.details.received}")
-        appendLine("Sent: ${transactions.details.sent}")
-        appendLine("Fees: ${transactions.details.fee}")
-        appendLine("Block: ${transactions.confirmation.height}")
-        appendLine("Txid: ${transactions.details.txid}")
+        Log.i(TAG, "Pending transaction list item: $transaction")
+        appendLine("Timestamp: Pending")
+        appendLine("Received: ${transaction.received}")
+        appendLine("Sent: ${transaction.sent}")
+        appendLine("Fees: ${transaction.fee}")
+        appendLine("Txid: ${transaction.txid}")
     }
 }
 
-private fun pendingTransactionsList(transactions: Transaction.Unconfirmed): String {
+private fun confirmedTransactionsItem(transaction: TransactionDetails): String {
     return buildString {
-        Log.i(TAG, "Pending transaction list item: $transactions")
-        appendLine("Timestamp: Pending")
-        appendLine("Received: ${transactions.details.received}")
-        appendLine("Sent: ${transactions.details.sent}")
-        appendLine("Fees: ${transactions.details.fee}")
-        appendLine("Txid: ${transactions.details.txid}")
+        Log.i(TAG, "Transaction list item: $transaction")
+        appendLine("Timestamp: ${transaction.confirmationTime!!.timestamp.timestampToString()}")
+        appendLine("Received: ${transaction.received}")
+        appendLine("Sent: ${transaction.sent}")
+        appendLine("Fees: ${transaction.fee}")
+        appendLine("Block: ${transaction.confirmationTime!!.height}")
+        appendLine("Txid: ${transaction.txid}")
     }
 }
+
+data class Transactions(
+    val confirmedTransactions: List<TransactionDetails>,
+    val unconfirmedTransactions: List<TransactionDetails>
+)
 
 // @Preview(device = Devices.PIXEL_4, showBackground = true)
 // @Composable

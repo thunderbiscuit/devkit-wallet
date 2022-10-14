@@ -8,6 +8,7 @@ package com.goldenraven.devkitwallet.data
 import android.util.Log
 import com.goldenraven.devkitwallet.utilities.SharedPreferencesManager
 import com.goldenraven.devkitwallet.utilities.TAG
+import java.io.Externalizable
 
 object Repository {
 
@@ -27,15 +28,15 @@ object Repository {
 
     // save the necessary data for wallet reconstruction in shared preferences
     // upon application launch, the wallet can initialize itself using that data
-    fun saveWallet(path: String, descriptor: String, changeDescriptor: String) {
+    fun saveWallet(path: String, externalDescriptor: String, internalDescriptor: String) {
         Log.i(
             TAG,
-            "Saved wallet:\npath -> $path \ndescriptor -> $descriptor \nchange descriptor -> $changeDescriptor"
+            "Saved wallet:\npath -> $path \nexternal descriptor -> $externalDescriptor \ninternal descriptor -> $internalDescriptor"
         )
         sharedPreferencesManager.walletInitialised = true
         sharedPreferencesManager.path = path
-        sharedPreferencesManager.descriptor = descriptor
-        sharedPreferencesManager.changeDescriptor = changeDescriptor
+        sharedPreferencesManager.externalDescriptor = externalDescriptor
+        sharedPreferencesManager.internalDescriptor = internalDescriptor
     }
 
     fun saveMnemonic(mnemonic: String) {
@@ -48,13 +49,13 @@ object Repository {
     }
 
     fun getInitialWalletData(): RequiredInitialWalletData {
-        val descriptor: String = sharedPreferencesManager.descriptor
-        val changeDescriptor: String = sharedPreferencesManager.changeDescriptor
-        return RequiredInitialWalletData(descriptor, changeDescriptor)
+        val externalDescriptor: String = sharedPreferencesManager.externalDescriptor
+        val internalDescriptor: String = sharedPreferencesManager.internalDescriptor
+        return RequiredInitialWalletData(externalDescriptor, internalDescriptor)
     }
 }
 
 data class RequiredInitialWalletData(
-    val descriptor: String,
-    val changeDescriptor: String
+    val externalDescriptor: String,
+    val internalDescriptor: String
 )
