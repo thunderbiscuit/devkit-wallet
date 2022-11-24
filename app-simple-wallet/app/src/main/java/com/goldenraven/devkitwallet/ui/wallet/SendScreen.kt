@@ -31,9 +31,9 @@ import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
-import org.bitcoindevkit.PartiallySignedBitcoinTransaction
+import org.bitcoindevkit.PartiallySignedTransaction
+import org.bitcoindevkit.TransactionDetails
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SendScreen(navController: NavController) {
 
@@ -279,7 +279,7 @@ private fun broadcastTransaction(recipientAddress: String, amount: ULong, feeRat
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient: $recipientAddress, amount: $amount, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
-        val psbt: PartiallySignedBitcoinTransaction = Wallet.createTransaction(recipientAddress, amount, feeRate)
+        val (psbt: PartiallySignedTransaction, txDetails: TransactionDetails)  = Wallet.createTransaction(recipientAddress, amount, feeRate)
         Wallet.sign(psbt)
         val txid: String = Wallet.broadcast(psbt)
         Log.i(TAG, "Transaction was broadcast! txid: $txid")

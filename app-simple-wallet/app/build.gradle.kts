@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.goldenraven.devkitwallet"
         minSdk = 26
-        targetSdk = 30
+        targetSdk = 33
         versionCode = 1
         versionName = "v0.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -72,7 +72,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 
     // bitcoindevkit
-    implementation("org.bitcoindevkit:bdk-android:0.9.0")
+    implementation("org.bitcoindevkit:bdk-android:0.11.0")
 
     // qr codes
     implementation("com.google.zxing:core:3.4.1")

@@ -51,7 +51,7 @@ object Wallet {
     }
 
     fun createWallet() {
-        val mnemonic: String = generateMnemonic(WordCount.WORDS12)
+        val mnemonic: Mnemonic = Mnemonic(WordCount.WORDS12)
         val bip32RootKey: DescriptorSecretKey = DescriptorSecretKey(
             network = Network.TESTNET,
             mnemonic = mnemonic,
@@ -64,7 +64,7 @@ object Wallet {
             internalDescriptor = internalDescriptor,
         )
         Repository.saveWallet(path, externalDescriptor, internalDescriptor)
-        Repository.saveMnemonic(mnemonic)
+        Repository.saveMnemonic(Mnemonic.toString())
     }
 
     // only create BIP84 compatible wallets
@@ -96,7 +96,7 @@ object Wallet {
     fun recoverWallet(mnemonic: String) {
         val bip32RootKey: DescriptorSecretKey = DescriptorSecretKey(
             network = Network.TESTNET,
-            mnemonic = mnemonic,
+            mnemonic = Mnemonic.fromString(mnemonic),
             password = ""
         )
         val externalDescriptor: String = createExternalDescriptor(bip32RootKey)
@@ -106,21 +106,23 @@ object Wallet {
             internalDescriptor = internalDescriptor,
         )
         Repository.saveWallet(path, externalDescriptor, internalDescriptor)
-        Repository.saveMnemonic(mnemonic)
+        Repository.saveMnemonic(mnemonic.toString())
     }
 
-    fun createTransaction(recipient: String, amount: ULong, fee_rate: Float): PartiallySignedBitcoinTransaction {
+    fun createTransaction(recipient: String, amount: ULong, fee_rate: Float): TxBuilderResult {
+        val scriptPubkey: Script = Address(recipient).scriptPubkey()
         return TxBuilder()
-            .addRecipient(recipient, amount)
+            .addRecipient(scriptPubkey, amount)
             .feeRate(satPerVbyte = fee_rate)
             .finish(wallet)
     }
 
-    fun sign(psbt: PartiallySignedBitcoinTransaction) {
+    val address: Script = Address("xprf").scriptPubkey()
+    fun sign(psbt: PartiallySignedTransaction) {
         wallet.sign(psbt)
     }
 
-    fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): String {
+    fun broadcast(signedPsbt: PartiallySignedTransaction): String {
         blockchain.broadcast(signedPsbt)
         return signedPsbt.txid()
     }
