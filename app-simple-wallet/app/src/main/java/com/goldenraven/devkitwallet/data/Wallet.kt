@@ -117,7 +117,6 @@ object Wallet {
             .finish(wallet)
     }
 
-    val address: Script = Address("xprf").scriptPubkey()
     fun sign(psbt: PartiallySignedTransaction) {
         wallet.sign(psbt)
     }
