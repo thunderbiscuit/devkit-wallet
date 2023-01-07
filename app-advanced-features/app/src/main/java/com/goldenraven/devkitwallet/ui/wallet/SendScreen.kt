@@ -80,9 +80,7 @@ internal fun SendScreen(
         modifier = Modifier.padding(paddingValues)
     ) {
         ConstraintLayout(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(DevkitWalletColors.night4)
+            modifier = Modifier.fillMaxSize()
         ) {
             val (screenTitle, transactionInputs, bottomButtons) = createRefs()
 
