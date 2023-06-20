@@ -31,39 +31,33 @@ object Wallet {
     }
 
     private fun initialize(
-        externalDescriptor: String,
-        internalDescriptor: String,
+        descriptor: Descriptor,
+        changeDescriptor: Descriptor,
     ) {
         val database = DatabaseConfig.Sqlite(SqliteDbConfiguration("$path/bdk-sqlite"))
         wallet = BdkWallet(
-            externalDescriptor,
-            internalDescriptor,
-            // Network.REGTEST,
+            descriptor,
+            changeDescriptor,
             Network.TESTNET,
-            database,
+            database
         )
     }
 
     fun createBlockchain() {
-        blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 10u, 20u, 10u))
-        // blockchainConfig = BlockchainConfig.Esplora(EsploraConfig(esploraUrl, null, 5u, 20u, 10u))
+        val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u, true))
         blockchain = Blockchain(blockchainConfig)
     }
 
     fun createWallet() {
-        val mnemonic: Mnemonic = Mnemonic(WordCount.WORDS12)
-        val bip32RootKey: DescriptorSecretKey = DescriptorSecretKey(
-            network = Network.TESTNET,
-            mnemonic = mnemonic,
-            password = ""
-        )
-        val externalDescriptor: String = createExternalDescriptor(bip32RootKey)
-        val internalDescriptor: String = createInternalDescriptor(bip32RootKey)
+        val mnemonic = Mnemonic(WordCount.WORDS12)
+        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
+        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
-            externalDescriptor = externalDescriptor,
-            internalDescriptor = internalDescriptor,
+            descriptor = descriptor,
+            changeDescriptor = changeDescriptor,
         )
-        Repository.saveWallet(path, externalDescriptor, internalDescriptor)
+        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
         Repository.saveMnemonic(mnemonic.asString())
     }
 
@@ -85,28 +79,25 @@ object Wallet {
     // if the wallet already exists, its descriptors are stored in shared preferences
     fun loadExistingWallet() {
         val initialWalletData: RequiredInitialWalletData = Repository.getInitialWalletData()
-        Log.i(TAG, "Loading existing wallet, descriptor is ${initialWalletData.descriptor}")
-        Log.i(TAG, "Loading existing wallet, change descriptor is ${initialWalletData.changeDescriptor}")
+        Log.i(TAG, "Loading existing wallet with descriptor: ${initialWalletData.descriptor}")
+        Log.i(TAG, "Loading existing wallet with change descriptor: ${initialWalletData.changeDescriptor}")
         initialize(
-            externalDescriptor = initialWalletData.descriptor,
-            internalDescriptor = initialWalletData.changeDescriptor,
+            descriptor = Descriptor(initialWalletData.descriptor, Network.TESTNET),
+            changeDescriptor = Descriptor(initialWalletData.changeDescriptor, Network.TESTNET),
         )
     }
 
-    fun recoverWallet(mnemonic: String) {
-        val bip32RootKey: DescriptorSecretKey = DescriptorSecretKey(
-            network = Network.TESTNET,
-            mnemonic = Mnemonic.fromString(mnemonic),
-            password = ""
-        )
-        val externalDescriptor: String = createExternalDescriptor(bip32RootKey)
-        val internalDescriptor: String = createInternalDescriptor(bip32RootKey)
+    fun recoverWallet(recoveryPhrase: String) {
+        val mnemonic = Mnemonic.fromString(recoveryPhrase)
+        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
+        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
-            externalDescriptor = externalDescriptor,
-            internalDescriptor = internalDescriptor,
+            descriptor = descriptor,
+            changeDescriptor = changeDescriptor,
         )
-        Repository.saveWallet(path, externalDescriptor, internalDescriptor)
-        Repository.saveMnemonic(mnemonic.toString())
+        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
+        Repository.saveMnemonic(mnemonic.asString())
     }
 
     fun createTransaction(recipient: String, amount: ULong, fee_rate: Float): TxBuilderResult {
@@ -118,7 +109,7 @@ object Wallet {
     }
 
     fun sign(psbt: PartiallySignedTransaction) {
-        wallet.sign(psbt)
+        wallet.sign(psbt, null)
     }
 
     fun broadcast(signedPsbt: PartiallySignedTransaction): String {
@@ -126,7 +117,7 @@ object Wallet {
         return signedPsbt.txid()
     }
 
-    fun getTransactions(): List<TransactionDetails> = wallet.listTransactions()
+    fun getTransactions(): List<TransactionDetails> = wallet.listTransactions(true)
 
     fun sync() {
         Log.i(TAG, "Wallet is syncing")
@@ -135,13 +126,13 @@ object Wallet {
 
     fun getBalance(): ULong = wallet.getBalance().total
 
-    fun getNewAddress(): AddressInfo {
-        val newAddress = wallet.getAddress(AddressIndex.NEW)
-        Log.i("Wallet", "New address is $newAddress.address")
-        return newAddress
-    }
+//    fun getNewAddress(): AddressInfo {
+//        val newAddress = wallet.getAddress(AddressIndex.NEW)
+//        Log.i("Wallet", "New address is $newAddress.address")
+//        return newAddress
+//    }
 
-    fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LAST_UNUSED)
+    fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
 
     fun isBlockChainCreated() = ::blockchain.isInitialized
 }
