@@ -280,9 +280,13 @@ private fun broadcastTransaction(recipientAddress: String, amount: ULong, feeRat
     try {
         // create, sign, and broadcast
         val (psbt: PartiallySignedTransaction, txDetails: TransactionDetails)  = Wallet.createTransaction(recipientAddress, amount, feeRate)
-        Wallet.sign(psbt)
-        val txid: String = Wallet.broadcast(psbt)
-        Log.i(TAG, "Transaction was broadcast! txid: $txid")
+        var isSigned = Wallet.sign(psbt)
+        if (isSigned) {
+            val txid: String = Wallet.broadcast(psbt)
+            Log.i(TAG, "Transaction was broadcast! txid: $txid")
+        } else {
+            Log.i(TAG, "Transaction not signed.")
+        }
     } catch (e: Throwable) {
         Log.i(TAG, "Broadcast error: ${e.message}")
     }

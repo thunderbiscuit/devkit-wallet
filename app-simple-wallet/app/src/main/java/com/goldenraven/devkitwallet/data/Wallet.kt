@@ -44,7 +44,14 @@ object Wallet {
     }
 
     fun createBlockchain() {
-        val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(electrumURL, null, 5u, null, 10u, true))
+        val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(
+            url = electrumURL,
+            socks5 = null,
+            retry = 5u,
+            timeout = null,
+            stopGap = 10u,
+            validateDomain = true
+        ))
         blockchain = Blockchain(blockchainConfig)
     }
 
@@ -108,12 +115,12 @@ object Wallet {
             .finish(wallet)
     }
 
-    fun sign(psbt: PartiallySignedTransaction) {
-        wallet.sign(psbt, null)
+    fun sign(psbt: PartiallySignedTransaction): Boolean {
+        return wallet.sign(psbt, null)
     }
 
     fun broadcast(signedPsbt: PartiallySignedTransaction): String {
-        blockchain.broadcast(signedPsbt)
+        blockchain.broadcast(signedPsbt.extractTx())
         return signedPsbt.txid()
     }
 
