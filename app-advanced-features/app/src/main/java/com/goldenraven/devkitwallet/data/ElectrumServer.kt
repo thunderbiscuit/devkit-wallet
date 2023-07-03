@@ -19,7 +19,14 @@ class ElectrumServer {
     private val defaultElectrumURL = "ssl://electrum.blockstream.info:60002"
 
     init {
-        val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(defaultElectrumURL, null, 5u, null, 10u))
+        val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(
+            url = defaultElectrumURL,
+            socks5 = null,
+            retry = 5u,
+            timeout = null,
+            stopGap = 10u,
+            validateDomain = true
+        ))
         customElectrumURL = ""
         default = Blockchain(blockchainConfig)
     }
@@ -33,7 +40,14 @@ class ElectrumServer {
     // tcp://testnet.aranguren.org:51001
     fun createCustomElectrum(electrumURL: String) {
         customElectrumURL = electrumURL
-        val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(customElectrumURL, null, 5u, null, 10u))
+        val blockchainConfig = BlockchainConfig.Electrum(ElectrumConfig(
+            url = customElectrumURL,
+            socks5 = null,
+            retry = 5u,
+            timeout = null,
+            stopGap = 10u,
+            validateDomain = true
+        ))
         custom = Blockchain(blockchainConfig)
         useCustomElectrum()
         Log.i(TAG, "New Electrum Server URL : $customElectrumURL")

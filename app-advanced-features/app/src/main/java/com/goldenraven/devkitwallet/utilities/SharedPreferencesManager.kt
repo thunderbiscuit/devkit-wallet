@@ -6,8 +6,8 @@ import android.content.SharedPreferences
 
 private const val PREFS_WALLET_INITIALISED = "initialized"
 private const val PREFS_PATH = "path"
-private const val PREFS_EXTERNAL_DESCRIPTOR = "externalDescriptor"
-private const val PREFS_INTERNAL_DESCRIPTOR = "internalDescriptor"
+private const val PREFS_DESCRIPTOR = "descriptor"
+private const val PREFS_CHANGE_DESCRIPTOR = "changeDescriptor"
 private const val PREFS_MNEMONIC = "mnemonic"
 
 class SharedPreferencesManager(private val sharedPreferences: SharedPreferences) {
@@ -18,16 +18,16 @@ class SharedPreferencesManager(private val sharedPreferences: SharedPreferences)
             sharedPreferences.edit()?.putString(PREFS_PATH, value)?.apply()
         }
 
-    var externalDescriptor: String
-        get() = sharedPreferences.getString(PREFS_EXTERNAL_DESCRIPTOR, "") ?: ""
+    var descriptor: String
+        get() = sharedPreferences.getString(PREFS_DESCRIPTOR, "") ?: ""
         set(value) {
-            sharedPreferences.edit()?.putString(PREFS_EXTERNAL_DESCRIPTOR, value)?.apply()
+            sharedPreferences.edit()?.putString(PREFS_DESCRIPTOR, value)?.apply()
         }
 
-    var internalDescriptor: String
-        get() = sharedPreferences.getString(PREFS_INTERNAL_DESCRIPTOR, "") ?: ""
+    var changeDescriptor: String
+        get() = sharedPreferences.getString(PREFS_CHANGE_DESCRIPTOR, "") ?: ""
         set(value) {
-            sharedPreferences.edit()?.putString(PREFS_INTERNAL_DESCRIPTOR, value)?.apply()
+            sharedPreferences.edit()?.putString(PREFS_CHANGE_DESCRIPTOR, value)?.apply()
         }
 
     var mnemonic: String

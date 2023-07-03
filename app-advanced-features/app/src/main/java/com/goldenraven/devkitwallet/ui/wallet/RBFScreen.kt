@@ -36,7 +36,7 @@ import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
-import org.bitcoindevkit.PartiallySignedBitcoinTransaction
+import org.bitcoindevkit.PartiallySignedTransaction
 import org.bitcoindevkit.TransactionDetails
 
 @Composable
@@ -278,7 +278,7 @@ private fun broadcastTransaction(txid: String, feeRate: Float = 1F) {
     Log.i(TAG, "Attempting to broadcast transaction with inputs: txid $txid, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
-        val psbt: PartiallySignedBitcoinTransaction = Wallet.createBumpFeeTransaction(txid = txid, feeRate = feeRate)
+        val psbt: PartiallySignedTransaction = Wallet.createBumpFeeTransaction(txid = txid, feeRate = feeRate)
         Wallet.sign(psbt)
         val newTxid: String = Wallet.broadcast(psbt)
         Log.i(TAG, "Transaction was broadcast! txid: $newTxid")

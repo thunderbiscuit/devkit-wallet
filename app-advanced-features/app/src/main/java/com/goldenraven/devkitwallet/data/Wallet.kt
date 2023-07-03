@@ -31,16 +31,15 @@ object Wallet {
     }
 
     private fun initialize(
-        externalDescriptor: String,
-        internalDescriptor: String,
+        descriptor: Descriptor,
+        changeDescriptor: Descriptor,
     ) {
         val database = DatabaseConfig.Sqlite(SqliteDbConfiguration("$path/bdk-sqlite"))
         wallet = BdkWallet(
-            externalDescriptor,
-            internalDescriptor,
-            // Network.REGTEST,
+            descriptor,
+            changeDescriptor,
             Network.TESTNET,
-            database,
+            database
         )
     }
 
@@ -55,20 +54,16 @@ object Wallet {
     }
 
     fun createWallet() {
-        val mnemonic: String = generateMnemonic(WordCount.WORDS12)
-        val bip32RootKey: DescriptorSecretKey = DescriptorSecretKey(
-            network = Network.TESTNET,
-            mnemonic = mnemonic,
-            password = ""
-        )
-        val externalDescriptor: String = createExternalDescriptor(bip32RootKey)
-        val internalDescriptor: String = createInternalDescriptor(bip32RootKey)
+        val mnemonic = Mnemonic(WordCount.WORDS12)
+        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
+        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
-            externalDescriptor = externalDescriptor,
-            internalDescriptor = internalDescriptor,
+            descriptor = descriptor,
+            changeDescriptor = changeDescriptor,
         )
-        Repository.saveWallet(path, externalDescriptor, internalDescriptor)
-        Repository.saveMnemonic(mnemonic)
+        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
+        Repository.saveMnemonic(mnemonic.asString())
     }
 
     // only create BIP84 compatible wallets
@@ -89,35 +84,32 @@ object Wallet {
     // if the wallet already exists, its descriptors are stored in shared preferences
     fun loadExistingWallet() {
         val initialWalletData: RequiredInitialWalletData = Repository.getInitialWalletData()
-        Log.i(TAG, "Loading existing wallet, descriptor is ${initialWalletData.externalDescriptor}")
-        Log.i(TAG, "Loading existing wallet, change descriptor is ${initialWalletData.internalDescriptor}")
+        Log.i(TAG, "Loading existing wallet with descriptor: ${initialWalletData.descriptor}")
+        Log.i(TAG, "Loading existing wallet with change descriptor: ${initialWalletData.changeDescriptor}")
         initialize(
-            externalDescriptor = initialWalletData.externalDescriptor,
-            internalDescriptor = initialWalletData.internalDescriptor,
+            descriptor = Descriptor(initialWalletData.descriptor, Network.TESTNET),
+            changeDescriptor = Descriptor(initialWalletData.changeDescriptor, Network.TESTNET),
         )
     }
 
-    fun recoverWallet(mnemonic: String) {
-        val bip32RootKey: DescriptorSecretKey = DescriptorSecretKey(
-            network = Network.TESTNET,
-            mnemonic = mnemonic,
-            password = ""
-        )
-        val externalDescriptor: String = createExternalDescriptor(bip32RootKey)
-        val internalDescriptor: String = createInternalDescriptor(bip32RootKey)
+    fun recoverWallet(recoveryPhrase: String) {
+        val mnemonic = Mnemonic.fromString(recoveryPhrase)
+        val bip32ExtendedRootKey = DescriptorSecretKey(Network.TESTNET, mnemonic, null)
+        val descriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.EXTERNAL, Network.TESTNET)
+        val changeDescriptor: Descriptor = Descriptor.newBip84(bip32ExtendedRootKey, KeychainKind.INTERNAL, Network.TESTNET)
         initialize(
-            externalDescriptor = externalDescriptor,
-            internalDescriptor = internalDescriptor,
+            descriptor = descriptor,
+            changeDescriptor = changeDescriptor,
         )
-        Repository.saveWallet(path, externalDescriptor, internalDescriptor)
-        Repository.saveMnemonic(mnemonic)
+        Repository.saveWallet(path, descriptor.asStringPrivate(), changeDescriptor.asStringPrivate())
+        Repository.saveMnemonic(mnemonic.asString())
     }
 
     fun createTransaction(
         recipientList: MutableList<Recipient>,
         feeRate: Float,
         enableRBF: Boolean
-    ): PartiallySignedBitcoinTransaction {
+    ): PartiallySignedTransaction {
         // technique 1 for adding a list of recipients to the TxBuilder
         // var txBuilder = TxBuilder()
         // for (recipient in recipientList) {
@@ -127,46 +119,48 @@ object Wallet {
 
         // technique 2 for adding a list of recipients to the TxBuilder
         var txBuilder = recipientList.fold(TxBuilder()) { builder, recipient ->
-            builder.addRecipient(recipient.address, recipient.amount)
+            val scriptPubkey: Script = Address(recipient.address).scriptPubkey()
+            builder.addRecipient(scriptPubkey, recipient.amount)
         }
         if (enableRBF) {
             txBuilder = txBuilder.enableRbf()
         }
-        return txBuilder.feeRate(feeRate).finish(wallet)
+        return txBuilder.feeRate(feeRate).finish(wallet).psbt
     }
 
     fun createSendAllTransaction(
         recipient: String,
         feeRate: Float,
         enableRBF: Boolean
-    ): PartiallySignedBitcoinTransaction {
+    ): PartiallySignedTransaction {
+        val scriptPubkey: Script = Address(recipient).scriptPubkey()
         var txBuilder = TxBuilder()
             .drainWallet()
-            .drainTo(address = recipient)
+            .drainTo(scriptPubkey)
             .feeRate(satPerVbyte = feeRate)
 
         if (enableRBF) {
             txBuilder = txBuilder.enableRbf()
         }
-        return txBuilder.finish(wallet)
+        return txBuilder.finish(wallet).psbt
     }
 
-    fun createBumpFeeTransaction(txid: String, feeRate: Float): PartiallySignedBitcoinTransaction {
+    fun createBumpFeeTransaction(txid: String, feeRate: Float): PartiallySignedTransaction {
         return BumpFeeTxBuilder(txid = txid, newFeeRate = feeRate)
             .enableRbf()
             .finish(wallet = wallet)
     }
 
-    fun sign(psbt: PartiallySignedBitcoinTransaction) {
-        wallet.sign(psbt)
+    fun sign(psbt: PartiallySignedTransaction): Boolean {
+        return wallet.sign(psbt, null)
     }
 
-    fun broadcast(signedPsbt: PartiallySignedBitcoinTransaction): String {
-        electrumServer.server.broadcast(signedPsbt)
+    fun broadcast(signedPsbt: PartiallySignedTransaction): String {
+        electrumServer.server.broadcast(signedPsbt.extractTx())
         return signedPsbt.txid()
     }
 
-    fun getAllTransactions(): List<TransactionDetails> = wallet.listTransactions()
+    fun getAllTransactions(): List<TransactionDetails> = wallet.listTransactions(true)
 
     fun getTransaction(txid: String): TransactionDetails? {
         val allTransactions = getAllTransactions()
@@ -185,9 +179,9 @@ object Wallet {
 
     fun getBalance(): ULong = wallet.getBalance().total
 
-    fun getNewAddress(): AddressInfo = wallet.getAddress(AddressIndex.NEW)
+    fun getNewAddress(): AddressInfo = wallet.getAddress(AddressIndex.New)
 
-    fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LAST_UNUSED)
+    fun getLastUnusedAddress(): AddressInfo = wallet.getAddress(AddressIndex.LastUnused)
 
     fun isBlockChainCreated() = ::electrumServer.isInitialized
 

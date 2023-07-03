@@ -41,7 +41,6 @@ import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 import com.goldenraven.devkitwallet.utilities.TAG
-import org.bitcoindevkit.PartiallySignedBitcoinTransaction
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.graphics.Color
@@ -50,6 +49,7 @@ import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.bitcoindevkit.PartiallySignedTransaction
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -512,13 +512,17 @@ private fun broadcastTransaction(
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
-        val psbt: PartiallySignedBitcoinTransaction = when (transactionType) {
+        val psbt: PartiallySignedTransaction = when (transactionType) {
             TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate, rbfEnabled)
             TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate, rbfEnabled)
         }
-        Wallet.sign(psbt)
-        val txid: String = Wallet.broadcast(psbt)
-        Log.i(TAG, "Transaction was broadcast! txid: $txid")
+        var isSigned = Wallet.sign(psbt)
+        if (isSigned) {
+            val txid: String = Wallet.broadcast(psbt)
+            Log.i(TAG, "Transaction was broadcast! txid: $txid")
+        } else {
+            Log.i(TAG, "Transaction not signed.")
+        }
     } catch (e: Throwable) {
         Log.i(TAG, "Broadcast error: ${e.message}")
     }

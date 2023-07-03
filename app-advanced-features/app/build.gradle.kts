@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     buildFeatures {
         viewBinding = true
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.goldenraven.devkitwallet"
         minSdk = 26
-        targetSdk = 30
+        targetSdk = 33
         versionCode = 1
         versionName = "v0.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -72,12 +72,12 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 
     // bitcoindevkit
-    implementation("org.bitcoindevkit:bdk-android:0.9.0")
+    implementation("org.bitcoindevkit:bdk-android:0.29.0")
 
     // qr codes
     implementation("com.google.zxing:core:3.4.1")
 
-    // tests
+    // testsbdk
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
