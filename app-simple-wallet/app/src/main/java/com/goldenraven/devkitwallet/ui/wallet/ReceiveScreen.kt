@@ -54,7 +54,7 @@ internal class AddressViewModel : ViewModel() {
         get() = _addressIndex
 
     fun updateAddress() {
-        _address.value = Wallet.getLastUnusedAddress().address.toString()
+        _address.value = Wallet.getLastUnusedAddress().address.asString()
         _addressIndex.value = Wallet.getLastUnusedAddress().index
     }
 }
