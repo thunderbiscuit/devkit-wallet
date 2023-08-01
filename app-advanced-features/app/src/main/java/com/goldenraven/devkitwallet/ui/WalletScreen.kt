@@ -174,7 +174,7 @@ internal fun AppTitle() {
     Text(
         text = "Devkit Wallet",
         color = DevkitWalletColors.snow1,
-        fontFamily = firaMonoMedium,
-        fontSize = 20.sp
+        // fontFamily = firaMonoMedium,
+        // fontSize = 20.sp
     )
 }
