@@ -1,2 +1,2 @@
-rootProject.name = "Devkit Wallet"
+rootProject.name = "Devkit Wallet — UI Only"
 include(":app")
