@@ -80,7 +80,9 @@ internal fun SendScreen(
         modifier = Modifier.padding(paddingValues)
     ) {
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DevkitWalletColors.night4)
         ) {
             val (screenTitle, transactionInputs, bottomButtons) = createRefs()
 
@@ -398,7 +400,9 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
 fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: BottomSheetScaffoldState) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(vertical = 8.dp)
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .background(DevkitWalletColors.auroraGreen)
     ) {
         Button(
             onClick = {
@@ -410,6 +414,7 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
                     }
                 }
             },
+            // colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
             colors = ButtonDefaults.buttonColors(Color.Transparent),
             modifier = Modifier
                 .height(50.dp)
@@ -430,7 +435,7 @@ fun MoreOptions(coroutineScope: CoroutineScope, bottomSheetScaffoldState: Bottom
             Icon(
                 painter = painterResource(id = R.drawable.ic_round_expand_more_24),
                 tint = DevkitWalletColors.snow1,
-                contentDescription = "More Options"
+                contentDescription = "More options"
             )
         }
     }
