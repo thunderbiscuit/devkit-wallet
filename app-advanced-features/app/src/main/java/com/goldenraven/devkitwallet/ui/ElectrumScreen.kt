@@ -5,7 +5,11 @@
 
 package com.goldenraven.devkitwallet.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Button
 import androidx.compose.material.OutlinedTextField
@@ -47,11 +51,11 @@ internal fun ElectrumScreen(navController: NavController) {
     Scaffold(
         topBar = { AwayFromHomeAppBar(navController, "Electrum Server") },
         containerColor = DevkitWalletColors.night4
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(all = 32.dp),
+                .padding(paddingValues),
         ) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {

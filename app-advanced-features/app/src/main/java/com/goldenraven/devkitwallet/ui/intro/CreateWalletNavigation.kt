@@ -12,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.WalletCreateType
 import com.goldenraven.devkitwallet.ui.Screen
-import com.goldenraven.devkitwallet.ui.intro.WalletChoiceScreen
-import com.goldenraven.devkitwallet.ui.intro.WalletRecoveryScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController

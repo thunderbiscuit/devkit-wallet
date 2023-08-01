@@ -48,7 +48,9 @@ internal fun WalletRecoveryScreen(
 
         // the screen is broken into 3 parts
         // the screen title, the body, and the button
-        ConstraintLayout(modifier = Modifier.fillMaxHeight(1f)) {
+        ConstraintLayout(
+            modifier = Modifier.fillMaxHeight(1f)
+        ) {
 
             val (screenTitle, body, button) = createRefs()
 
