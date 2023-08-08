@@ -9,7 +9,6 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -71,13 +70,14 @@ internal fun SendScreen(
 
     val sendAll: MutableState<Boolean> = remember { mutableStateOf(false) }
     val rbfEnabled: MutableState<Boolean> = remember { mutableStateOf(false) }
+    val opReturnMsg: MutableState<String> = remember { mutableStateOf("")}
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
     )
 
     BottomSheetScaffold(
-        sheetContent = { AdvancedOptions(sendAll, rbfEnabled, recipientList) },
+        sheetContent = { AdvancedOptions(sendAll, rbfEnabled, opReturnMsg, recipientList) },
         scaffoldState = bottomSheetScaffoldState,
         sheetBackgroundColor = DevkitWalletColors.night1,
         sheetElevation = 12.dp,
@@ -131,6 +131,7 @@ internal fun SendScreen(
                     setShowDialog = setShowDialog,
                     transactionType = if (sendAll.value) TransactionType.SEND_ALL else TransactionType.DEFAULT,
                     rbfEnabled = rbfEnabled.value,
+                    opReturnMsg = opReturnMsg.value,
                     context = context
                 )
             }
@@ -188,6 +189,7 @@ internal fun SendScreen(
 internal fun AdvancedOptions(
     sendAll: MutableState<Boolean>,
     rbfEnabled: MutableState<Boolean>,
+    opReturnMsg: MutableState<String>,
     recipientList: MutableList<Recipient>
 ) {
     Column(
@@ -241,6 +243,31 @@ internal fun AdvancedOptions(
                 onCheckedChange = {
                     rbfEnabled.value = !rbfEnabled.value
                 }
+            )
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .weight(0.5f),
+                value = opReturnMsg.value,
+                onValueChange = {
+                    opReturnMsg.value = it
+                },
+                label = {
+                    Text(
+                        text = "OP_RETURN",
+                        color = DevkitWalletColors.snow1,
+                    )
+                },
+                singleLine = true,
+                textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    focusedBorderColor = DevkitWalletColors.auroraGreen,
+                    unfocusedBorderColor = DevkitWalletColors.snow1,
+                    cursorColor = DevkitWalletColors.auroraGreen,
+                ),
             )
         }
 
@@ -454,6 +481,7 @@ fun Dialog(
     setShowDialog: (Boolean) -> Unit,
     transactionType: TransactionType,
     rbfEnabled: Boolean,
+    opReturnMsg: String,
     context: Context,
 ) {
     if (showDialog) {
@@ -486,6 +514,7 @@ fun Dialog(
                                 feeRate = feeRate.value.toFloat(),
                                 transactionType = transactionType,
                                 rbfEnabled = rbfEnabled,
+                                opReturnMsg = opReturnMsg
                             )
                             setShowDialog(false)
                         }
@@ -518,13 +547,14 @@ private fun broadcastTransaction(
     feeRate: Float = 1F,
     transactionType: TransactionType,
     rbfEnabled: Boolean,
+    opReturnMsg: String
 ) {
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
     try {
         // create, sign, and broadcast
         val psbt: PartiallySignedTransaction = when (transactionType) {
-            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate, rbfEnabled)
-            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate, rbfEnabled)
+            TransactionType.DEFAULT -> Wallet.createTransaction(recipientList, feeRate, rbfEnabled, opReturnMsg)
+            TransactionType.SEND_ALL -> Wallet.createSendAllTransaction(recipientList[0].address, feeRate, rbfEnabled, opReturnMsg)
         }
         var isSigned = Wallet.sign(psbt)
         if (isSigned) {
