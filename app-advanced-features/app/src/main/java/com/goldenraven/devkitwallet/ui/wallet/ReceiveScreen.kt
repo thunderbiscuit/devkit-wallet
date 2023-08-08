@@ -72,6 +72,7 @@ internal fun ReceiveScreen(
 ) {
 
     val address by addressViewModel.address.observeAsState("Generate new address")
+    val addressIndex by addressViewModel.addressIndex.observeAsState("")
 
     ConstraintLayout(
         modifier = Modifier
@@ -122,6 +123,12 @@ internal fun ReceiveScreen(
                         color = DevkitWalletColors.snow1
                     )
                 }
+                Spacer(modifier = Modifier.padding(vertical = 8.dp))
+                Text(
+                    text = "m/84h/1h/0h/0/$addressIndex",
+                    fontFamily = firaMono,
+                    color = DevkitWalletColors.snow1
+                )
             }
         }
 
