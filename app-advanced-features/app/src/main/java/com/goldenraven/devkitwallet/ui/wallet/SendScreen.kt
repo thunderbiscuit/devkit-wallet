@@ -9,6 +9,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -489,6 +490,9 @@ fun Dialog(
         recipientList.forEach { confirmationText += "${it.address}, ${it.amount}\n"}
         if (feeRate.value.isNotEmpty()) {
             confirmationText += "Fee Rate : ${feeRate.value.toULong()}"
+        }
+        if (opReturnMsg.isNotEmpty()) {
+            confirmationText += "OP_RETURN Message : ${opReturnMsg}"
         }
         AlertDialog(
             containerColor = DevkitWalletColors.night4,
