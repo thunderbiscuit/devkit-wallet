@@ -71,7 +71,7 @@ internal fun SendScreen(
 
     val sendAll: MutableState<Boolean> = remember { mutableStateOf(false) }
     val rbfEnabled: MutableState<Boolean> = remember { mutableStateOf(false) }
-    val opReturnMsg: MutableState<String> = remember { mutableStateOf("")}
+    val opReturnMsg: MutableState<String?> = remember { mutableStateOf(null) }
 
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
@@ -190,7 +190,7 @@ internal fun SendScreen(
 internal fun AdvancedOptions(
     sendAll: MutableState<Boolean>,
     rbfEnabled: MutableState<Boolean>,
-    opReturnMsg: MutableState<String>,
+    opReturnMsg: MutableState<String?>,
     recipientList: MutableList<Recipient>
 ) {
     Column(
@@ -252,13 +252,13 @@ internal fun AdvancedOptions(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .weight(0.5f),
-                value = opReturnMsg.value,
+                value = opReturnMsg.value ?: "",
                 onValueChange = {
                     opReturnMsg.value = it
                 },
                 label = {
                     Text(
-                        text = "OP_RETURN",
+                        text = "Optional OP_RETURN message",
                         color = DevkitWalletColors.snow1,
                     )
                 },
@@ -482,7 +482,7 @@ fun Dialog(
     setShowDialog: (Boolean) -> Unit,
     transactionType: TransactionType,
     rbfEnabled: Boolean,
-    opReturnMsg: String,
+    opReturnMsg: String?,
     context: Context,
 ) {
     if (showDialog) {
@@ -491,8 +491,8 @@ fun Dialog(
         if (feeRate.value.isNotEmpty()) {
             confirmationText += "Fee Rate : ${feeRate.value.toULong()}"
         }
-        if (opReturnMsg.isNotEmpty()) {
-            confirmationText += "OP_RETURN Message : ${opReturnMsg}"
+        if (!opReturnMsg.isNullOrEmpty()) {
+            confirmationText += "OP_RETURN Message : $opReturnMsg"
         }
         AlertDialog(
             containerColor = DevkitWalletColors.night4,
@@ -551,7 +551,7 @@ private fun broadcastTransaction(
     feeRate: Float = 1F,
     transactionType: TransactionType,
     rbfEnabled: Boolean,
-    opReturnMsg: String
+    opReturnMsg: String?
 ) {
     Log.i(TAG, "Attempting to broadcast transaction with inputs: recipient, amount: $recipientList, fee rate: $feeRate")
     try {
