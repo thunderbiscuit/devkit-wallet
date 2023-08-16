@@ -81,6 +81,7 @@ internal fun SendScreen(
         sheetContent = { AdvancedOptions(sendAll, rbfEnabled, opReturnMsg, recipientList) },
         scaffoldState = bottomSheetScaffoldState,
         sheetBackgroundColor = DevkitWalletColors.night1,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetElevation = 12.dp,
         sheetPeekHeight = 0.dp,
         modifier = Modifier.padding(paddingValues)
@@ -196,12 +197,14 @@ internal fun AdvancedOptions(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center)
-        {
+            Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
             Text(
                 text = "Advanced Options",
                 color = DevkitWalletColors.snow3,
@@ -210,7 +213,11 @@ internal fun AdvancedOptions(
             )
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
                 text = "Send All",
                 color = DevkitWalletColors.snow3,
@@ -225,11 +232,22 @@ internal fun AdvancedOptions(
                 onCheckedChange = {
                     sendAll.value = !sendAll.value
                     while (recipientList.size > 1) { recipientList.removeLast() }
-                }
+                },
+                colors = SwitchDefaults.colors(
+                    uncheckedBorderColor = DevkitWalletColors.night1,
+                    uncheckedThumbColor = DevkitWalletColors.night1,
+                    uncheckedTrackColor = DevkitWalletColors.snow1,
+                    checkedThumbColor = DevkitWalletColors.snow1,
+                    checkedTrackColor = DevkitWalletColors.auroraGreen,
+                )
             )
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(
                 text = "Enable Replace-by-Fee",
                 color = DevkitWalletColors.snow3,
@@ -243,7 +261,14 @@ internal fun AdvancedOptions(
                 checked = rbfEnabled.value,
                 onCheckedChange = {
                     rbfEnabled.value = !rbfEnabled.value
-                }
+                },
+                colors = SwitchDefaults.colors(
+                    uncheckedBorderColor = DevkitWalletColors.night1,
+                    uncheckedThumbColor = DevkitWalletColors.night1,
+                    uncheckedTrackColor = DevkitWalletColors.snow1,
+                    checkedThumbColor = DevkitWalletColors.snow1,
+                    checkedTrackColor = DevkitWalletColors.auroraGreen,
+                )
             )
         }
 
@@ -272,19 +297,54 @@ internal fun AdvancedOptions(
             )
         }
 
-        Button(
-            onClick = { recipientList.add(Recipient("", 0u)) },
-            enabled = !sendAll.value
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "Add recipient")
+            Text(
+                text = "Number of Recipients",
+                color = DevkitWalletColors.snow3,
+                fontSize = 14.sp,
+                fontFamily = firaMonoMedium,
+            )
         }
 
-        Button(
-            onClick = { if (recipientList.size > 1) { recipientList.removeLast() } },
-            enabled = !sendAll.value
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Remove recipient")
+            Button(
+                onClick = { if (recipientList.size > 1) { recipientList.removeLast() } },
+                enabled = !sendAll.value,
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.width(70.dp)
+            ) {
+                Text(text = "-")
+            }
+
+            Text(
+                text = "${recipientList.size}",
+                color = DevkitWalletColors.snow1,
+                fontSize = 18.sp,
+            )
+
+            Button(
+                onClick = { recipientList.add(Recipient("", 0u)) },
+                enabled = !sendAll.value,
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.width(70.dp)
+            ) {
+                Text(text = "+")
+            }
+
+
         }
+
     }
 }
 
