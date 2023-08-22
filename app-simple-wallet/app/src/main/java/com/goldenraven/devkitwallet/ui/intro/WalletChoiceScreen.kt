@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2020-2022 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
@@ -40,7 +40,7 @@ internal fun WalletChoiceScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.night4)
+                .background(DevkitWalletColors.primary)
         ) {
             val (logo, create, recover) = createRefs()
 
@@ -55,14 +55,14 @@ internal fun WalletChoiceScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_testnet_logo),
+                    painter = painterResource(id = R.drawable.ic_bitcoin_logo),
                     contentDescription = "Bitcoin testnet logo",
                     Modifier.size(90.dp)
                 )
                 Spacer(modifier = Modifier.padding(8.dp))
                 Text(
                     text = "Bitcoin\nTestnet",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                     fontSize = 28.sp,
                     fontFamily = firaMono,
                 )
@@ -70,7 +70,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { onBuildWalletButtonClicked(WalletCreateType.FROMSCRATCH()) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)
@@ -93,7 +93,7 @@ internal fun WalletChoiceScreen(
 
             Button(
                 onClick = { navController.navigate(Screen.WalletRecoveryScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .size(width = 300.dp, height = 170.dp)

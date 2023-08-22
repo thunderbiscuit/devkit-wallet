@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.data.Wallet
+import com.goldenraven.devkitwallet.ui.HomeNavigation
 import com.goldenraven.devkitwallet.ui.intro.CreateWalletNavigation
 import com.goldenraven.devkitwallet.utilities.TAG
 

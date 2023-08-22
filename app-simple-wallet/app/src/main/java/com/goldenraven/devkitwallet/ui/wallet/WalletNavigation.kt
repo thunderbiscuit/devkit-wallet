@@ -3,17 +3,14 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
 
-package com.goldenraven.devkitwallet.ui
+package com.goldenraven.devkitwallet.ui.wallet
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.goldenraven.devkitwallet.ui.wallet.HomeScreen
-import com.goldenraven.devkitwallet.ui.wallet.ReceiveScreen
-import com.goldenraven.devkitwallet.ui.wallet.SendScreen
-import com.goldenraven.devkitwallet.ui.wallet.TransactionsScreen
+import com.goldenraven.devkitwallet.ui.Screen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController

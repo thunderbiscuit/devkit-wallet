@@ -68,15 +68,16 @@ internal fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DevkitWalletColors.night4),
+            .background(DevkitWalletColors.primary),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.padding(24.dp))
         Row(
             Modifier
-                .fillMaxWidth()
-                .background(color = DevkitWalletColors.night3)
-                .height(110.dp),
+                .fillMaxWidth(0.90f)
+                .padding(horizontal = 8.dp)
+                .background(color = DevkitWalletColors.primaryLight, shape = RoundedCornerShape(16.dp))
+                .height(100.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -91,14 +92,14 @@ internal fun HomeScreen(
                 balance.formatInBtc(),
                 fontFamily = firaMonoMedium,
                 fontSize = 32.sp,
-                color = DevkitWalletColors.snow1
+                color = DevkitWalletColors.white
             )
         }
         if (!networkAvailable) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .background(color = DevkitWalletColors.auroraYellow)
+                    .background(color = DevkitWalletColors.accent2)
                     .height(50.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -107,7 +108,7 @@ internal fun HomeScreen(
                     text = "Network unavailable",
                     fontFamily = firaMonoMedium,
                     fontSize = 18.sp,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             }
         }
@@ -115,8 +116,8 @@ internal fun HomeScreen(
         Button(
             onClick = { walletViewModel.updateBalance() },
             colors = ButtonDefaults.buttonColors(
-                containerColor = DevkitWalletColors.frost4,
-                disabledContainerColor = DevkitWalletColors.frost4Disabled,
+                containerColor = DevkitWalletColors.secondary,
+                disabledContainerColor = DevkitWalletColors.white,
             ),
             enabled = networkAvailable,
             shape = RoundedCornerShape(16.dp),
@@ -139,8 +140,8 @@ internal fun HomeScreen(
         Button(
             onClick = { navController.navigate(Screen.TransactionsScreen.route) },
             colors = ButtonDefaults.buttonColors(
-                containerColor = DevkitWalletColors.frost4,
-                disabledContainerColor = DevkitWalletColors.frost4Disabled,
+                containerColor = DevkitWalletColors.secondary,
+                disabledContainerColor = DevkitWalletColors.white,
             ),
             shape = RoundedCornerShape(16.dp),
             enabled = networkAvailable,
@@ -168,7 +169,7 @@ internal fun HomeScreen(
         ) {
             Button(
                 onClick = { navController.navigate(Screen.ReceiveScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraGreen),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent1),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(160.dp)
@@ -190,8 +191,8 @@ internal fun HomeScreen(
             Button(
                 onClick = { navController.navigate(Screen.SendScreen.route) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = DevkitWalletColors.auroraRed,
-                    disabledContainerColor = DevkitWalletColors.auroraRedDisabled,
+                    containerColor = DevkitWalletColors.accent2,
+                    disabledContainerColor = DevkitWalletColors.accent2,
                 ),
                 shape = RoundedCornerShape(16.dp),
                 enabled = networkAvailable,

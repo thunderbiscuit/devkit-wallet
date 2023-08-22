@@ -27,7 +27,7 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
 
     Scaffold(
         topBar = { AwayFromHomeAppBar(navController, "Recovery Phrase") },
-        containerColor = DevkitWalletColors.night4
+        containerColor = DevkitWalletColors.primary
     ) {
         Column(
             modifier = Modifier
@@ -38,7 +38,7 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
                 Text(
                     text = "${index + 1}. $item",
                     modifier = Modifier.weight(weight = 1F),
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                     fontFamily = firaMono
                 )
             }

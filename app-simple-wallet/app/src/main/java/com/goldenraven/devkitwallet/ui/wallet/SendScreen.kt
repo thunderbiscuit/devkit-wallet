@@ -46,12 +46,12 @@ internal fun SendScreen(navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primary)
     ) {
         val (screenTitle, transactionInputs, bottomButtons) = createRefs()
         Text(
             text = "Send Bitcoin",
-            color = DevkitWalletColors.snow1,
+            color = DevkitWalletColors.white,
             fontSize = 28.sp,
             fontFamily = firaMono,
             textAlign = TextAlign.Center,
@@ -98,7 +98,7 @@ internal fun SendScreen(navController: NavController) {
         ) {
             Button(
                 onClick = { setShowDialog(true) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.auroraRed),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.accent2),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     .height(80.dp)
@@ -116,7 +116,7 @@ internal fun SendScreen(navController: NavController) {
             }
             Button(
                 onClick = { navController.navigate(Screen.HomeScreen.route) },
-                colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+                colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
                     // .size(width = 300.dp, height = 70.dp)
@@ -150,15 +150,15 @@ private fun TransactionRecipientInput(recipientAddress: MutableState<String>) {
             label = {
                 Text(
                     text = "Recipient address",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                 )
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white,
+                cursorColor = DevkitWalletColors.accent1,
             ),
         )
     }
@@ -177,17 +177,17 @@ private fun TransactionAmountInput(amount: MutableState<String>) {
                 amount.value = value.filter { it.isDigit() }
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
             label = {
                 Text(
                     text = "Amount",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white,
+                cursorColor = DevkitWalletColors.accent1,
             ),
         )
     }
@@ -206,17 +206,17 @@ private fun TransactionFeeInput(feeRate: MutableState<String>) {
                 feeRate.value = newValue.filter { it.isDigit() }
             },
             singleLine = true,
-            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.snow1),
+            textStyle = TextStyle(fontFamily = firaMono, color = DevkitWalletColors.white),
             label = {
                 Text(
                     text = "Fee rate",
-                    color = DevkitWalletColors.snow1,
+                    color = DevkitWalletColors.white,
                 )
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = DevkitWalletColors.auroraGreen,
-                unfocusedBorderColor = DevkitWalletColors.snow1,
-                cursorColor = DevkitWalletColors.auroraGreen,
+                focusedBorderColor = DevkitWalletColors.accent1,
+                unfocusedBorderColor = DevkitWalletColors.white,
+                cursorColor = DevkitWalletColors.accent1,
             ),
         )
     }
@@ -232,18 +232,18 @@ fun Dialog(
 ) {
     if (showDialog) {
         AlertDialog(
-            containerColor = DevkitWalletColors.night4,
+            containerColor = DevkitWalletColors.primary,
             onDismissRequest = {},
             title = {
                 Text(
                     text = "Confirm transaction",
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             },
             text = {
                 Text(
                     text = "Send: $amount\nto: $recipientAddress\nFee rate: ${feeRate.toFloat()}",
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             },
             confirmButton = {
@@ -255,7 +255,7 @@ fun Dialog(
                 ) {
                     Text(
                         text = "Confirm",
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             },
@@ -267,7 +267,7 @@ fun Dialog(
                 ) {
                     Text(
                         text = "Cancel",
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             },

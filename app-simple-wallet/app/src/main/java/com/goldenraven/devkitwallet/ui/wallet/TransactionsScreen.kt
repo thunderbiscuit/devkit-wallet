@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2020-2022 thunderbiscuit and contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the ./LICENSE file.
  */
@@ -42,13 +42,13 @@ internal fun TransactionsScreen(navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(DevkitWalletColors.night4)
+            .background(DevkitWalletColors.primary)
             .padding(bottom = 24.dp)
     ) {
         val (screenTitle, transactions, bottomButton) = createRefs()
         Text(
             text = "Transaction History",
-            color = DevkitWalletColors.snow1,
+            color = DevkitWalletColors.white,
             fontSize = 28.sp,
             fontFamily = firaMono,
             textAlign = TextAlign.Center,
@@ -75,64 +75,69 @@ internal fun TransactionsScreen(navController: NavController) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .background(DevkitWalletColors.night3)
+                    .background(color = DevkitWalletColors.primaryLight, shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp))
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
                     text = "Pending",
                     fontSize = 18.sp,
                     fontFamily = firaMono,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(120.dp)
-                    .background(DevkitWalletColors.night2)
+                    .background(color = DevkitWalletColors.primaryDark, shape = RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp))
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 val scrollState = rememberScrollState()
                 Column(
-                    modifier = Modifier.fillMaxWidth().verticalScroll(state = scrollState)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(state = scrollState)
                 ) {
                     Text(
                         text = pendingTransactionsList(allTransactions),
                         fontSize = 12.sp,
                         fontFamily = firaMono,
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(16.dp))
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    .background(DevkitWalletColors.night3)
+                    .background(color = DevkitWalletColors.primaryLight, shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp))
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
                     "Confirmed",
                     fontSize = 18.sp,
                     fontFamily = firaMono,
-                    color = DevkitWalletColors.snow1
+                    color = DevkitWalletColors.white
                 )
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .height(200.dp)
-                    .background(DevkitWalletColors.night2)
+                    .background(DevkitWalletColors.primaryDark, shape = RoundedCornerShape(0.dp, 0.dp, 16.dp, 16.dp))
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 val scrollState = rememberScrollState()
                 Column(
-                    modifier = Modifier.fillMaxWidth().verticalScroll(state = scrollState)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(state = scrollState)
                 ) {
                     Text(
                         text = confirmedTransactionsList(allTransactions),
                         fontSize = 12.sp,
                         fontFamily = firaMono,
-                        color = DevkitWalletColors.snow1
+                        color = DevkitWalletColors.white
                     )
                 }
             }
@@ -140,7 +145,7 @@ internal fun TransactionsScreen(navController: NavController) {
 
         Button(
             onClick = { navController.navigate(Screen.HomeScreen.route) },
-            colors = ButtonDefaults.buttonColors(DevkitWalletColors.frost4),
+            colors = ButtonDefaults.buttonColors(DevkitWalletColors.secondary),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .height(80.dp)

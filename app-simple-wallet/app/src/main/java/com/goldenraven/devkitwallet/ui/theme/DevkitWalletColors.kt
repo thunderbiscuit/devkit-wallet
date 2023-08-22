@@ -7,27 +7,12 @@ package com.goldenraven.devkitwallet.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// the colors are taken for the Nord theme
-// https://www.nordtheme.com/
-
-// snow and night colors go from lightest to darkest
-// e.g. snow1 is lighter than snow 2, etc.
-
 object DevkitWalletColors {
-    val night1: Color = Color(0xFF4c566a)
-    val night2: Color = Color(0xFF434c5e)
-    val night3: Color = Color(0xFF3b4252)
-    val night4: Color = Color(0xFF2e3440)
-
-    // most text uses snow1
-    val snow1: Color = Color(0xFFeceff4)
-    val snow3: Color = Color(0xFFd8dee9)
-
-
-    val frost4: Color = Color(0xFF5e81ac)
-    val frost4Disabled: Color = Color(0x305e81ac)
-    val auroraGreen: Color = Color(0xFFa3be8c)
-    val auroraRed: Color = Color(0xFFbf616a)
-    val auroraRedDisabled: Color = Color(0x30bf616a)
-    val auroraYellow: Color = Color(0xFFebcb8b)
+    val primaryDark: Color = Color(0xFF203B46) // App bar
+    val primary: Color = Color(0xFF264653) // Background
+    val primaryLight: Color = Color(0xFF335F70) // Behind balance primary light
+    val white: Color = Color(0xffffffff) // Most text
+    val secondary: Color = Color(0xFF2A9D8F) // Buttons
+    val accent1: Color = Color(0xFFF77F00) // Receive button
+    val accent2: Color = Color(0xFFD62828) // Send button
 }
