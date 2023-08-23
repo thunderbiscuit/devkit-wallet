@@ -8,7 +8,10 @@ package com.goldenraven.devkitwallet.ui.wallet
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.goldenraven.devkitwallet.ui.Screen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -17,13 +20,14 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun WalletNavigation() {
+fun WalletNavigation(innerPadding: PaddingValues) {
     val navController: NavHostController = rememberAnimatedNavController()
     val animationDuration = 400
 
     AnimatedNavHost(
         navController = navController,
         startDestination = Screen.HomeScreen.route,
+        modifier = Modifier.padding(innerPadding)
     ) {
 
         composable(

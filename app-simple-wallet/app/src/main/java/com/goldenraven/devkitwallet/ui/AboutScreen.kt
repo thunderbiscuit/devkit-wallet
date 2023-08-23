@@ -26,16 +26,16 @@ import androidx.navigation.compose.rememberNavController
 import com.goldenraven.devkitwallet.R
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreen(navController: NavController) {
     Scaffold(
         topBar = { AwayFromHomeAppBar(navController, "About") }
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(DevkitWalletColors.primary),
+                .background(DevkitWalletColors.primary)
+                .padding(paddingValues),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

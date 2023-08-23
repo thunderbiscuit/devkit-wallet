@@ -18,7 +18,6 @@ import com.goldenraven.devkitwallet.data.Repository
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RecoveryPhraseScreen(navController: NavController) {
 
@@ -28,11 +27,12 @@ internal fun RecoveryPhraseScreen(navController: NavController) {
     Scaffold(
         topBar = { AwayFromHomeAppBar(navController, "Recovery Phrase") },
         containerColor = DevkitWalletColors.primary
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(all = 32.dp)
+                .padding(paddingValues)
+                .padding(all = 16.dp),
         ) {
             wordList.forEachIndexed { index, item ->
                 Text(

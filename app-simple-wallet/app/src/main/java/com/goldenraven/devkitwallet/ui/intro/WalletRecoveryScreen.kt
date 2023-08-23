@@ -36,18 +36,21 @@ import com.goldenraven.devkitwallet.ui.IntroAppBar
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WalletRecoveryScreen(
     onBuildWalletButtonClicked: (WalletCreateType) -> Unit
 ) {
     Scaffold(
         topBar = { IntroAppBar() }
-    ) {
+    ) { paddingValues ->
 
         // the screen is broken into 3 parts
         // the screen title, the body, and the button
-        ConstraintLayout(modifier = Modifier.fillMaxHeight(1f)) {
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxHeight(1f)
+                .padding(paddingValues)
+        ) {
 
             val (screenTitle, body, button) = createRefs()
 

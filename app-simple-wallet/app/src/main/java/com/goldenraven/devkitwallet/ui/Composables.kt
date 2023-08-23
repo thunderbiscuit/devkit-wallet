@@ -14,11 +14,13 @@ import androidx.navigation.NavController
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMonoMedium
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AwayFromHomeAppBar(navController: NavController, title: String) {
-    SmallTopAppBar(
+    TopAppBar(
         title = { IntroAppTitle(title) },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.primaryDark),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = DevkitWalletColors.primaryDark),
+        // colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.primaryDark),
         navigationIcon = {
             IconButton(onClick = { navController.navigate(Screen.WalletScreen.route) }) {
                 Icon(
@@ -28,16 +30,17 @@ internal fun AwayFromHomeAppBar(navController: NavController, title: String) {
                 )
             }
         },
-        actions = { }
+        actions = { },
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun IntroAppBar() {
-    SmallTopAppBar(
+    TopAppBar(
         title = { IntroAppTitle("Devkit Wallet") },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = DevkitWalletColors.primaryDark),
-        actions = { }
+        actions = { },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = DevkitWalletColors.primaryDark)
     )
 }
 

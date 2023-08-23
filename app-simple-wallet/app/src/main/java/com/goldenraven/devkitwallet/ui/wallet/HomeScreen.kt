@@ -55,7 +55,7 @@ internal class WalletViewModel : ViewModel() {
 @Composable
 internal fun HomeScreen(
     navController: NavHostController,
-    walletViewModel: WalletViewModel = viewModel()
+    walletViewModel: WalletViewModel = viewModel(),
 ) {
 
     val networkAvailable: Boolean = isOnline(LocalContext.current)

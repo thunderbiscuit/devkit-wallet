@@ -27,7 +27,6 @@ import com.goldenraven.devkitwallet.ui.Screen
 import com.goldenraven.devkitwallet.ui.theme.DevkitWalletColors
 import com.goldenraven.devkitwallet.ui.theme.firaMono
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WalletChoiceScreen(
     navController: NavController,
@@ -36,11 +35,12 @@ internal fun WalletChoiceScreen(
 
     Scaffold(
         topBar = { IntroAppBar() },
-    ) {
+    ) { paddingValues ->
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .background(DevkitWalletColors.primary)
+                .padding(paddingValues)
         ) {
             val (logo, create, recover) = createRefs()
 
