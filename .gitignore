@@ -12,4 +12,5 @@ app-advanced-features/local.properties
 app-ui-only/local.properties
 app-simple-wallet/app/build/
 app-advanced-features/app/build/
-app-ui-only/app/build
+app-ui-only/app/build/
+app-clean/
