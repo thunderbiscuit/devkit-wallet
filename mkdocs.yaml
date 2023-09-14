@@ -1,0 +1,45 @@
+site_name: "Devkit Wallet Documentation"
+
+theme:
+  name: material
+  
+  icon:
+    logo: material/android
+
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+  
+  palette: 
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - scheme: slate 
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+
+# page tree
+nav:
+  - Home: "index.md"
+  - UI Only: "ui.md"
+  - Simple Wallet: "simple-wallet.md"
+  - Advanced Features: "advanced-features.md"
+  - KMP: "kmp.md"
