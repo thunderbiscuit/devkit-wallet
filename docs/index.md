@@ -15,17 +15,15 @@
 
 The _Android Bitcoindevkit Demo Wallet_ (we're calling it the _Devkit Wallet_ for short) is a simple testnet Bitcoin wallet built as a reference app for the [bitcoindevkit](https://github.com/bitcoindevkit) on Android. It is purposely lean on Android-specific bells and whistles in order to keep the focus on bitcoin fundamentals and the bitcoindevkit API.
 
-The repository is built to help newcomers to the bitcoindevkit by layering complexity slowly while not adding too much UI polish to the app.
+The repository is built to help newcomers to the bitcoindevkit by layering complexity slowly while not bloating the codebase with too much UI polish.
 
-The repository works in the following way: multiple branches are maintained in parallel, each of them focusing on a version of the app.  
+The repository works in the following way: multiple app are maintained in parallel, each of them focusing on showcasing different levels of integration between the bitcoin development kit and the applications.  
 
-1. the `docs` branch is mostly empty, and is used for building this website
-2. the `ui` branch builds the basic design and UI without any functionality
-3. the `simple-wallet` branch builds a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and wallet recovery.
+1. The **ui-only** app showcases the basic design and UI without any functionality.
+2. The **simple-wallet** app showcases a simple bitcoin wallet which implements the core functionality one would expect from a wallet: create addresses, send, receive, display transaction history, and wallet recovery.
+3. The **advanced-features** app showcases some of the more advanced features of the bitcoin development kit library, like sending to multiple recipients, replace-by-fee (BIP125), custom Electrum server, and creating OP_RETURN outputs.
+4. The **kpm** apps showcase how to build Android and iOS apps using the same codebase and sharing common code for bitcoin-related logic while writing the user interface in the native languages (Kotlin for Android and Swift for iOS).
 
-Each of those branches has a documentation page associated with it.
+Each of those apps has a documentation page associated with it, accessible with the navbar above.
 
-<br/>
-
-# Prerequisites
-These tutorials assume you have a working Android development setup, including Android Studio 4.2.2 or above and a phone you can launch the app on or a working emulator on your development machine.
+<br>
